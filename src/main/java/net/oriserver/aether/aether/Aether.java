@@ -9,9 +9,7 @@ public final class Aether extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        System.out.println("aaa");
-        System.out.println("bbb");
-
+        
 
         new CommandSetter(this).setCommands();
 
