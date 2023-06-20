@@ -294,18 +294,19 @@ public class RomanjiToJapanese {
                 result.append(romanjiToHiraganaMap.get(temp));
                 temp = "";
             }
-            if(temp.equals("nn")){
-                result.append("ん");
-                temp = "";
-            }
             if(temp.length()==2){
                 if(temp.charAt(0)==temp.charAt(1)){
-                    result.append("っ");
+                    if(temp.charAt(0)=='n'){
+                        result.append("ん");
+                    }
+                    else{
+                        result.append("っ");
+                    }
                     temp = "";
                 }
-            }else if(temp.length()==4){
+            }else if(temp.length()==3){
                 result.append(temp.charAt(0));
-                i-=3;
+                i-=2;
                 temp = "";
             }
         }
