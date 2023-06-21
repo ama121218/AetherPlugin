@@ -14,7 +14,7 @@ public class PlayerDBManagerR extends SQLiteManager{
 
     public PlayerDBManagerR(JavaPlugin plugin,String dbname) {
         super(plugin,dbname);
-        String sql = "CREATE TABLE IF NOT EXISTS Player_data (" +
+        String sql = "CREATE TABLE IF NOT EXISTS Player_data_R (" +
                 "`player_uuid` varchar NOT NULL," +
                 "`level` int NOT NULL," +
                 "`global` int NOT NULL," +
@@ -27,7 +27,7 @@ public class PlayerDBManagerR extends SQLiteManager{
     }
 
     public ArrayList<Integer> getPlayerData(String uuid) {
-        List<Integer> playerdata = getDB("SELECT name FROM Player WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+        List<Integer> playerdata = getDB("SELECT name FROM Player_data_R WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Integer> pd = new ArrayList<>();
             while(rs.next()){
                 pd.add(rs.getInt("level"));
