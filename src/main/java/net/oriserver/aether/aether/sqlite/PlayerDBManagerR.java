@@ -42,7 +42,7 @@ public class PlayerDBManagerR extends SQLiteManager{
     }
 
     public void setPlayerLevel(String uuid,int level){
-        setDB("UPDATE Player SET level = ? WHERE player_uuid = ?",Arrays.asList(level,uuid));
+        setDB("UPDATE Player_data_R SET level = ? WHERE player_uuid = ?",Arrays.asList(level,uuid));
     }
 
 

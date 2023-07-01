@@ -1,4 +1,4 @@
-package net.oriserver.aether.aether.command.chat;
+package net.oriserver.aether.aether.chat;
 
 import java.util.HashMap;
 import java.util.Map;
