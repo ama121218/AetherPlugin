@@ -2,87 +2,30 @@ package net.oriserver.aether.aether.sqlite;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-
 public class SQLiteManager {
-    protected final JavaPlugin plugin;
-    private final String dbname;
-    public SQLiteManager(JavaPlugin plugin,String dbname){
-        this.plugin = plugin;
-        this.dbname = plugin.getConfig().getString("SQLite.Filename", dbname);
-    }
-    public void initialize(String sql){
-        Connection conn = null;
-        PreparedStatement ps = null;
-        File ndir = new File(plugin.getDataFolder().getAbsolutePath());
-        if(!ndir.exists())ndir.mkdirs();
-        File dataFolder = new File(plugin.getDataFolder(), dbname+".db");
-        if (!dataFolder.exists()){
-            try {
-                dataFolder.createNewFile();
-            } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "File write error: "+dbname+".db");
-            }
-        }
-        try {
-            conn = getSQLConnection();
-            ps = conn.prepareStatement(sql);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                if (ps != null)ps.close();
-                if (conn != null)conn.close();
-            } catch (SQLException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Failed to close MySQL connection: ", ex);
-            }
-        }
-    }
-    public Connection getSQLConnection() {
-        File dataFolder = new File(plugin.getDataFolder(), dbname+".db");
-        try {
-            Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE,"SQLite exception on initialize", ex);
-        } catch (ClassNotFoundException ex) {
-            plugin.getLogger().log(Level.SEVERE, "You need the SQLite JBDC library. Google it. Put it in /lib folder.");
-        }
-        return null;
-    }
-    public void setDB(String sql, List<Object> parameters) {
-        try (Connection conn = getSQLConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (int i = 0; i < parameters.size(); i++) {
-                ps.setObject(i + 1, parameters.get(i));
-            }
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Couldn't execute MySQL statement: ", ex);
-        }
+    private final PlayerDBManagerJQ playerDBManagerJQ;
+    private final PlayerDBManagerR playerDBManagerR;
+    private final ChartDBManagerP chartDBManagerP;
+    private final PlayerDBManagerSetting playerDBManagerSetting;
+    private final PlayerDBManagerUUID playerDBManagerUUID;
+
+
+    public SQLiteManager(JavaPlugin plugin){
+        playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_Q");
+        playerDBManagerR = new PlayerDBManagerR(plugin,"Player_data_R");
+        chartDBManagerP = new ChartDBManagerP(plugin,"Chart_Data_Player");
+        playerDBManagerSetting = new PlayerDBManagerSetting(plugin,"Setting");
+        playerDBManagerUUID = new PlayerDBManagerUUID(plugin,"Player_UUID");
+
     }
 
-    @FunctionalInterface
-    public interface ResultSetHandler<T> {
-        List<T> handle(ResultSet rs) throws SQLException;
+    public PlayerDBManagerJQ getPlayerDBManagerJQ(){
+        return this.playerDBManagerJQ;
     }
-    public <T> List<T> getDB(String sql, List<Object> parameters, ResultSetHandler<T> handler) {
-        try (Connection conn = getSQLConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (int i = 0; i < parameters.size(); i++) {
-                ps.setObject(i + 1, parameters.get(i));
-            }
-            try (ResultSet rs = ps.executeQuery()) {
-                return handler.handle(rs);
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Failed to close MySQL connection: ", ex);
-            return Collections.emptyList();
-        }
+    public PlayerDBManagerR getPlayerDBManagerR(){
+        return this.playerDBManagerR;
     }
+    public ChartDBManagerP getChartDBManagerP(){return this.chartDBManagerP; }
+    public PlayerDBManagerSetting getPlayerDBManagerSetting(){return this.playerDBManagerSetting;}
+    public PlayerDBManagerUUID getPlayerDBManagerUUID(){return this.playerDBManagerUUID;}
 }

@@ -2,17 +2,13 @@ package net.oriserver.aether.aether.sqlite;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
-public class PlayerDBManagerR extends SQLiteManager{
+public class PlayerDBManagerR extends SQLiteAPI {
 
-    public PlayerDBManagerR(JavaPlugin plugin,String dbname) {
+    public PlayerDBManagerR(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Player_data_R (" +
                 "`player_uuid` varchar NOT NULL," +
@@ -45,5 +41,8 @@ public class PlayerDBManagerR extends SQLiteManager{
         setDB("UPDATE Player_data_R SET level = ? WHERE player_uuid = ?",Arrays.asList(level,uuid));
     }
 
+    public void insertPlayerData(String uuid){
+        setDB("INSERT OR IGNORE INTO Player_data (player_uuid,level,global,chart,star,AP) VALUES(?,?,?,?,?,?);",Arrays.asList(uuid,0,0,0,0,0));
+    }
 
 }

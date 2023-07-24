@@ -8,7 +8,7 @@ public class CommandSetter {
         this.plugin = plugin;
     }
     public void setCommands(){
-        plugin.getCommand("").setExecutor();
+        //plugin.getCommand("").setExecutor();
     }
 
 }

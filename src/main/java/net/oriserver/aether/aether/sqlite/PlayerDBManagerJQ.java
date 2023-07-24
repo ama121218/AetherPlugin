@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerQ extends SQLiteManager{
+public class PlayerDBManagerJQ extends SQLiteAPI {
 
-    public PlayerDBManagerQ(JavaPlugin plugin, String dbname) {
+    public PlayerDBManagerJQ(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Player_data_Q (" +
                 "`player_uuid` varchar NOT NULL," +
@@ -20,17 +20,17 @@ public class PlayerDBManagerQ extends SQLiteManager{
         initialize(sql);
     }
 
-    public ArrayList<Integer> getPlayerData(String uuid) {
-        List<Integer> playerdata = getDB("SELECT name FROM Player_data_Q WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
-            List<Integer> pd = new ArrayList<>();
+    public ArrayList<Object> getPlayerData(String uuid) {
+        List<Object> playerdata = getDB("SELECT name FROM Player_data_Q WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+            List<Object> pd = new ArrayList<>();
             while(rs.next()){
                 pd.add(rs.getInt("jump_count"));
-                pd.add(rs.getInt("last_local"));
-                pd.add(rs.getInt("play_time"));
+                pd.add(rs.getString("last_local"));
+                pd.add(rs.getLong("play_time"));
             }
             return pd;
         });
-        return  (ArrayList<Integer>) playerdata;
+        return  (ArrayList<Object>) playerdata;
     }
 
     public void setPlayerData(String uuid,int[] data){

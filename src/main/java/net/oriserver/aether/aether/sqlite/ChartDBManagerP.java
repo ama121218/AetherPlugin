@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChartDBManagerP extends SQLiteManager{
+public class ChartDBManagerP extends SQLiteAPI {
     public ChartDBManagerP(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Chart_Data_Player (" +
