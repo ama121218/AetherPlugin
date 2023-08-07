@@ -17,6 +17,7 @@ import net.oriserver.aether.aether.inventory.home.phonesetting.appearance.PhoneA
 import net.oriserver.aether.aether.inventory.home.phonesetting.partition.PhonePartitionInventory;
 import net.oriserver.aether.aether.inventory.home.setting.SettingInventory;
 import net.oriserver.aether.aether.inventory.home.shop.ShopInventory;
+import net.oriserver.aether.aether.inventory.level.LevelInventory;
 import net.oriserver.aether.aether.player.PlayerManager;
 
 public class InventoryManager {
@@ -36,6 +37,7 @@ public class InventoryManager {
     final private PhoneAppearanceInventory phoneAppearanceInventory;
     final private PhonePartitionInventory phonePartitionInventory;
     final private PhoneSettingInventory phoneSettingInventory;
+    final private LevelInventory levelInventory;
 
     public InventoryManager(PlayerManager pm){
         this.pm = pm;
@@ -54,6 +56,7 @@ public class InventoryManager {
         phoneAppearanceInventory = new PhoneAppearanceInventory();
         phonePartitionInventory = new PhonePartitionInventory();
         phoneSettingInventory = new PhoneSettingInventory();
+        levelInventory = new LevelInventory();
     }
     public PlayerManager getPlayerManager(){return this.pm;}
     public HomeInventory getHomeInventory(){return this.homeInventory;}
@@ -71,4 +74,5 @@ public class InventoryManager {
     public PhoneAppearanceInventory getPhoneAppearanceInventory(){return this.phoneAppearanceInventory;}
     public PhonePartitionInventory getPhonePartitionInventory(){return this.phonePartitionInventory;}
     public PhoneSettingInventory getPhoneSettingInventory(){return this.phoneSettingInventory;}
+    public LevelInventory getLevelInventory(){return levelInventory;}
 }

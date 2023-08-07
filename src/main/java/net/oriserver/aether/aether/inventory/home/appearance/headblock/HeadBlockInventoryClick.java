@@ -23,7 +23,7 @@ public class HeadBlockInventoryClick {
 
         else if (material == Material.TOTEM && slot == 1) {inventoryManager.getAppearanceInventory().setinv(p);}
 
-        if (slot==3||slot==4||slot==5||slot==12||slot==13||slot==14||slot==21||slot==22||slot==23||slot==30||slot==31||slot==32||slot==39||slot==40||slot==41){
+        else if (slot==3||slot==4||slot==5||slot==12||slot==13||slot==14||slot==21||slot==22||slot==23||slot==30||slot==31||slot==32||slot==39||slot==40||slot==41){
             if (material.equals(Material.INK_SACK)) {
                 p.sendMessage("このアイテムは手に入れてないためHeadBlockにすることはできません");
                 return;
@@ -38,15 +38,10 @@ public class HeadBlockInventoryClick {
             p.closeInventory();
             p.sendMessage("HeadBlockを消しました。");
         }
-        else if (material == Material.ARROW && slot == 48) {
+        else if (material == Material.ARROW && (slot == 48 || slot == 50)) {
             int page = Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0));
             PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
-            inventoryManager.getHeadBlockInventory().setinv(p,playerStats.getHeadblock()[page],page);
-        }
-        else if (material == Material.ARROW && slot == 50) {
-            int page = Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0));
-            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
-            inventoryManager.getHeadBlockInventory().setinv(p,playerStats.getHeadblock()[page],page);
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[page], page);
         }
 
         else if (material == Material.END_CRYSTAL && slot == 7) {}

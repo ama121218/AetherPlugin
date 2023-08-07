@@ -81,6 +81,13 @@ public class Item {
         item.setItemMeta(meta);
         return item;
     }
+    static public ItemStack enachantitem(ItemStack item){
+        ItemMeta meta = item.getItemMeta();
+        meta.addEnchant(Enchantment.LUCK,1,true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(meta);
+        return item;
+    }
     static public Inventory inventorycopy(Inventory a){
         ItemStack[] allitem;
         String t = a.getTitle();
