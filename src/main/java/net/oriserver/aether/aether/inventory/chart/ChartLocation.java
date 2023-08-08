@@ -36,7 +36,8 @@ public enum ChartLocation {
         ChartLocation chartLocation = ChartLocation.valueOf("CHART_"+chart);
         return new Location(Bukkit.getWorld("shrine"), chartLocation.x, chartLocation.y, chartLocation.z);
     }
-    public static String getName(int name){
-        return null;
+    public static String getName(int chart){
+        ChartLocation chartLocation = ChartLocation.valueOf("CHART_"+chart);
+        return chartLocation.name;
     }
 }

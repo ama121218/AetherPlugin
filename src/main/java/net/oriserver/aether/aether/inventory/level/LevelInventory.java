@@ -24,7 +24,7 @@ public class LevelInventory {
     };
     ItemStack gray_dye = new ItemStack(Material.INK_SACK,1, (short) 8);
     public LevelInventory(){
-        invLevel.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));
+        invLevel.setItem(0, Item.createitem(Material.IRON_INGOT, 1, "Teleport Option", ""));
         invLevel.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
 
         invLevel.setItem(1,Item.createitem(Material.QUARTZ_STAIRS, 1, "Level_Athletic", ChatColor.WHITE+"1"));

@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.listener;
 
+import net.oriserver.aether.aether.inventory.chart.ChartInventoryClick;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
 import net.oriserver.aether.aether.inventory.home.HomeInventoryClick;
 import net.oriserver.aether.aether.inventory.InventoryManager;
@@ -16,6 +17,7 @@ import net.oriserver.aether.aether.inventory.home.phonesetting.PhoneSettingInven
 import net.oriserver.aether.aether.inventory.home.phonesetting.appearance.PhoneAppearanceInventoryClick;
 import net.oriserver.aether.aether.inventory.home.phonesetting.partition.PhonePartitionInventoryClick;
 import net.oriserver.aether.aether.inventory.home.setting.SettingInventoryClick;
+import net.oriserver.aether.aether.inventory.level.LevelInventoryClick;
 import net.oriserver.aether.aether.player.PlayerManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -42,6 +44,8 @@ public class InventoryClickListener implements Listener {
     final private PhoneAppearanceInventoryClick phoneAppearanceInventoryClick;
     final private PhonePartitionInventoryClick phonePartitionInventoryClick;
     final private PhoneSettingInventoryClick phoneSettingInventoryClick;
+    final private ChartInventoryClick chartInventoryClick;
+    final private LevelInventoryClick levelInventoryClick;
 
     final public PlayerManager pm;
 
@@ -64,6 +68,8 @@ public class InventoryClickListener implements Listener {
         phoneAppearanceInventoryClick = new PhoneAppearanceInventoryClick(inventoryManager);
         phonePartitionInventoryClick = new PhonePartitionInventoryClick(inventoryManager);
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
+        levelInventoryClick = new LevelInventoryClick(inventoryManager);
+        chartInventoryClick = new ChartInventoryClick(inventoryManager);
     }
 
     @EventHandler

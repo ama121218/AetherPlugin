@@ -20,6 +20,7 @@ public class PlayerManager {
     public void addPlayer(Player player){
         players.put(String.valueOf(player.getUniqueId()), new PlayerStats(player,sqLiteManager));
     }
+    public SQLiteManager getSqLiteManager(){return  this.sqLiteManager;}
 
     public void removePlayer(String uuid) {
         players.remove(uuid);
