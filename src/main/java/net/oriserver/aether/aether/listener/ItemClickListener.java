@@ -25,7 +25,7 @@ public class ItemClickListener implements Listener {
         Player p = e.getPlayer();
         ItemStack item = e.getItem();
 
-        if (p.isOp() && item.getType() == Material.FEATHER) {
+        if (p.isOp() && item != null &&item.getType() == Material.FEATHER) {
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 featherInventory.openinv(p);
             }else if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)){

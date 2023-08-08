@@ -38,14 +38,16 @@ public class UsualListener implements Listener {
         Item.player_head.put(uuid,Item.getHead(player.getName()));
 
 
-        /*if(!playerDBManagerUUID.isPlayerInDatabase(uuid)){//firstJoinEvent
+        if(!playerDBManagerUUID.isPlayerInDatabase(uuid)){//firstJoinEvent
             player.teleport(new Location(Bukkit.getWorld("world"),171.500,96,-4.5,90,30));
-            return;
+            playerDBManagerUUID.insertPlayer_name(uuid,player.getName());
+            sq.getPlayerDBManagerR().insertPlayerData(uuid);
+            sq.getPlayerDBManagerSetting().insertPlayerData(uuid);
+            sq.getPlayerDBManagerJQ().insertPlayerData(uuid);
         }
-
-        if(!playerDBManagerUUID.isChangeName(uuid,player.getName())){
+        else if(!playerDBManagerUUID.isChangeName(uuid,player.getName())){
             playerDBManagerUUID.updatePlayer_name(uuid, player.getName());
-        }*/
+        }
         if(!pm.isPlayer(uuid)) {
             pm.addPlayer(player);
         }

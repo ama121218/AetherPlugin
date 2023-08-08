@@ -11,6 +11,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import static net.oriserver.aether.aether.inventory.chart.ChartTimeStandard.*;
+
 public class ChartInventory {
     Inventory invChart = Bukkit.createInventory(null, 54, "Chart_Athletic");
     private final PlayerManager pm;
@@ -48,15 +50,17 @@ public class ChartInventory {
 
 
         for(int i = (page-1)*14; i < chart+1 && i < 14*page; i++){
-            String string_map = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+(i+1)+" "+ChartLocation.getName(i);
+            String map_name = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+(i+1)+" "+ChartLocation.getName(i);
             long time = 1000;//sql
-            String string_time = ChatColor.AQUA+"Your Time :"+ChatColor.WHITE+time;
+            String you_time = ChatColor.AQUA+"Your Time :"+ChatColor.WHITE+getStringTime(time);
             int star = ChartTimeStandard.getStarRating(i+1,time);
             String string_star = getstarstrings(star);
-            if(star==0){openinv.setItem(a[i],Item.changename(gray_dye,eq,string_map,"",string_time,string_star,"",starstrings[0],starstrings[1],starstrings[2],"",teleport,eq));}
-            else if(star==1){openinv.setItem(a[i],Item.createitem(Material.APPLE,1,eq,string_map,"",string_time,string_star,"",starstrings[0],starstrings[1],starstrings[2],"",teleport,eq));}
-            else if(star==2){openinv.setItem(a[i],Item.createitem(Material.GOLDEN_APPLE,1,eq,string_map,"",string_time,string_star,"",starstrings[0],starstrings[1],starstrings[2],"",teleport,eq));}
-            else{openinv.setItem(a[i],Item.createitem2(Material.GOLDEN_APPLE,1,eq,string_map,"",string_time,string_star,"",starstrings[0],starstrings[1],starstrings[2],"",teleport,eq));}
+            String[] standardtimes = getStringTimes(getChartStandard(i+1));
+
+            if(star==0){openinv.setItem(a[i],Item.changename(gray_dye,eq,map_name,"",you_time,string_star,"",starstrings[0]+standardtimes[0],starstrings[1]+standardtimes[1],starstrings[2]+standardtimes[2],"",teleport,eq));}
+            else if(star==1){openinv.setItem(a[i],Item.createitem(Material.APPLE,1,eq,map_name,"",you_time,string_star,"",starstrings[0]+standardtimes[0],starstrings[1]+standardtimes[1],starstrings[2]+standardtimes[2],"",teleport,eq));}
+            else if(star==2){openinv.setItem(a[i],Item.createitem(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",starstrings[0]+standardtimes[0],starstrings[1]+standardtimes[1],starstrings[2]+standardtimes[2],"",teleport,eq));}
+            else{openinv.setItem(a[i],Item.createitem2(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",starstrings[0]+standardtimes[0],starstrings[1]+standardtimes[1],starstrings[2]+standardtimes[2],"",teleport,eq));}
         }
         openinv.setItem(1,Item.createitem(Material.APPLE,1,"",ChatColor.WHITE+""+page));
 
@@ -69,5 +73,6 @@ public class ChartInventory {
         else if (star==2) return ChatColor.YELLOW + "✦✦✧";
         else              return ChatColor.YELLOW + "✦✦✦";
     }
+
 }
 

@@ -23,7 +23,7 @@ public class PlayerDBManagerR extends SQLiteAPI {
     }
 
     public ArrayList<Integer> getPlayerData(String uuid) {
-        List<Integer> playerdata = getDB("SELECT name FROM Player_data_R WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+        List<Integer> playerdata = getDB("SELECT * FROM Player_data_R WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Integer> pd = new ArrayList<>();
             while(rs.next()){
                 pd.add(rs.getInt("level"));
@@ -42,7 +42,7 @@ public class PlayerDBManagerR extends SQLiteAPI {
     }
 
     public void insertPlayerData(String uuid){
-        setDB("INSERT OR IGNORE INTO Player_data (player_uuid,level,global,chart,star,AP) VALUES(?,?,?,?,?,?);",Arrays.asList(uuid,0,0,0,0,0));
+        setDB("INSERT OR IGNORE INTO Player_data_R (player_uuid,level,global,chart,star,AP) VALUES(?,?,?,?,?,?);",Arrays.asList(uuid,0,0,0,0,0));
     }
 
 }

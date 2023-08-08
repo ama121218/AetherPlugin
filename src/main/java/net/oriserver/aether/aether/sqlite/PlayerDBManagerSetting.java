@@ -24,7 +24,7 @@ public class PlayerDBManagerSetting extends SQLiteAPI{
     }
 
     public ArrayList<Object> getPlayerData(String uuid) {
-        List<Object> playerdata = getDB("SELECT name FROM Setting WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+        List<Object> playerdata = getDB("SELECT * FROM Setting WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Object> pd = new ArrayList<>();
             while(rs.next()){
                 pd.add(rs.getBoolean("particle"));

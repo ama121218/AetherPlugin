@@ -28,10 +28,20 @@ public enum ChartTimeStandard {
         return times;
     }
 
-    static public long[] getChartstandard(int number){
+    static public long[] getChartStandard(int number){
         return ChartTimeStandard.values()[number-1].getTimes();
     }
 
+    public static String[] getStringTimes(long[] longs){
+        String[] strings = new String[3];
+        for(int i=0;i<3;i++){
+            strings[i] = String.format("%02d:%02d:%03d", (longs[i] / (1000 * 60)) % 60, (longs[i] / 1000) % 60, longs[i] % 1000);
+        }
+        return strings;
+    }
+    public static String getStringTime(long time){
+        return String.format("%02d:%02d:%03d", (time / (1000 * 60)) % 60, (time / 1000) % 60, time % 1000);
+    }
     static public int getStarRating(int number, long time) {
         long[] timeStandard = ChartTimeStandard.values()[number-1].getTimes();
         if(time==0)return 0;
