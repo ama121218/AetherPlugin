@@ -16,13 +16,13 @@ public class ChartDBManagerP extends SQLiteAPI {
                 "`stage_id` int NOT NULL," +
                 "`chart_time` int NOT NULL," +
                 "`clear_count` int NOT NULL," +
-                "`date`int NOT NULL," +
+                "`date`int NOT NULL" +
                 ");";
         initialize(sql);
     }
 
     public List<Integer> getpasttime(String uuid, int stage_id){
-        return getDB("SELECT name FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
+        return getDB("SELECT * FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
             List<Integer> pt = new ArrayList<>();
             while(rs.next()){
                 pt.add(rs.getInt("chart_time"));

@@ -20,7 +20,7 @@ public class PlayerDBManagerUUID extends SQLiteAPI{
 
 
     public boolean isPlayerInDatabase(String uuid){
-        List<Object> is = getDB("SELECT name FROM Player_name WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+        List<Object> is = getDB("SELECT player_name FROM Player_name WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Object> isPlayer = new ArrayList<>();
             if(rs.next()) {
                 isPlayer.add(true);

@@ -10,7 +10,7 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
 
     public PlayerDBManagerJQ(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
-        String sql = "CREATE TABLE IF NOT EXISTS Player_data_Q (" +
+        String sql = "CREATE TABLE IF NOT EXISTS Player_data_JQ (" +
                 "`player_uuid` varchar NOT NULL," +
                 "`jump_count` int NOT NULL," +
                 "`last_local` int NOT NULL," +
@@ -21,7 +21,7 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
     }
 
     public ArrayList<Object> getPlayerData(String uuid) {
-        List<Object> playerdata = getDB("SELECT name FROM Player_data_Q WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
+        List<Object> playerdata = getDB("SELECT * FROM Player_data_JQ WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Object> pd = new ArrayList<>();
             while(rs.next()){
                 pd.add(rs.getInt("jump_count"));
@@ -39,5 +39,8 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
         setDB("UPDATE Player SET play_time = ? WHERE player_uuid = ?",Arrays.asList(data[2],uuid));
     }
 
+    public void insertPlayerData(String uuid){
+        setDB("INSERT OR IGNORE INTO Player_data_JQ (player_uuid,jump_count,last_local,play_time) VALUES(?,?,?,?);",Arrays.asList(uuid,0,"lobby",0));
+    }
 
 }

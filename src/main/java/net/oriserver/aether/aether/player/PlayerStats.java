@@ -44,6 +44,7 @@ public class PlayerStats {
         this.player = player;
 
         ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(String.valueOf(player.getUniqueId()));
+        if(arrayList_R==null)return;
         this.level = arrayList_R.get(0);
         this.global = arrayList_R.get(1);
         this.chart = arrayList_R.get(2);
@@ -51,11 +52,13 @@ public class PlayerStats {
         this.aetherpoint = arrayList_R.get(4);
 
         ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getPlayerData(String.valueOf(player.getUniqueId()));
+        if(arrayList_JQ==null)return;
         this.jumpcount = (int) arrayList_JQ.get(0);
         this.location = (String) arrayList_JQ.get(1);
         this.past_time = (long) arrayList_JQ.get(2);
 
         ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(String.valueOf(player.getUniqueId()));
+        if(arrayList_Setting==null)return;
         this.particleonoff = (boolean) arrayList_Setting.get(0);
         this.mailonoff = (boolean) arrayList_Setting.get(1);
         this.friendonoff = (boolean) arrayList_Setting.get(2);
@@ -63,7 +66,6 @@ public class PlayerStats {
         this.playersidebaronoff = (boolean) arrayList_Setting.get(4);
 
         this.playerSidebar = new PlayerSidebar();
-
     }
 
     public Player getPlayer() {return this.player;}
