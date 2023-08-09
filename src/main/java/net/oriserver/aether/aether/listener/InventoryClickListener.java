@@ -47,14 +47,10 @@ public class InventoryClickListener implements Listener {
     final private ChartInventoryClick chartInventoryClick;
     final private LevelInventoryClick levelInventoryClick;
 
-    final public PlayerManager pm;
-
-    public InventoryClickListener(PlayerManager pm){
+    public InventoryClickListener(InventoryManager inventoryManager){
 
         featherInventoryClick = new FeatherInventoryClick();
-        this.pm = pm;
-
-        inventoryManager = new InventoryManager(pm);
+        this.inventoryManager = inventoryManager;
         athleticInventoryClick = new AthleticInventoryClick(inventoryManager);
         homeInventoryClick = new HomeInventoryClick(inventoryManager);
         miniGameInventoryClick = new MiniGameInventoryClick(inventoryManager);
