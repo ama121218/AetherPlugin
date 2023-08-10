@@ -8,7 +8,7 @@ public class SQLiteManager {
     private final ChartDBManagerP chartDBManagerP;
     private final PlayerDBManagerSetting playerDBManagerSetting;
     private final PlayerDBManagerUUID playerDBManagerUUID;
-
+    private final PlayerDBManagerPhone playerDBManagerPhone;
 
     public SQLiteManager(JavaPlugin plugin){
         playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_Q");
@@ -16,7 +16,7 @@ public class SQLiteManager {
         chartDBManagerP = new ChartDBManagerP(plugin,"Chart_Data_Player");
         playerDBManagerSetting = new PlayerDBManagerSetting(plugin,"Setting");
         playerDBManagerUUID = new PlayerDBManagerUUID(plugin,"Player_UUID");
-
+        playerDBManagerPhone = new PlayerDBManagerPhone(plugin,"Phone_Setting");
     }
 
     public PlayerDBManagerJQ getPlayerDBManagerJQ(){
@@ -28,4 +28,5 @@ public class SQLiteManager {
     public ChartDBManagerP getChartDBManagerP(){return this.chartDBManagerP; }
     public PlayerDBManagerSetting getPlayerDBManagerSetting(){return this.playerDBManagerSetting;}
     public PlayerDBManagerUUID getPlayerDBManagerUUID(){return this.playerDBManagerUUID;}
+    public PlayerDBManagerPhone getPlayerDBManagerPhone(){return this.playerDBManagerPhone;}
 }

@@ -42,13 +42,13 @@ public class Item {
         item_partition[18] = changename(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0), "", "");
         item_partition[19] = changename(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 12), "", "");
 
-        item_phone[0] = createitem(Material.IRON_DOOR, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[1] = createitem(Material.WOOD_DOOR, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[2] = createitem(Material.BIRCH_DOOR_ITEM, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[3] = createitem(Material.ACACIA_DOOR_ITEM, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[4] = createitem(Material.DARK_OAK_DOOR_ITEM, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[5] = createitem(Material.JUNGLE_DOOR_ITEM, 1, ChatColor.AQUA + "AetherPhone", "");
-        item_phone[6] = createitem(Material.PAINTING, 1, ChatColor.AQUA + "AetherPhone", "");
+        item_phone[0] = createitem(Material.IRON_DOOR, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[1] = createitem(Material.WOOD_DOOR, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[2] = createitem(Material.BIRCH_DOOR_ITEM, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[3] = createitem(Material.ACACIA_DOOR_ITEM, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[4] = createitem(Material.DARK_OAK_DOOR_ITEM, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[5] = createitem(Material.JUNGLE_DOOR_ITEM, 1, ChatColor.AQUA + "Aether Phone", "");
+        item_phone[6] = createitem(Material.PAINTING, 1, ChatColor.AQUA + "Aether Phone", "");
 
         player_head = new HashMap<>();
         player_partition = new HashMap<>();
@@ -131,5 +131,8 @@ public class Item {
             inv.setItem(i,item_partition[itemnumber]);
         }
         p.openInventory(inv);
+    }
+    static public ItemStack getItemPhone(int number){
+        return item_phone[number];
     }
 }

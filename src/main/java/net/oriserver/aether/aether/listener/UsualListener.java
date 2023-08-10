@@ -44,6 +44,7 @@ public class UsualListener implements Listener {
             sq.getPlayerDBManagerR().insertPlayerData(uuid);
             sq.getPlayerDBManagerSetting().insertPlayerData(uuid);
             sq.getPlayerDBManagerJQ().insertPlayerData(uuid);
+            sq.getPlayerDBManagerPhone().insertData(uuid);
         }
         else if(!playerDBManagerUUID.isChangeName(uuid,player.getName())){
             playerDBManagerUUID.updatePlayer_name(uuid, player.getName());
@@ -52,6 +53,10 @@ public class UsualListener implements Listener {
             pm.addPlayer(player);
         }
         Item.player_partition.put(uuid,pm.getPlayer(String.valueOf(player.getUniqueId())).getPartition());
+
+
+
+
     }
 
     @EventHandler

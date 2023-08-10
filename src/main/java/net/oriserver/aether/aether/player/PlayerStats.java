@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.player;
 
+import net.oriserver.aether.aether.Item;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerJQ;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerR;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
@@ -34,16 +35,19 @@ public class PlayerStats {
 
     private PlayerSidebar playerSidebar;
 
-    private int partition;
-    private int phone;
 
+    private int phone;
+    private int partition;
+    private int checkpoint;
 
     private String language;
 
     PlayerStats(Player player,SQLiteManager sqLiteManager){
         this.player = player;
+        String uuid = String.valueOf(player.getUniqueId());
 
-        ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(String.valueOf(player.getUniqueId()));
+
+        ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(uuid);
         if(arrayList_R==null)return;
         this.level = arrayList_R.get(0);
         this.global = arrayList_R.get(1);
@@ -51,19 +55,27 @@ public class PlayerStats {
         this.star = arrayList_R.get(3);
         this.aetherpoint = arrayList_R.get(4);
 
-        ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getPlayerData(String.valueOf(player.getUniqueId()));
+        ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getPlayerData(uuid);
         if(arrayList_JQ==null)return;
         this.jumpcount = (int) arrayList_JQ.get(0);
         this.location = (String) arrayList_JQ.get(1);
         this.past_time = (long) arrayList_JQ.get(2);
 
-        ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(String.valueOf(player.getUniqueId()));
+        ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(uuid);
         if(arrayList_Setting==null)return;
         this.particleonoff = (boolean) arrayList_Setting.get(0);
         this.mailonoff = (boolean) arrayList_Setting.get(1);
         this.friendonoff = (boolean) arrayList_Setting.get(2);
         this.chatroomonoff = (boolean) arrayList_Setting.get(3);
         this.playersidebaronoff = (boolean) arrayList_Setting.get(4);
+
+        ArrayList<Object> arrayList_Phone = sqLiteManager.getPlayerDBManagerPhone().getData(uuid);
+        if(arrayList_Phone==null)return;
+        this.phone = (int) arrayList_Phone.get(0);
+        this.partition = (int) arrayList_Phone.get(1);
+        this.checkpoint = (int) arrayList_Phone.get(2);
+
+        Item.player_partition.put(uuid,this.partition);
 
         this.playerSidebar = new PlayerSidebar();
     }
@@ -110,12 +122,14 @@ public class PlayerStats {
     public boolean isPlayersidebaronoff() {return this.playersidebaronoff;}
     public void setPlayersidebaronoff(boolean playersidebaronoff) {this.playersidebaronoff = playersidebaronoff;}
 
-
-    public int getPartition(){return this.partition;}
-    public void setPartition(int partition){this.partition = partition;}
-
     public int getPhone(){return this.phone;}
     public void setPhone(int phone){this.phone = phone;}
+    public int getPartition(){return this.partition;}
+    public void setPartition(int partition){this.partition = partition;}
+    public int getCheckpoint(){return this.checkpoint;}
+    public void setCheckpoint(int checkpoint){this.checkpoint = checkpoint;}
+
+
 
     public String[] getHeadblock(){return this.headblock;}
     public void setHeadblock(String[] headblock){this.headblock = headblock;}

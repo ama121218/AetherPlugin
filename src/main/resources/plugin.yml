@@ -1,3 +1,11 @@
 name: Aether
 version: ${project.version}
 main: net.oriserver.aether.aether.Aether
+
+commands:
+  getphone:
+    description: Ather Phone入手
+    aliases:
+      - gp
+      - phone
+      - getPhone
