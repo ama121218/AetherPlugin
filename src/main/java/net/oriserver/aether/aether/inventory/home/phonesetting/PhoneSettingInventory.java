@@ -1,15 +1,14 @@
 package net.oriserver.aether.aether.inventory.home.phonesetting;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class PhoneSettingInventory {
-    Inventory invPhoneSetting = Bukkit.createInventory(null, 54, "Phone_Setting");
+    Inventory invPhoneSetting = Bukkit.createInventory(null, 54, "Phone Setting");
     public PhoneSettingInventory() {
 
         invPhoneSetting.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

@@ -33,6 +33,8 @@ public class SettingInventoryClick {
             }
             else if(slot == 31){
                 playerStats.setPlayersidebaronoff(value);
+                if(value)playerStats.getPlayerSidebar().cancelSidebar(p);
+                else playerStats.getPlayerSidebar().setSidebar(p);
             }
             inventoryManager.getSettingInventory().setinv(p,playerStats.getSetting());
         }

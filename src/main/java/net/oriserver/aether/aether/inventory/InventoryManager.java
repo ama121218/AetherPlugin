@@ -53,8 +53,8 @@ public class InventoryManager {
         badgeInventory = new BadgeInventory();
         settingInventory = new SettingInventory();
         giveItemInventory = new GiveItemInventory();
-        saveItemInventory = new SaveItemInventory();
-        saveTeleportInventory = new SaveTeleportInventory();
+        saveItemInventory = new SaveItemInventory(pm);
+        saveTeleportInventory = new SaveTeleportInventory(pm);
         shopInventory = new ShopInventory();
         phoneAppearanceInventory = new PhoneAppearanceInventory();
         phonePartitionInventory = new PhonePartitionInventory();

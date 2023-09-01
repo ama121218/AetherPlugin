@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory.home.appearance.badge;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerPhone extends SQLiteAPI{
-    PlayerDBManagerPhone(JavaPlugin plugin, String dbname) {
+public class PhoneSetting extends SQLiteAPI{
+    PhoneSetting(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Phone_Setting (" +
                 "`player_uuid` varchar NOT NULL," +

@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory.home.setting;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -36,8 +36,8 @@ public class SettingInventory {
         invSetting.setItem(3, Item.createitem(Material.END_CRYSTAL, 1, ChatColor.GREEN + "Particle", "パーティクル表示設定"));
         invSetting.setItem(4, Item.createitem(Material.STORAGE_MINECART, 1, ChatColor.GREEN + "Mail", "メール受け取り設定"));
         invSetting.setItem(5, Item.createitem(Material.SKULL_ITEM, 1, ChatColor.GREEN + "Friend", "フレンド申請設定"));
-        invSetting.setItem(12, Item.createitem(Material.PAPER, 1, ChatColor.GREEN + "Chatroom", "join時にGeneralチャンネル設定"));
-        invSetting.setItem(13, Item.createitem(Material.LEATHER, 1, ChatColor.GREEN + "Sidebar", "サイドバー表示設定"));
+        invSetting.setItem(21, Item.createitem(Material.PAPER, 1, ChatColor.GREEN + "Chatroom", "join時にGeneralチャンネル設定"));
+        invSetting.setItem(22, Item.createitem(Material.LEATHER, 1, ChatColor.GREEN + "Sidebar", "サイドバー表示設定"));
     }
     public void setinv(Player p,boolean[] booleans){
         Inventory openinv = Item.inventorycopy(invSetting);

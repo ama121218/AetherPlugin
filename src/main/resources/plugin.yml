@@ -1,6 +1,8 @@
 name: Aether
 version: ${project.version}
 main: net.oriserver.aether.aether.Aether
+load: POSTWORLD
+softdepend: [Multiverse-Core]
 
 commands:
   getphone:
@@ -9,3 +11,36 @@ commands:
       - gp
       - phone
       - getPhone
+  saveteleport:
+    description: 現在地を保存
+    aliases:
+      - st
+      - SaveTeleport
+  saveitem:
+    description: 持っているアイテムを保存
+    aliases:
+      - SaveItem
+      - si
+  rename:
+    description: 持っているアイテムの名前を変更
+
+  chatroom:
+    description: チャットルームのコマンド
+
+  saveinventory:
+    description: インベントリーを保存します
+    aliases: sinv
+
+  getfirstinv:
+    description: FirstInventoryを設定する
+    aliases:
+      - fi
+      - getFirstInventory
+      - firstinv
+
+  hide:
+    description: Hide a specific player or all players
+    usage: /<command> [playerName]
+  show:
+    description: Show a specific player or all players
+    usage: /<command> [playerName]

@@ -11,6 +11,11 @@ public class PhoneSettingInventoryClick {
     }
 
     public void event(Player p, Material material, int slot){
+        if(material == Material.IRON_DOOR && slot == 0) {inventoryManager.getHomeInventory().setinv(p);}
+        else if(material == Material.BARRIER && slot == 45) {p.closeInventory();}
 
+        else if(material==Material.WOOD_DOOR && slot==21){inventoryManager.getPhoneAppearanceInventory().setinv(p);}
+        else if(material==Material.THIN_GLASS && slot==22){inventoryManager.getPhonePartitionInventory().setinv(p,1);}
+        else if(material==Material.IRON_BARDING && slot==23){}
     }
 }

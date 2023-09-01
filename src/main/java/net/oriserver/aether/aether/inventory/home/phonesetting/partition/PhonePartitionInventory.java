@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory.home.phonesetting.partition;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PhonePartitionInventory {
-    Inventory invPhonePartition1 = Bukkit.createInventory(null, 54, "Phone_Partition1");
-    Inventory invPhonePartition2 = Bukkit.createInventory(null, 54, "Phone_Partition2");
+    Inventory invPhonePartition1 = Bukkit.createInventory(null, 54, "Phone Partition 1");
+    Inventory invPhonePartition2 = Bukkit.createInventory(null, 54, "Phone Partition 2");
     public PhonePartitionInventory(){
         {
             invPhonePartition1.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

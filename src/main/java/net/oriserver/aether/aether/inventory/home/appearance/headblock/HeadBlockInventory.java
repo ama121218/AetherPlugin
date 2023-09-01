@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory.home.appearance.headblock;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class HeadBlockInventory {
     int[] a = {3,4,5,12,13,14,21,22,23,30,31,32,39,40,41};
+
     ItemStack gray_dye = new ItemStack(Material.INK_SACK, 1, (short) 8);
     ArrayList<ItemStack[]> headblock = new ArrayList<ItemStack[]>();
     Inventory invHeadBlock = Bukkit.createInventory(null, 54, "HeadBlock");
@@ -22,8 +23,10 @@ public class HeadBlockInventory {
         invHeadBlock.setItem(1, Item.createitem(Material.TOTEM, 1, ChatColor.GREEN + "Appearance", ""));
         invHeadBlock.setItem(10, Item.createitem(Material.END_CRYSTAL, 1, ChatColor.GREEN + "HeadBlock", ""));
 
+        invHeadBlock.setItem(49,Item.createitem(Material.BARRIER,1,"HeadBlockを消す",""));
+
         invHeadBlock.setItem(7, Item.createitem(Material.END_CRYSTAL, 1,ChatColor.GREEN + "Particle", ""));
-        invHeadBlock.setItem(16, Item.createitem(Material.PRISMARINE_CRYSTALS, 1,ChatColor.GREEN + "BBadge", ""));
+        invHeadBlock.setItem(16, Item.createitem(Material.PRISMARINE_CRYSTALS, 1,ChatColor.GREEN + "Badge", ""));
         invHeadBlock.setItem(25, Item.createitem(Material.JUKEBOX, 1, ChatColor.GREEN + "Music", ""));
 
         invHeadBlock.setItem(8, Item.createitem(Material.GRASS, 1, ChatColor.GREEN + "1ページ目", ""));
@@ -37,7 +40,7 @@ public class HeadBlockInventory {
         Inventory openinv = Item.inventorycopy(invHeadBlock);
         for(int i=0;i<booleans.length();i++){
             if(booleans.charAt(i)=='1'){
-                openinv.setItem(a[i],headblock.get(page)[i]);
+                openinv.setItem(a[i],headblock.get(page-1)[i]);
             }else{
                 openinv.setItem(a[i],gray_dye);
             }

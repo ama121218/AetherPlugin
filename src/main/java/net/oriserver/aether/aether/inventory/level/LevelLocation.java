@@ -136,7 +136,7 @@ public enum LevelLocation {
         this.z = z;
     }
 
-    public static Location getLocation(int level){
+    public static Location getLevelLocation(int level){
         if(!(1<=level&&level<=121))return null;
         LevelLocation levelLocation = LevelLocation.valueOf("LEVEL_"+level);
         return new Location(Bukkit.getWorld("shrine"), levelLocation.x, levelLocation.y, levelLocation.z);

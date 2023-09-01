@@ -8,7 +8,11 @@ public class SQLiteManager {
     private final ChartDBManagerP chartDBManagerP;
     private final PlayerDBManagerSetting playerDBManagerSetting;
     private final PlayerDBManagerUUID playerDBManagerUUID;
-    private final PlayerDBManagerPhone playerDBManagerPhone;
+    private final PhoneSetting phoneSetting;
+    private final HeadBlockDB headBlockDB;
+    private final SaveTeleportDB saveTeleportDB;
+    private final SaveItemDB saveItemDB;
+    private final ChartRankingDB chartRankingDB;
 
     public SQLiteManager(JavaPlugin plugin){
         playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_Q");
@@ -16,7 +20,11 @@ public class SQLiteManager {
         chartDBManagerP = new ChartDBManagerP(plugin,"Chart_Data_Player");
         playerDBManagerSetting = new PlayerDBManagerSetting(plugin,"Setting");
         playerDBManagerUUID = new PlayerDBManagerUUID(plugin,"Player_UUID");
-        playerDBManagerPhone = new PlayerDBManagerPhone(plugin,"Phone_Setting");
+        phoneSetting = new PhoneSetting(plugin,"Phone_Setting");
+        headBlockDB = new HeadBlockDB(plugin,"HeadBlock");
+        saveTeleportDB = new SaveTeleportDB(plugin,"Save_Teleport");
+        saveItemDB = new SaveItemDB(plugin,"Save_Item");
+        chartRankingDB = new ChartRankingDB(plugin,"Chart_Ranking");
     }
 
     public PlayerDBManagerJQ getPlayerDBManagerJQ(){
@@ -28,5 +36,9 @@ public class SQLiteManager {
     public ChartDBManagerP getChartDBManagerP(){return this.chartDBManagerP; }
     public PlayerDBManagerSetting getPlayerDBManagerSetting(){return this.playerDBManagerSetting;}
     public PlayerDBManagerUUID getPlayerDBManagerUUID(){return this.playerDBManagerUUID;}
-    public PlayerDBManagerPhone getPlayerDBManagerPhone(){return this.playerDBManagerPhone;}
+    public PhoneSetting getPhoneSetting(){return this.phoneSetting;}
+    public HeadBlockDB getPlayerDBManagerHeadBlock(){return this.headBlockDB;}
+    public SaveTeleportDB getSaveTeleportDB(){return this.saveTeleportDB;}
+    public SaveItemDB getSaveItemDB(){return this.saveItemDB;}
+    public ChartRankingDB getChartRankingDB(){return this.chartRankingDB;}
 }

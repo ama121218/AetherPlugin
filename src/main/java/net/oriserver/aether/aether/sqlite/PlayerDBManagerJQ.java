@@ -20,7 +20,7 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
         initialize(sql);
     }
 
-    public ArrayList<Object> getPlayerData(String uuid) {
+    public ArrayList<Object> getData(String uuid) {
         List<Object> playerdata = getDB("SELECT * FROM Player_data_JQ WHERE player_uuid = ?", Arrays.asList(uuid), rs -> {
             List<Object> pd = new ArrayList<>();
             while(rs.next()){
@@ -33,7 +33,7 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
         return  (ArrayList<Object>) playerdata;
     }
 
-    public void setPlayerData(String uuid,int[] data){
+    public void setData(String uuid,Object[] data){
         setDB("UPDATE Player SET jump_count = ? WHERE player_uuid = ?",Arrays.asList(data[0],uuid));
         setDB("UPDATE Player SET last_local = ? WHERE player_uuid = ?",Arrays.asList(data[1],uuid));
         setDB("UPDATE Player SET play_time = ? WHERE player_uuid = ?",Arrays.asList(data[2],uuid));

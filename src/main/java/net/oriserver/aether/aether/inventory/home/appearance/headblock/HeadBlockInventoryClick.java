@@ -41,15 +41,34 @@ public class HeadBlockInventoryClick {
         else if (material == Material.ARROW && (slot == 48 || slot == 50)) {
             int page = Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0));
             PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
-            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[page], page);
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[page-1], page);
         }
 
-        else if (material == Material.END_CRYSTAL && slot == 7) {}
+        else if (material == Material.END_CRYSTAL && slot == 7) {
+            inventoryManager.getParticleInventory().setinv(p);
+        }
+        else if(material == Material.PRISMARINE_CRYSTALS && slot == 16) {
+            //PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+            inventoryManager.getBadgeInventory().setinv(p);
+        }
 
 
-        else if (material == Material.GRASS && slot == 8) {}
-        else if (material == Material.DIAMOND_BLOCK && slot == 17) {}
-        else if (material == Material.WORKBENCH && slot == 26) {}
-        else if (material == Material.DOUBLE_PLANT && slot == 35) {}
+
+        else if (material == Material.GRASS && slot == 8) {
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[0], 1);
+        }
+        else if (material == Material.DIAMOND_BLOCK && slot == 17) {
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[1], 2);
+        }
+        else if (material == Material.WORKBENCH && slot == 26) {
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[2], 3);
+        }
+        else if (material == Material.DOUBLE_PLANT && slot == 35) {
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+            inventoryManager.getHeadBlockInventory().setinv(p, playerStats.getHeadblock()[3], 4);
+        }
     }
 }

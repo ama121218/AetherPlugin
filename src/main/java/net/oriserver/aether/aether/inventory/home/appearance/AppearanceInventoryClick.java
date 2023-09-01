@@ -18,7 +18,7 @@ public class AppearanceInventoryClick {
         else if(material == Material.END_CRYSTAL && slot == 21) {inventoryManager.getParticleInventory().setinv(p);}
         else if(material == Material.IRON_HELMET && slot == 22) {
             inventoryManager.getHeadBlockInventory().setinv(p,
-                    inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getHeadblock()[1],
+                    inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getHeadblock()[0],
                     1
             );
         }

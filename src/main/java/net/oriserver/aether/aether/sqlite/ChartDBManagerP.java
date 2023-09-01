@@ -14,44 +14,63 @@ public class ChartDBManagerP extends SQLiteAPI {
         String sql = "CREATE TABLE IF NOT EXISTS Chart_Data_Player (" +
                 "`player_uuid` varchar NOT NULL," +
                 "`stage_id` int NOT NULL," +
-                "`chart_time` int NOT NULL," +
                 "`clear_count` int NOT NULL," +
-                "`date`int NOT NULL" +
+                "`chart_time` int NOT NULL," +
+                "`date` int NOT NULL," +
+                "PRIMARY KEY (`player_uuid`, `stage_id`)" +
                 ");";
         initialize(sql);
     }
 
-    public List<Integer> getpasttime(String uuid, int stage_id){
-        return getDB("SELECT * FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
-            List<Integer> pt = new ArrayList<>();
+
+
+    public ArrayList<Object[]> getDatas(String uuid,int min,int max){
+        List<Object[]> data = getDB("SELECT * FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id BETWEEN ? AND ? ORDER BY stage_id ASC", Arrays.asList(uuid, min, max), rs -> {
+            List<Object[]> pt = new ArrayList<>();
             while(rs.next()){
-                pt.add(rs.getInt("chart_time"));
+                Object[] objects = new Object[2];
+                objects[0] = rs.getLong("chart_time");
+                objects[1] = rs.getInt("clear_count");
+                pt.add(objects);
             }
             return pt;
         });
+        return (ArrayList<Object[]>) data;
     }
 
+    public ArrayList<Object> getData(String uuid,int stage_id){
+        List<Object> data = getDB("SELECT * FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
+            List<Object> pt = new ArrayList<>();
+            while(rs.next()){
+                pt.add(rs.getLong("chart_time"));
+                pt.add(rs.getInt("clear_count"));
+            }
+            return pt;
+        });
+        return (ArrayList<Object>) data;
+    }
+
+
+
     public List<Integer> getclear_count(String uuid, int stage_id){
-        return getDB("SELECT chart_count FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
+        return getDB("SELECT clear_count FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(uuid,stage_id), rs -> {
             List<Integer> clear_count = new ArrayList<>();
             while(rs.next()){
-                clear_count.add(rs.getInt("chart_count"));
+                clear_count.add(rs.getInt("clear_count"));
             }
             return clear_count;
         });
     }
-    public void setgoal(String uuid,int stage_id,Long chart_time){
+
+
+    public void setgoal(String uuid,int stage_id,int clear_count,Long chart_time){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String date = now.format(formatter);
-        List<Integer> clear_count_list = getclear_count(uuid,stage_id);
-        int clear_count = 0;
-        if(clear_count_list.get(0)!=null){
-            clear_count = clear_count_list.get(0);
-        }
-
-        setDB("UPDATE Chart_Data_Player SET chart_time = ? WHERE player_uuid = ? AND stage_id = ?",Arrays.asList(chart_time,uuid,stage_id));
-        setDB("INSERT OR IGNORE INTO Chart_Data_Player (player_uuid,stage_id,chart_time,clear_count,date) VALUES(?,?,?,?,?)",Arrays.asList(uuid,stage_id,chart_time,clear_count+1,date));
+        setDB("INSERT OR REPLACE INTO Chart_Data_Player (player_uuid,stage_id,clear_count,chart_time,date) VALUES(?,?,?,?,?)",Arrays.asList(uuid,stage_id,clear_count,chart_time,date));
+    }
+    public void setgoal(String uuid,int stage_id,int clear_count){
+        setDB("UPDATE Chart_Data_Player SET clear_count = ? WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(clear_count, uuid, stage_id));
     }
 
 

@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory.home.phonesetting.appearance;
 
-import net.oriserver.aether.aether.Item;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 public class PhoneAppearanceInventory {
-    Inventory invPhoneAppearance = Bukkit.createInventory(null, 54, "Phone_Appearance");
+    Inventory invPhoneAppearance = Bukkit.createInventory(null, 54, "Phone Appearance");
     public PhoneAppearanceInventory(){
         invPhoneAppearance.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));
         invPhoneAppearance.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
