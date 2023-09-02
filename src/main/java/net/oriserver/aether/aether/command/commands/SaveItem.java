@@ -37,7 +37,7 @@ public class SaveItem implements CommandExecutor {
                 saveItemDB.insertData(String.valueOf(player.getUniqueId()), String.valueOf(player.getItemInHand().getType()),player.getItemInHand().getItemMeta().getDisplayName());
                 player.sendMessage(ChatColor.GOLD + "Itemを" + ChatColor.WHITE + player.getItemInHand().getItemMeta().getDisplayName() + ChatColor.GOLD + "として設定しました");
             }else {
-                if(args[0].equals("a")) {
+                if(args[0].equals("a")||args[0].equals("admin")) {
                     if(!player.getItemInHand().hasItemMeta()||!player.getItemInHand().getItemMeta().hasDisplayName())return true;
                     saveItemDB.insertData("admin", String.valueOf(player.getItemInHand().getType()),player.getItemInHand().getItemMeta().getDisplayName());
                     player.sendMessage(ChatColor.GOLD + "Itemを" + ChatColor.WHITE + player.getItemInHand().getItemMeta().getDisplayName() + ChatColor.GOLD + "(admin)として設定しました");

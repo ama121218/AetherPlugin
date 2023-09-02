@@ -10,9 +10,14 @@ import net.oriserver.aether.aether.listener.InventoryClickListener;
 import net.oriserver.aether.aether.listener.ItemClickListener;
 import net.oriserver.aether.aether.listener.UsualListener;
 import net.oriserver.aether.aether.player.PlayerManager;
+import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.saveinventory.SaveInventoryManager;
+import net.oriserver.aether.aether.sqlite.PhoneSetting;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,12 +50,32 @@ public final class Aether extends JavaPlugin{
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
 
         pluginManager.registerEvents(new UsualListener(playerManager,sqLiteManager, chatManager,saveInventoryManager,hideShow),this);
-        pluginManager.registerEvents(new ItemClickListener(inventoryManager,pressureListener,plugin),this);
+        pluginManager.registerEvents(new ItemClickListener(inventoryManager,pressureListener,hideShow,plugin),this);
         pluginManager.registerEvents(new InventoryClickListener(playerManager,inventoryManager,plugin),this);
         pluginManager.registerEvents(pressureListener,this);
+
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRuleValue("announceAdvancements", "false");
+        }
     }
     public void onDisable(){
 
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            // ここで、プレイヤーのデータをデータベースに保存する処理を行う
+            String uuid = player.getUniqueId().toString();
+            PlayerStats playerStats = playerManager.getPlayer(uuid);
+            boolean[] setting = playerStats.getSetting();
+            SQLiteManager sqLiteManager = playerManager.getSqLiteManager();
+            sqLiteManager.getPlayerDBManagerSetting().setPlayerData(uuid,setting);
+
+            PhoneSetting phoneSetting = sqLiteManager.getPhoneSetting();
+            phoneSetting.setData(uuid, new int[]{playerStats.getPhone(), playerStats.getPartition(), playerStats.getCheckpoint()});
+
+            playerStats.setPast_time(playerStats.getPast_time() + System.currentTimeMillis()-playerStats.getJoin_time());
+            sqLiteManager.getPlayerDBManagerJQ().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
+            player.setGameMode(GameMode.ADVENTURE);
+        }
     }
 
     public static JavaPlugin getPlugin(){return plugin;}

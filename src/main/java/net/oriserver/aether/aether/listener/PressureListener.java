@@ -2,6 +2,7 @@ package net.oriserver.aether.aether.listener;
 
 import java.util.AbstractMap.SimpleEntry;
 import net.oriserver.aether.aether.AthleticLocation;
+import net.oriserver.aether.aether.listener.pressurelocation.chart.ChartGoalTPLocation;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.hologram.Hologram;
 import net.oriserver.aether.aether.statics.Item;
@@ -39,6 +40,7 @@ public class PressureListener implements Listener {
     final private Plugin plugin;
     final private LevelGoalLocation levelGoalLocation;
     final private ChartGoalLocation chartGoalLocation;
+    final private ChartGoalTPLocation chartGoalTPLocation;
     final private ChartStartLocation chartStartLocation;
     final private ChartStartTPLocation chartStartTPLocation;
     final private GlobalGoalLocation globalGoalLocation;
@@ -54,6 +56,7 @@ public class PressureListener implements Listener {
         this.plugin = plugin;
         this.levelGoalLocation = new LevelGoalLocation();
         this.chartGoalLocation = new ChartGoalLocation();
+        this.chartGoalTPLocation = new ChartGoalTPLocation();
         this.chartStartLocation = new ChartStartLocation();
         this.chartStartTPLocation = new ChartStartTPLocation();
         this.globalGoalLocation = new GlobalGoalLocation();
@@ -75,6 +78,12 @@ public class PressureListener implements Listener {
                 }
                 else if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))) {
                     int chart = chartGoalLocation.getChart(e.getClickedBlock().getLocation());
+                    player.sendMessage(""+chart);
+                    if(chart==-1){
+                        player.sendMessage(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        Bukkit.getServer().getLogger().info(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        return;
+                    }
                     handleChartGoal(player,chart);
                 }
                 else if(player.getLocation().getWorld().equals(Bukkit.getWorld("global"))){
@@ -83,7 +92,11 @@ public class PressureListener implements Listener {
             } else if (e.getClickedBlock().getType() == Material.STONE_PLATE) {
                 if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))) {
                     int chart = chartStartLocation.getChart(e.getClickedBlock().getLocation());
-                    if(chart==-1)return;
+                    if(chart==-1){
+                        player.sendMessage(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        Bukkit.getServer().getLogger().info(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        return;
+                    }
                     handleChartStart(player,chart);
                 }
             }
@@ -99,7 +112,7 @@ public class PressureListener implements Listener {
             sqLiteManager.getPlayerDBManagerR().setPlayerLevel(uuid,level);
         }
         p.sendMessage(ChatColor.BOLD+"Level Athletic: "+level+" をクリアしました。");
-        CommonMethods.setTeleport(p,LevelLocation.getLevelLocation(level+1),"Chart_Lobby",pm.getPlayer(uuid));
+        CommonMethods.setTeleport(p,LevelLocation.getLevelLocation(level+1),"Level_"+(level+1),pm.getPlayer(uuid));
     }
 
     public void handleChartStart(Player p,int chart){
@@ -128,7 +141,7 @@ public class PressureListener implements Listener {
     public void handleChartGoal(Player p,int chart){
         p.getInventory().remove(Material.PRISMARINE_SHARD);
         String uuid = String.valueOf(p.getUniqueId());
-        CommonMethods.setTeleport(p,AthleticLocation.getLocation(AthleticLocation.CHART),"Chart_Lobby", pm.getPlayer(uuid));
+        CommonMethods.setTeleport(p,chartGoalTPLocation.getLocation(chart),"Chart_Lobby", pm.getPlayer(uuid));
         PlayerStats playerStats = pm.getPlayer(uuid);
         if(chart-playerStats.getChart()==1){
             playerStats.setChart(chart);
@@ -153,8 +166,8 @@ public class PressureListener implements Listener {
             chartDBManagerP.setgoal(uuid,stage_id,1,this_time);
             past_time = 0L;
             past_star = 0;
-            pm.getPlayer(uuid).setStar(pm.getPlayer(uuid).getStar()+3);
-            sqLiteManager.getPlayerDBManagerR().setStar(uuid,sqLiteManager.getPlayerDBManagerR().getStar(uuid)+3);
+            pm.getPlayer(uuid).setStar(pm.getPlayer(uuid).getStar()+this_star);
+            sqLiteManager.getPlayerDBManagerR().setStar(uuid,sqLiteManager.getPlayerDBManagerR().getStar(uuid)+this_star);
         }else{
             past_time = (Long)list.get(0);
             int clear_count = (int)list.get(1);

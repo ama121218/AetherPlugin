@@ -22,8 +22,8 @@ public class Item {
     static final private ItemStack[] item_phone = new ItemStack[7];
     static final private ItemStack[] first_inv = new ItemStack[9];
     static {
-        item_partition[0] = createitem(Material.THIN_GLASS, 1, "", "");
-        item_partition[1] = createitem(Material.IRON_FENCE, 1, "", "");
+        item_partition[0] = createitem(Material.IRON_FENCE, 1, "", "");
+        item_partition[1] = createitem(Material.THIN_GLASS, 1, "", "");
         item_partition[2] = createitem(Material.RAILS, 1, "", "");
         item_partition[3] = createitem(Material.POWERED_RAIL, 1, "", "");
         item_partition[4] = createitem(Material.ACTIVATOR_RAIL, 1, "", "");
@@ -61,10 +61,9 @@ public class Item {
         first_inv[7] = new ItemStack(Material.AIR);
         first_inv[8] = createitem(Material.IRON_DOOR,1,ChatColor.AQUA+"AetherPhone","");
 
-        player_head = new HashMap<>();
         player_partition = new HashMap<>();
     }
-    static public final HashMap<String,ItemStack> player_head;
+
     static public final HashMap<String,Integer> player_partition;
 
     static public ItemStack createitem(final Material material, int a, final String name, final String... lore){

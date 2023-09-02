@@ -33,5 +33,7 @@ public class CommandSetter {
         plugin.getCommand("getfirstinv").setExecutor(new GetFirstInventory(pm));
         plugin.getCommand("hide").setExecutor(new Hide(hideShow));
         plugin.getCommand("show").setExecutor(new Show(hideShow));
+        plugin.getCommand("teleportaether").setExecutor(new TeleportAether());
+        plugin.getCommand("i").setExecutor(new I());
     }
 }

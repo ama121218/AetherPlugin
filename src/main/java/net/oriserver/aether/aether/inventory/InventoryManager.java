@@ -2,6 +2,7 @@ package net.oriserver.aether.aether.inventory;
 
 import javafx.scene.chart.Chart;
 import net.oriserver.aether.aether.inventory.chart.ChartInventory;
+import net.oriserver.aether.aether.inventory.global.GlobalInventory;
 import net.oriserver.aether.aether.inventory.home.HomeInventory;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventory;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventoryClick;
@@ -41,6 +42,7 @@ public class InventoryManager {
     final private PhoneSettingInventory phoneSettingInventory;
     final private LevelInventory levelInventory;
     final private ChartInventory chartInventory;
+    final private GlobalInventory globalInventory;
 
     public InventoryManager(PlayerManager pm){
         this.pm = pm;
@@ -61,6 +63,7 @@ public class InventoryManager {
         phoneSettingInventory = new PhoneSettingInventory();
         levelInventory = new LevelInventory();
         chartInventory = new ChartInventory(pm);
+        globalInventory = new GlobalInventory();
     }
     public PlayerManager getPlayerManager(){return this.pm;}
     public HomeInventory getHomeInventory(){return this.homeInventory;}
@@ -80,4 +83,5 @@ public class InventoryManager {
     public PhoneSettingInventory getPhoneSettingInventory(){return this.phoneSettingInventory;}
     public LevelInventory getLevelInventory(){return levelInventory;}
     public ChartInventory getChartInventory(){return chartInventory;}
+    public GlobalInventory getGlobalInventory(){return  globalInventory;}
 }

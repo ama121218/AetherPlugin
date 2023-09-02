@@ -25,13 +25,13 @@ public class SaveInventory implements CommandExecutor {
         if (args.length <= 1) {
             if(args.length==0){
                 saveInventoryManager.createInventory(player,"");
-                player.sendMessage("新しいインベントリーを作成しました");
+                player.sendMessage("新しいInventoryを作成しました");
             }else{
                 if(args[0].equals("delete")){
                     saveInventoryManager.deleteInventory(player);
                 }else{
                     saveInventoryManager.createInventory(player,args[0]);
-                    player.sendMessage("新しいインベントリー"+ ChatColor.BOLD +"("+args[0]+")"+ ChatColor.RESET +"を作成しました");
+                    player.sendMessage("新しいInventory("+ChatColor.YELLOW+args[0]+ ChatColor.RESET +")を作成しました");
                 }
             }
         }else if(args.length == 2){

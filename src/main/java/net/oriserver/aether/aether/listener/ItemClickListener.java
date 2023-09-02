@@ -1,15 +1,21 @@
 package net.oriserver.aether.aether.listener;
 
+import net.oriserver.aether.aether.hideshow.HideShow;
+import net.oriserver.aether.aether.inventory.chart.ChartLocation;
+import net.oriserver.aether.aether.inventory.global.GlobalLocation;
+import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -22,12 +28,14 @@ public class ItemClickListener implements Listener {
     private final FeatherInventory featherInventory;
     private final InventoryManager inventoryManager;
     private final PressureListener pressureListener;
+    private final HideShow hideShow;
     private final Plugin plugin;
     private final HashSet<String> itemCoolTime = new HashSet<String>();
-    public ItemClickListener(InventoryManager inventoryManager, PressureListener pressureListener, Plugin plugin){
+    public ItemClickListener(InventoryManager inventoryManager, PressureListener pressureListener,HideShow hideShow ,Plugin plugin){
         featherInventory = new FeatherInventory();
         this.inventoryManager = inventoryManager;
         this.pressureListener = pressureListener;
+        this.hideShow = hideShow;
         this.plugin = plugin;
     }
 
@@ -39,7 +47,7 @@ public class ItemClickListener implements Listener {
         if(!p.isOp()){
             e.setCancelled(true);
             if(!isCoolTimeItem(p.getName())) {
-                p.sendMessage(ChatColor.DARK_RED + "高速で連続クリックしないでください");
+                //p.sendMessage(ChatColor.DARK_RED + "高速で連続クリックしないでください");
                 return;
             }
         }
@@ -77,7 +85,7 @@ public class ItemClickListener implements Listener {
             }else{
                 String right = ChatColor.stripColor(item.getItemMeta().getDisplayName().substring(1));
                 if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                    if(right.startsWith("br")){
+                    if(right.startsWith("br")||right.startsWith("brush")||right.startsWith("lrbuild")){
                         ItemStack nitem = Item.changename(p.getItemInHand(),right);
                         p.getInventory().setItem(p.getInventory().getHeldItemSlot(),nitem);
                     }
@@ -90,7 +98,86 @@ public class ItemClickListener implements Listener {
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if(p.getLocation().getWorld().getName().equals("shrine"))inventoryManager.getLevelInventory().setinv(p,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
                 else if(p.getLocation().getWorld().getName().equals("chart"))inventoryManager.getChartInventory().setinv(p,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getChart());
-                //else if(p.getLocation().getWorld().getName().equals("global"))inventoryManager.getLevelInventory().setinv(p,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+                else if(p.getLocation().getWorld().getName().equals("global"))inventoryManager.getGlobalInventory().setinv(p,1);
+            }
+        }else if (item.getType() == Material.EYE_OF_ENDER){
+            if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                if ((item.getItemMeta().getDisplayName() != null) && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Visible")) {
+                    e.setCancelled(true);
+                    p.getInventory().remove(Material.EYE_OF_ENDER);
+                    p.getInventory().setItem(4, Item.createitem(Material.ENDER_PEARL, 1, ChatColor.GREEN + "Invisible", ""));
+                    hideShow.allHide(p);
+                }
+            }
+        } else if (item.getType() == Material.ENDER_PEARL) {
+            if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                if ((item.getItemMeta().getDisplayName() != null) && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Invisible")) {
+                    e.setCancelled(true);
+                    p.getInventory().remove(Material.ENDER_PEARL);
+                    p.getInventory().setItem(4, Item.createitem(Material.EYE_OF_ENDER, 1, ChatColor.GREEN + "Visible", ""));
+                    hideShow.allShow(p);
+                }
+            }
+        }else if(item.getType() == Material.IRON_BARDING){
+            e.setCancelled(true);
+            if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                if (p.getWorld().getName().equals("chart")) {
+                    String string_location = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString()).getLocation();
+                    if (string_location.startsWith("Chart") && !string_location.equals("Chart_Lobby")) {
+                        String[] parts = string_location.split("_");
+
+                        // main_pageとsub_pageを取得する
+                        int main_page = Integer.parseInt(parts[0].replace("Chart", ""));
+                        int sub_page = Integer.parseInt(parts[1]);
+
+                        p.teleport(ChartLocation.getChartLocation((main_page - 1) * 14 + sub_page));
+                    }
+
+                } else if (p.getWorld().getName().equals("shrine")) {
+                    String string_location = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString()).getLocation();
+                    if (string_location.startsWith("Level") && !string_location.equals("Level_Lobby")) {
+                        p.teleport(LevelLocation.getLevelLocation(Integer.parseInt(string_location.substring(6))));
+                    }
+                } else if (p.getWorld().getName().equals("global")) {
+                    String string_location = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString()).getLocation();
+                    if (string_location.startsWith("Global") && !string_location.equals("Global_Lobby")) {
+                        p.teleport(GlobalLocation.getGlobalLocation(Integer.parseInt(string_location.substring(7))));
+                    }
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItemInMainHand(); // 主手に持っているアイテムを取得
+        if(!player.isOp())event.setCancelled(true);
+        if (event.getRightClicked() instanceof ArmorStand) { // 右クリックされたエンティティがアーマースタンドか確認
+            ArmorStand armorStand = (ArmorStand) event.getRightClicked();
+
+            if (!armorStand.isVisible()) { // アーマースタンドが透明であることを確認
+
+                // Aether Phoneを持っている場合の処理
+                if (item != null && item.hasItemMeta() &&
+                        item.getItemMeta().hasDisplayName() &&
+                        item.getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Aether Phone")) {
+
+                    // Aether Phoneを持っている場合の処理をここに書く
+                    event.setCancelled(true); // 任意でイベントをキャンセル
+                    // その他の処理...
+                    inventoryManager.getHomeInventory().setinv(player);
+                }
+                // 鉄インゴットを持っている場合の処理
+                else if (item != null && item.getType() == Material.IRON_INGOT) {
+
+                    // 鉄インゴットを持っている場合の処理をここに書く
+                    event.setCancelled(true); // 任意でイベントをキャンセル
+                    // 例: プレイヤーにメッセージを表示
+                    if(player.getLocation().getWorld().getName().equals("shrine"))inventoryManager.getLevelInventory().setinv(player,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(player.getUniqueId())).getLevel());
+                    else if(player.getLocation().getWorld().getName().equals("chart"))inventoryManager.getChartInventory().setinv(player,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(player.getUniqueId())).getChart());
+                    else if(player.getLocation().getWorld().getName().equals("global"))inventoryManager.getGlobalInventory().setinv(player,1);
+
+                }
             }
         }
     }

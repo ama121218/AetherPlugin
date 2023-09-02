@@ -2,6 +2,7 @@ package net.oriserver.aether.aether.listener;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.InventoryTitle;
 import net.oriserver.aether.aether.hideshow.HideShow;
 import net.oriserver.aether.aether.statics.Item;
@@ -13,18 +14,27 @@ import net.oriserver.aether.aether.saveinventory.SaveInventoryManager;
 import net.oriserver.aether.aether.sqlite.PhoneSetting;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerUUID;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class UsualListener implements Listener {
 
@@ -57,7 +67,7 @@ public class UsualListener implements Listener {
         String uuid = String.valueOf(player.getUniqueId());
         PlayerDBManagerUUID playerDBManagerUUID = sq.getPlayerDBManagerUUID();
 
-        Item.player_head.put(player.getName(),Item.getHead(player.getName()));
+        player.getInventory().setItem(35,Item.getHead(player.getName()));
 
         if(!playerDBManagerUUID.isPlayerInDatabase(uuid)){//firstJoinEvent
             player.teleport(new Location(Bukkit.getWorld("world"),171.500,96,-4.5,90,30));
@@ -89,7 +99,7 @@ public class UsualListener implements Listener {
 
         Item.player_partition.put(uuid,playerStats.getPartition());
         if(!playerStats.isPlayersidebaronoff())playerStats.getPlayerSidebar().setSidebar(player);
-        else playerStats.getPlayerSidebar().cancelSidebar(player);
+        else playerStats.getPlayerSidebar().cancelSidebar();
 
         if(!player.isOp()){
             player.getInventory().clear();
@@ -98,6 +108,11 @@ public class UsualListener implements Listener {
         playerStats.setListName();
         hideShow.handleNewPlayerJoin(player);
         playerStats.setJoin_time(System.currentTimeMillis());
+
+        if(player.isOp()){
+            player.performCommand("wea");
+        }
+        player.setGameMode(GameMode.ADVENTURE);
     }
 
     @EventHandler
@@ -128,7 +143,7 @@ public class UsualListener implements Listener {
         if (room != null) {
             String message = "["+room.getName()+"] "+p.getName()+" > "+chatManager.getJapanese(e.getMessage())+ ChatColor.GRAY+" ("+e.getMessage()+")";
             for (Player member : room.getMembers())member.sendMessage(message);
-            for (Player member : chatManager.getChatrooms().get("admin").getMembers()) member.sendMessage(message);
+            for (Player member : chatManager.getChatrooms().get("Admin").getMembers()) member.sendMessage(ChatColor.GRAY+message);
         }else{
 
             p.sendMessage("チャットルームに入っていないため発言できません。");
@@ -172,11 +187,41 @@ public class UsualListener implements Listener {
         playerStats.setPast_time(playerStats.getPast_time() + System.currentTimeMillis()-playerStats.getJoin_time());
         sqLiteManager.getPlayerDBManagerJQ().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
     }
+
+    private final Set<UUID> playersJumping = new HashSet<>();
+
     @EventHandler
-    public void onPlayerJump(PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        if (e.getFrom().getY() < e.getTo().getY() && p.isOnGround()) {
-            pm.getPlayer(String.valueOf(p.getUniqueId())).setJumpcount1();
+    public void onPlayerJump(PlayerMoveEvent event) {
+
+        Player player = event.getPlayer();
+        UUID playerUUID = player.getUniqueId();
+
+        // Y座標が上がっているか確認（ジャンプまたは上昇中）
+        if (event.getFrom().getY() < event.getTo().getY()) {
+            // 地面にいない（ジャンプまたは上昇中）＆＆まだカウントされていない
+            if (!player.isOnGround() && !playersJumping.contains(playerUUID)) {
+                // ジャンプ回数を増やす
+                pm.getPlayer(playerUUID.toString()).setJumpcount1();
+                // ジャンプを開始したとしてUUIDをセットに追加
+                playersJumping.add(playerUUID);
+            }
+        } else if (player.isOnGround()) {
+            // 地面にいる場合、セットからUUIDを削除
+            playersJumping.remove(playerUUID);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        // プレイヤーのY座標が-20以下になった場合の処理
+        if (event.getTo().getY() <= -20) {
+            Player player = event.getPlayer();
+            if(player.getWorld().getName().equals("world")){
+                player.teleport(AthleticLocation.getLocation(AthleticLocation.LOBBY));
+            } else {
+                Location spawnLocation = player.getWorld().getSpawnLocation();
+                player.teleport(spawnLocation);
+            }
         }
     }
 
@@ -193,6 +238,7 @@ public class UsualListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
+        if(!(event.getEntity() instanceof Player))return;
         Player player = (Player) event.getEntity();
         switch (event.getCause()) {
             case SUFFOCATION: // 窒息死
@@ -222,4 +268,102 @@ public class UsualListener implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            // ターゲットがプレイヤーで、ダメージを与えるプレイヤーがOPの場合
+            if (event.getEntity() instanceof Player && player.isOp()) {
+                event.setCancelled(true);
+                return;
+            }
+            // ダメージを与えるプレイヤーがOPではない場合
+            if (!player.isOp()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp()) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onItemPickup(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (!player.isOp()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+    @EventHandler
+    public void onItemSpawn(ItemSpawnEvent event) {
+        event.setCancelled(true);
+    }
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        event.setCancelled(true);
+    }
+    @EventHandler
+    public void onBlockSpread(BlockSpreadEvent event) {
+        if (event.getNewState().getType() == Material.FIRE) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp() && event.getItem() != null &&
+                (event.getItem().getType().name().endsWith("_HELMET") ||
+                        event.getItem().getType().name().endsWith("_CHESTPLATE") ||
+                        event.getItem().getType().name().endsWith("_LEGGINGS") ||
+                        event.getItem().getType().name().endsWith("_BOOTS"))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp() && event.getHand() != null &&
+                (event.getHand().name().endsWith("_HELMET") ||
+                        event.getHand().name().endsWith("_CHESTPLATE") ||
+                        event.getHand().name().endsWith("_LEGGINGS") ||
+                        event.getHand().name().endsWith("_BOOTS"))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onCraftItem(CraftItemEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (!player.isOp()) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
+        if (event.getEntity().getType() == EntityType.ITEM_FRAME) {
+            if (event.getRemover() instanceof Player) {
+                Player player = (Player) event.getRemover();
+                if (!player.isOp()) {
+                    event.setCancelled(true);
+                }
+            } else {
+                event.setCancelled(true);
+            }
+        }
+    }
 }

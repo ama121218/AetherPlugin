@@ -46,7 +46,7 @@ public class SaveInventory {
 
     public void setInventory1(Player p){
         if(item_list.size()==0){
-            p.sendMessage("保存されているインベントリーはありません");
+            p.sendMessage("保存されているInventoryはありません");
         }
         else{
             ItemStack[] temp = new ItemStack[9];
@@ -65,7 +65,7 @@ public class SaveInventory {
     }
     public void setInventory2(Player p){
         if(item_list.size()==0){
-            p.sendMessage("保存されているインベントリーはありません");
+            p.sendMessage("保存されているInventoryはありません");
         }
         else{
             ItemStack[] temp = new ItemStack[9];
@@ -108,7 +108,7 @@ public class SaveInventory {
             }
             String s = item_string.get(number).equals("")?""+number:item_string.get(number);
             p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(s));
-            p.sendMessage("今のインベントリーを削除しました");
+            p.sendMessage("現在のInventoryを削除しました");
         }
     }
     public void changeName(String s){

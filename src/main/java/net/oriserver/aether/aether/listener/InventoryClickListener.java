@@ -2,6 +2,7 @@ package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.inventory.chart.ChartInventoryClick;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
+import net.oriserver.aether.aether.inventory.global.GlobalInventoryClick;
 import net.oriserver.aether.aether.inventory.home.HomeInventoryClick;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventoryClick;
@@ -56,6 +57,7 @@ public class InventoryClickListener implements Listener {
     final private PhoneSettingInventoryClick phoneSettingInventoryClick;
     final private ChartInventoryClick chartInventoryClick;
     final private LevelInventoryClick levelInventoryClick;
+    final private GlobalInventoryClick globalInventoryClick;
     private final Plugin plugin;
 
     final public PlayerManager pm;
@@ -85,6 +87,8 @@ public class InventoryClickListener implements Listener {
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
         levelInventoryClick = new LevelInventoryClick(inventoryManager,pm);
         chartInventoryClick = new ChartInventoryClick(inventoryManager,pm);
+        globalInventoryClick = new GlobalInventoryClick(pm);
+
 
         actionMap.put("Speed Select", (player, type, slot, event) -> featherInventoryClick.event(player, type, slot));
         actionMap.put("Home", (player, type, slot, event) -> homeInventoryClick.event(player, type, slot));
@@ -118,6 +122,7 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Phone Appearance", (player, type, slot, event) -> phoneAppearanceInventoryClick.event(player, type, slot));
         actionMap.put("Phone Partition 1", (player, type, slot, event) -> phonePartitionInventoryClick.event1(player, type, slot));
         actionMap.put("Phone Partition 2", (player, type, slot, event) -> phonePartitionInventoryClick.event2(player, type, slot));
+        actionMap.put("Global Athletic",(player,type,slot, event)-> globalInventoryClick.event(player,type,slot));
     }
 
     @EventHandler

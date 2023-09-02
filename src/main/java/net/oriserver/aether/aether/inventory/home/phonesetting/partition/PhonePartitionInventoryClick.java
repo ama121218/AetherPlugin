@@ -16,13 +16,14 @@ public class PhonePartitionInventoryClick {
 
         else if(material == Material.PAINTING && slot == 1){inventoryManager.getPhoneSettingInventory().setinv(p);}
 
-        else if(material == Material.THIN_GLASS && slot == 3){
-            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setPartition(0);
+
+        else if(material == Material.IRON_FENCE && slot == 3){
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setPartition(1);
             Item.player_partition.put(String.valueOf(p.getUniqueId()),0);
             inventoryManager.getPhonePartitionInventory().setinv(p,1);
         }
-        else if(material == Material.IRON_FENCE && slot == 4){
-            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setPartition(1);
+        else if(material == Material.THIN_GLASS && slot == 4){
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setPartition(0);
             Item.player_partition.put(String.valueOf(p.getUniqueId()),1);
             inventoryManager.getPhonePartitionInventory().setinv(p,1);
         }

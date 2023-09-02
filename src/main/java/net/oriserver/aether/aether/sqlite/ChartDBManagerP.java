@@ -27,11 +27,22 @@ public class ChartDBManagerP extends SQLiteAPI {
     public ArrayList<Object[]> getDatas(String uuid,int min,int max){
         List<Object[]> data = getDB("SELECT * FROM Chart_Data_Player WHERE player_uuid = ? AND stage_id BETWEEN ? AND ? ORDER BY stage_id ASC", Arrays.asList(uuid, min, max), rs -> {
             List<Object[]> pt = new ArrayList<>();
+            int count = min;
             while(rs.next()){
+                int stage_id = rs.getInt("stage_id");
+                while (count < stage_id) {
+                    pt.add(null);
+                    count++;
+                }
                 Object[] objects = new Object[2];
                 objects[0] = rs.getLong("chart_time");
                 objects[1] = rs.getInt("clear_count");
                 pt.add(objects);
+                count++;
+            }
+            while (count <= max) {
+                pt.add(null);
+                count++;
             }
             return pt;
         });

@@ -34,9 +34,9 @@ public class PlayerDBManagerJQ extends SQLiteAPI {
     }
 
     public void setData(String uuid,Object[] data){
-        setDB("UPDATE Player SET jump_count = ? WHERE player_uuid = ?",Arrays.asList(data[0],uuid));
-        setDB("UPDATE Player SET last_local = ? WHERE player_uuid = ?",Arrays.asList(data[1],uuid));
-        setDB("UPDATE Player SET play_time = ? WHERE player_uuid = ?",Arrays.asList(data[2],uuid));
+        setDB("UPDATE Player_data_JQ SET jump_count = ? WHERE player_uuid = ?",Arrays.asList(data[0],uuid));
+        setDB("UPDATE Player_data_JQ SET last_local = ? WHERE player_uuid = ?",Arrays.asList(data[1],uuid));
+        setDB("UPDATE Player_data_JQ SET play_time = ? WHERE player_uuid = ?",Arrays.asList(data[2],uuid));
     }
 
     public void insertPlayerData(String uuid){

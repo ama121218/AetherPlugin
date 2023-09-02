@@ -53,7 +53,7 @@ public class SaveTeleport implements CommandExecutor {
                     player.sendMessage("このアイテムIDは保存できるブロックではありません");
                 }
             }else {
-                if(args[2].equals("a")) {
+                if(args[2].equals("a")||args[2].equals("admin")) {
                     String st_name = args[0];
                     Material material = Material.getMaterial(Integer.parseInt(args[1]));
                     if (material != null && material.isBlock()) {

@@ -36,7 +36,7 @@ public class ChartInventory {
     
     public ChartInventory(PlayerManager pm){
         this.pm = pm;
-        invChart.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));
+        invChart.setItem(0, Item.createitem(Material.IRON_INGOT, 1, ChatColor.WHITE+"Teleport_option", ""));
         invChart.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
 
         invChart.setItem(1,Item.createitem(Material.APPLE, 1, "Chart_Athletic", ChatColor.WHITE+"1"));
@@ -50,22 +50,22 @@ public class ChartInventory {
     public void setinv(Player p,int page,int chart){
         ArrayList<Object[]> objects = pm.getSqLiteManager().getChartDBManagerP().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
         Inventory openinv = Item.inventorycopy(invChart);
-        for(int i = (page-1)*14; i < chart+1 && i < 14*page; i++){
-            String map_name = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+(i+1)+" "+ChartLocation.getChartName(i+1);
+        for(int i = 0; i < chart+1-((page-1)*14) && i < 14; i++){
+            String map_name = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+page+"_"+(i+1)+" "+ChartLocation.getChartName(i+1+((page-1)*14));
             long time = 0L;
             int count = 0;
-            if(i < objects.size()){
+            if(i < objects.size() && objects.get(i) != null){
                 time = (long) objects.get(i)[0];
                 count = (int) objects.get(i)[1];
             }
             String you_time = ChatColor.AQUA+"Your Time"+ChatColor.WHITE+": "+getStringTime(time);
-            int star = ChartTimeStandard.getStarRating(i+1,time);
+            int star = ChartTimeStandard.getStarRating(i+1+((page-1)*14),time);
             String string_star = "       " + getStarString(star);
-            String[] standardtimes = getStringTimes(getChartStandard(i+1));
-            if(star==0){openinv.setItem(a[i%14],Item.changename(gray_dye,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
-            else if(star==1){openinv.setItem(a[i%14],Item.createitem(Material.APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
-            else if(star==2){openinv.setItem(a[i%14],Item.createitem(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
-            else{openinv.setItem(a[i%14],Item.createitem2(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
+            String[] standardtimes = getStringTimes(getChartStandard(i+1+((page-1)*14)));
+            if(star==0){openinv.setItem(a[i],Item.changename(gray_dye,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
+            else if(star==1){openinv.setItem(a[i],Item.createitem(Material.APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
+            else if(star==2){openinv.setItem(a[i],Item.createitem(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
+            else{openinv.setItem(a[i],Item.createitem2(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
         }
         openinv.setItem(1,Item.createitem(Material.APPLE,1,"",ChatColor.WHITE+""+page));
 

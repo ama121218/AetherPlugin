@@ -45,8 +45,16 @@ public class Chat implements CommandExecutor {
             case "join":
                 String roomName = args[1];
                 ChatRoom room = cm.getChatrooms().get(roomName);
+
                 if (room != null) {
-                    if (room.isPrivate()) {
+                    if(roomName.equals("Admin")){
+                        if(player.isOp()){
+                            room.addMember(player);
+                            cm.getPlayerRooms().put(player, room);
+                            playerManager.getPlayer(String.valueOf(player.getUniqueId())).setChatroom(roomName);
+                            player.sendMessage(roomName+"に入りました");
+                        }
+                    } else if (room.isPrivate()) {
                         player.sendMessage("このチャットルームはプライベートです");
                     } else {
                         room.addMember(player);

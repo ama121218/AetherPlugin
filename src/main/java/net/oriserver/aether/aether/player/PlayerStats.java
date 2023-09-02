@@ -85,7 +85,10 @@ public class PlayerStats {
         this.chatroom = this.chatroomonoff ? "" : "General";
         this.playerSidebar = new PlayerSidebar(player.getName(),this.level,this.global,this.star,this.AP,this.chatroom,this.location);
 
-
+        this.headblock[0] = "111111111111111";
+        this.headblock[1] = "111111111111111";
+        this.headblock[2] = "111111111111111";
+        this.headblock[3] = "111111111111111";
     }
 
     public Player getPlayer() {return this.player;}

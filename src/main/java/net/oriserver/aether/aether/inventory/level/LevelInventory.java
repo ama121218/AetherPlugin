@@ -23,7 +23,7 @@ public class LevelInventory {
     };
     ItemStack gray_dye = new ItemStack(Material.INK_SACK,1, (short) 8);
     public LevelInventory(){
-        invLevel.setItem(0, Item.createitem(Material.IRON_INGOT, 1, "Teleport_Option", ""));
+        invLevel.setItem(0, Item.createitem(Material.IRON_INGOT, 1, ChatColor.WHITE+"Teleport_Option", ""));
         invLevel.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
 
         invLevel.setItem(1,Item.createitem(Material.QUARTZ_STAIRS, 1, "Level_Athletic", ChatColor.WHITE+"1"));
@@ -53,7 +53,7 @@ public class LevelInventory {
                 openinv.setItem(slots[i], gray_dye);
             }
         }
-        openinv.setItem(1,Item.createitem(Material.QUARTZ_STAIRS,1,"",ChatColor.WHITE+""+main_page));
+        openinv.setItem(1,Item.createitem(Material.QUARTZ_STAIRS,1,"Level_Athletic",ChatColor.WHITE+""+main_page));
 
         if (page % 2 != 0) openinv.setItem(50, Item.createitem(Material.ARROW, 1, "2ページ目へ", ""));
         else openinv.setItem(48, Item.createitem(Material.ARROW, 1, "1ページ目へ", ""));

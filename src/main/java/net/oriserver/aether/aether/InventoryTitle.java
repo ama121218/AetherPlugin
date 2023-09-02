@@ -28,7 +28,10 @@ public enum InventoryTitle {
     PHONE_SETTING("Phone Setting"),
     PHONE_APPEARANCE("Phone Appearance"),
     PHONE_PARTITION_1("Phone Partition 1"),
-    PHONE_PARTITION_2("Phone Partition 2");
+    PHONE_PARTITION_2("Phone Partition 2"),
+    Level("Level Athletic"),
+    Chart("Chart Athletic"),
+    Global("Level Athletic");
 
     private String title;
 

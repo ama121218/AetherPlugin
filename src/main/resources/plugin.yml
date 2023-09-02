@@ -44,3 +44,11 @@ commands:
   show:
     description: Show a specific player or all players
     usage: /<command> [playerName]
+
+  teleportaether:
+    description: teleport
+    usage: /<command> [level || chart] [number]
+    aliases:
+      - tpa
+  i:
+    description: 座標表示

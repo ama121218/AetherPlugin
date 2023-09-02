@@ -52,6 +52,7 @@ public class PlayerSidebar {
     }
     public void setSidebar(Player p){
         p.setScoreboard(board);
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
     public void setlevel(int level){
@@ -99,7 +100,7 @@ public class PlayerSidebar {
 
 
 
-    public void cancelSidebar(Player p) {
-        p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+    public void cancelSidebar() {
+        board.clearSlot(DisplaySlot.SIDEBAR);
     }
 }

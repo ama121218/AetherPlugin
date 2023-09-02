@@ -15,7 +15,7 @@ public class SQLiteManager {
     private final ChartRankingDB chartRankingDB;
 
     public SQLiteManager(JavaPlugin plugin){
-        playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_Q");
+        playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_JQ");
         playerDBManagerR = new PlayerDBManagerR(plugin,"Player_data_R");
         chartDBManagerP = new ChartDBManagerP(plugin,"Chart_Data_Player");
         playerDBManagerSetting = new PlayerDBManagerSetting(plugin,"Setting");

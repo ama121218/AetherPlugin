@@ -19,8 +19,8 @@ public class PhonePartitionInventory {
             invPhonePartition1.setItem(1, Item.createitem(Material.PAINTING, 1, ChatColor.GREEN +"Phone_Setting", ""));
             invPhonePartition1.setItem(10, Item.createitem(Material.THIN_GLASS, 1, ChatColor.GREEN +"Phone_Partition", ""));
 
-            invPhonePartition1.setItem(3, Item.createitem(Material.THIN_GLASS, 1, ChatColor.GREEN +"Phone_Partition", ""));
-            invPhonePartition1.setItem(4, Item.createitem(Material.IRON_FENCE, 1, ChatColor.GREEN +"Phone_Partition", ""));
+            invPhonePartition1.setItem(3, Item.createitem(Material.IRON_FENCE, 1, ChatColor.GREEN +"Phone_Partition", ""));
+            invPhonePartition1.setItem(4, Item.createitem(Material.THIN_GLASS, 1, ChatColor.GREEN +"Phone_Partition", ""));
             invPhonePartition1.setItem(5, Item.createitem(Material.RAILS, 1, ChatColor.GREEN +"Phone_Partition", ""));
             invPhonePartition1.setItem(12, Item.createitem(Material.POWERED_RAIL, 1, ChatColor.GREEN +"Phone_Partition", ""));
             invPhonePartition1.setItem(13, Item.createitem(Material.ACTIVATOR_RAIL, 1, ChatColor.GREEN +"Phone_Partition", ""));
