@@ -298,11 +298,12 @@ public class RomanjiToJapanese {
                 if(temp.charAt(0)==temp.charAt(1)){
                     if(temp.charAt(0)=='n'){
                         result.append("ん");
+                        temp = "";
                     }
                     else{
                         result.append("っ");
+                        temp = ""+c;
                     }
-                    temp = "";
                 }
             }else if(temp.length()==3){
                 result.append(temp.charAt(0));

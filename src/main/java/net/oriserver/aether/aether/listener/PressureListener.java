@@ -105,6 +105,7 @@ public class PressureListener implements Listener {
 
     public void handleLevelGoal(Player p,int level){
         String uuid = String.valueOf(p.getUniqueId());
+        CommonMethods.setTeleport(p,LevelLocation.getLevelLocation(level+1),"Level_"+(level+1),pm.getPlayer(uuid));
         PlayerStats playerStats = pm.getPlayer(uuid);
         int player_level = playerStats.getLevel();
         if (level - player_level == 1) {
@@ -193,6 +194,7 @@ public class PressureListener implements Listener {
         if(ranking!=-1&&ranking<=5){
             hologram.setChartTime(stage_id);
         }
+        CommonMethods.setTeleport(p,chartGoalTPLocation.getLocation(chart),"Chart_Lobby", pm.getPlayer(uuid));
     }
     public void printChartClear(Player p,String stage_name,Long past_time,Long this_time,int past_star,int this_star,int ranking){
         p.sendMessage("     "+stage_name);
