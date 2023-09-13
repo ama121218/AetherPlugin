@@ -47,8 +47,10 @@ public class PressureListener implements Listener {
     final private Hologram hologram;
 
     private final HashSet<String> goalCoolTime = new HashSet<String>();
-    private final HashMap<String, SimpleEntry<Integer, Long>> saveChartTime = new HashMap<String,SimpleEntry<Integer, Long>>();
+    private final HashMap<String, ChartInfo> saveChartStageTime = new HashMap<String,ChartInfo>();
     private final ItemStack prismarine = Item.createitem(Material.PRISMARINE_SHARD,1,ChatColor.GREEN +"time_reset","");
+
+
 
     public PressureListener(PlayerManager pm, SQLiteManager sqLiteManager, Hologram hologram, Plugin plugin) {
         this.pm = pm;
@@ -60,6 +62,7 @@ public class PressureListener implements Listener {
         this.chartStartLocation = new ChartStartLocation();
         this.chartStartTPLocation = new ChartStartTPLocation();
         this.globalGoalLocation = new GlobalGoalLocation();
+
         this.hologram = hologram;
     }
 
@@ -118,20 +121,20 @@ public class PressureListener implements Listener {
 
     public void handleChartStart(Player p,int chart){
         p.sendMessage(ChatColor.BOLD+"測定を開始します");
-        saveChartTime.put(p.getName(),new SimpleEntry<>(chart,System.currentTimeMillis()));
+        saveChartStageTime.put(p.getName(),new ChartInfo(chart,System.currentTimeMillis()));
 
         p.teleport(chartStartTPLocation.getLocation(chart));
         p.getInventory().addItem(prismarine);
     }
     public void resetChartStart(Player p){
-        if(saveChartTime.get(p.getName())==null){
+        if(saveChartStageTime.get(p.getName())==null){
             p.sendMessage(ChatColor.DARK_RED+"測定が開始されていないためリセットできません");
             return;
         }
         p.getInventory().remove(Material.PRISMARINE_SHARD);
         p.sendMessage(ChatColor.BOLD+"測定をリセットします");
-        int chart = saveChartTime.get(p.getName()).getKey();
-        saveChartTime.put(p.getName(),new SimpleEntry<>(chart,System.currentTimeMillis()));
+        int chart = saveChartStageTime.get(p.getName()).getStageID();
+        saveChartStageTime.put(p.getName(),new ChartInfo(chart,System.currentTimeMillis()));
         p.teleport(chartStartTPLocation.getLocation(chart));
         p.getInventory().addItem(prismarine);
     }
@@ -148,14 +151,14 @@ public class PressureListener implements Listener {
             playerStats.setChart(chart);
             sqLiteManager.getPlayerDBManagerR().setPlayerChart(uuid,chart);
         }
-        if(saveChartTime.get(p.getName()) == null) {
+        if(saveChartStageTime.get(p.getName()) == null) {
             p.sendMessage(ChartLocation.getChartName(chart) + "をクリアしました。 タイム : 測定不能");
             return;
         }
-        int stage_id = saveChartTime.get(p.getName()).getKey();
+        int stage_id = saveChartStageTime.get(p.getName()).getStageID();
         String stage_name = ChartLocation.getChartName(chart);
 
-        Long this_time = System.currentTimeMillis() - saveChartTime.get(p.getName()).getValue();
+        Long this_time = System.currentTimeMillis() - saveChartStageTime.get(p.getName()).getStartTime();
         ChartDBManagerP chartDBManagerP = sqLiteManager.getChartDBManagerP();
         ArrayList<Object> list = chartDBManagerP.getData(uuid,stage_id);
 
@@ -183,14 +186,14 @@ public class PressureListener implements Listener {
             }else{
                 chartDBManagerP.setgoal(uuid,stage_id,clear_count+1);
                 printChartClear(p,stage_name,past_time,this_time,past_star,this_star,-1);
-                saveChartTime.remove(p.getName());
+                saveChartStageTime.remove(p.getName());
                 return;
             }
         }
         int ranking = sqLiteManager.getChartRankingDB().insertOrUpdateScoreIfTop5(stage_id,uuid,p.getName(),this_time);
         p.sendMessage("ranking"+ranking);
         printChartClear(p,stage_name,past_time,this_time,past_star,this_star,ranking);
-        saveChartTime.remove(p.getName());
+        saveChartStageTime.remove(p.getName());
         if(ranking!=-1&&ranking<=5){
             hologram.setChartTime(stage_id);
         }
@@ -233,4 +236,26 @@ public class PressureListener implements Listener {
         task.runTaskLater(plugin,40);
     }
 
+    public class ChartInfo{
+        private int stageID;
+        private Long startTime;
+        private int checkPoint;
+        ChartInfo(int stageID,Long startTime){
+            this.stageID = stageID;
+            this.startTime = startTime;
+            this.checkPoint = 0;
+        }
+        public int getStageID(){
+            return this.stageID;
+        }
+        public Long getStartTime(){
+            return this.getStartTime();
+        }
+        public int getCheckPoint(){
+            return checkPoint;
+        }
+        public void setCheckPoint(int checkPoint){
+            this.checkPoint = checkPoint;
+        }
+    }
 }
