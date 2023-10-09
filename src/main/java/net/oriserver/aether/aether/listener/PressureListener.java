@@ -2,7 +2,7 @@ package net.oriserver.aether.aether.listener;
 
 import java.util.AbstractMap.SimpleEntry;
 import net.oriserver.aether.aether.AthleticLocation;
-import net.oriserver.aether.aether.listener.pressurelocation.chart.ChartGoalTPLocation;
+import net.oriserver.aether.aether.listener.pressurelocation.chart.*;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.hologram.Hologram;
 import net.oriserver.aether.aether.statics.Item;
@@ -10,9 +10,6 @@ import net.oriserver.aether.aether.inventory.chart.ChartLocation;
 import net.oriserver.aether.aether.inventory.chart.ChartTimeStandard;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.listener.pressurelocation.*;
-import net.oriserver.aether.aether.listener.pressurelocation.chart.ChartGoalLocation;
-import net.oriserver.aether.aether.listener.pressurelocation.chart.ChartStartLocation;
-import net.oriserver.aether.aether.listener.pressurelocation.chart.ChartStartTPLocation;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.sqlite.ChartDBManagerP;
@@ -44,6 +41,8 @@ public class PressureListener implements Listener {
     final private ChartStartLocation chartStartLocation;
     final private ChartStartTPLocation chartStartTPLocation;
     final private GlobalGoalLocation globalGoalLocation;
+    final private ChartCheckPointLocation chartCheckPointLocation;
+    final private ChartCheckPointTPLocation chartCheckPointTPLocation;
     final private Hologram hologram;
 
     private final HashSet<String> goalCoolTime = new HashSet<String>();
@@ -62,6 +61,9 @@ public class PressureListener implements Listener {
         this.chartStartLocation = new ChartStartLocation();
         this.chartStartTPLocation = new ChartStartTPLocation();
         this.globalGoalLocation = new GlobalGoalLocation();
+        this.chartCheckPointLocation = new ChartCheckPointLocation();
+        this.chartCheckPointTPLocation = new ChartCheckPointTPLocation();
+
 
         this.hologram = hologram;
     }
@@ -102,6 +104,16 @@ public class PressureListener implements Listener {
                     }
                     handleChartStart(player,chart);
                 }
+            }else if(e.getClickedBlock().getType() == Material.IRON_PLATE){
+                /*if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))){
+                    int chart = .getChart(e.getClickedBlock().getLocation());
+                    if(chart==-1){
+                        player.sendMessage(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        Bukkit.getServer().getLogger().info(""+e.getClickedBlock().getLocation().getX()+","+e.getClickedBlock().getLocation().getY()+","+e.getClickedBlock().getLocation().getZ());
+                        return;
+                    }
+                    handleChartStart(player,chart);
+                }*/
             }
         }
     }
@@ -141,6 +153,11 @@ public class PressureListener implements Listener {
     public String getChartNumber(int number){
         return "Chart"+((number - 1) / 14 + 1)+"_"+((number - 1) % 14 + 1);
     }
+
+    public void handleChartCheckpoint(Player p,int number){
+
+    }
+
 
     public void handleChartGoal(Player p,int chart){
         p.getInventory().remove(Material.PRISMARINE_SHARD);

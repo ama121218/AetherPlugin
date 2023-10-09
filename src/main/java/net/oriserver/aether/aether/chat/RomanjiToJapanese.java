@@ -105,6 +105,12 @@ public class RomanjiToJapanese {
         romanjiToHiraganaMap.put("kye", "きぇ");
         romanjiToHiraganaMap.put("kyo", "きょ");
 
+        romanjiToHiraganaMap.put("sya", "しゃ");
+        romanjiToHiraganaMap.put("syi", "しぃ");
+        romanjiToHiraganaMap.put("syu", "しゅ");
+        romanjiToHiraganaMap.put("sye", "しぇ");
+        romanjiToHiraganaMap.put("syo", "しょ");
+
         romanjiToHiraganaMap.put("sha", "しゃ");
         romanjiToHiraganaMap.put("shi", "し");
         romanjiToHiraganaMap.put("shu", "しゅ");

@@ -131,9 +131,11 @@ public class InventoryClickListener implements Listener {
         String title = e.getInventory().getTitle();
         final ItemStack clickItem = e.getCurrentItem();
         if(clickItem==null||clickItem.getType()== Material.AIR) return;
-        if(!p.isOp())e.setCancelled(true);
-        if(!isCoolTimeClick(p.getName())){
-            p.sendMessage(ChatColor.DARK_RED+"高速で連打しないでください");
+        if(!p.isOp()) {
+            e.setCancelled(true);
+            if (!isCoolTimeClick(p.getName())) {
+                p.sendMessage(ChatColor.DARK_RED + "高速で連打しないでください");
+            }
         }
         InventoryAction action = actionMap.get(title);
         if (action != null) {
