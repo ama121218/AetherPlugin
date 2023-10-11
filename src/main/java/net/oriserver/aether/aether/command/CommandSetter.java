@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.command;
 
+import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.command.commands.*;
 import net.oriserver.aether.aether.command.hideshow.Hide;
@@ -15,12 +16,14 @@ public class CommandSetter {
     private final ChatManager chatManager;
     private final SaveInventoryManager saveInventoryManager;
     private final HideShow hideShow;
-    public CommandSetter(JavaPlugin plugin, PlayerManager playerManager, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow){
+    private final TNTRunMain tntRunMain;
+    public CommandSetter(JavaPlugin plugin, PlayerManager playerManager, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow,TNTRunMain tntRunMain){
         this.plugin = plugin;
         this.pm = playerManager;
         this.chatManager = chatManager;
         this.saveInventoryManager = saveInventoryManager;
         this.hideShow = hideShow;
+        this.tntRunMain = tntRunMain;
         setCommands();
     }
     public void setCommands(){
@@ -35,5 +38,6 @@ public class CommandSetter {
         plugin.getCommand("show").setExecutor(new Show(hideShow));
         plugin.getCommand("teleportaether").setExecutor(new TeleportAether());
         plugin.getCommand("i").setExecutor(new I());
+        plugin.getCommand("TNTRun").setExecutor(new TNTRun(tntRunMain));
     }
 }

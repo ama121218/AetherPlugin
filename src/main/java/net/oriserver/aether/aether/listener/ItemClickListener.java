@@ -1,5 +1,7 @@
 package net.oriserver.aether.aether.listener;
 
+import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
+import net.oriserver.aether.aether.events.CreateTNTRunStageInventoryEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
 import net.oriserver.aether.aether.inventory.chart.ChartLocation;
 import net.oriserver.aether.aether.inventory.global.GlobalLocation;
@@ -7,6 +9,7 @@ import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventory;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -144,6 +147,11 @@ public class ItemClickListener implements Listener {
                         p.teleport(GlobalLocation.getGlobalLocation(Integer.parseInt(string_location.substring(7))));
                     }
                 }
+            }
+        }else if(item.getType() == Material.WOOD_PICKAXE){
+            if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun_Setting")) {
+                e.setCancelled(true);
+                Bukkit.getPluginManager().callEvent(new CreateTNTRunStageClickItemEvent(e));
             }
         }
     }

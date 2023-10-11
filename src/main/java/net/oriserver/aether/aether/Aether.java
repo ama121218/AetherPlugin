@@ -1,5 +1,7 @@
 package net.oriserver.aether.aether;
 
+import net.oriserver.aether.aether.TNTRun.CreateStageManager;
+import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.command.CommandSetter;
 import net.oriserver.aether.aether.hideshow.HideShow;
@@ -33,6 +35,7 @@ public final class Aether extends JavaPlugin{
     Hologram hologram;
     SaveInventoryManager saveInventoryManager;
     HideShow hideShow;
+    TNTRunMain tntRunMain;
 
     @Override
     public void onEnable(){
@@ -44,9 +47,10 @@ public final class Aether extends JavaPlugin{
         saveInventoryManager = new SaveInventoryManager();
         hideShow = new HideShow(plugin);
         chatManager = new ChatManager();
+        tntRunMain = new TNTRunMain(plugin);
 
         PressureListener pressureListener = new PressureListener(playerManager,sqLiteManager, hologram,plugin);
-        cm = new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow);
+        cm = new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain);
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
 
         pluginManager.registerEvents(new UsualListener(playerManager,sqLiteManager, chatManager,saveInventoryManager,hideShow),this);

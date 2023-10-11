@@ -1,5 +1,7 @@
 package net.oriserver.aether.aether.listener;
 
+import net.oriserver.aether.aether.events.AnvilClickEvent;
+import net.oriserver.aether.aether.events.CreateTNTRunStageInventoryEvent;
 import net.oriserver.aether.aether.inventory.chart.ChartInventoryClick;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
 import net.oriserver.aether.aether.inventory.global.GlobalInventoryClick;
@@ -22,12 +24,14 @@ import net.oriserver.aether.aether.inventory.home.phonesetting.partition.PhonePa
 import net.oriserver.aether.aether.inventory.home.setting.SettingInventoryClick;
 import net.oriserver.aether.aether.inventory.level.LevelInventoryClick;
 import net.oriserver.aether.aether.player.PlayerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -136,6 +140,18 @@ public class InventoryClickListener implements Listener {
             if (!isCoolTimeClick(p.getName())) {
                 p.sendMessage(ChatColor.DARK_RED + "高速で連打しないでください");
             }
+        }
+        //AnvilInventoryだった場合
+        if(e.getInventory().getType() == InventoryType.ANVIL){
+            AnvilClickEvent customEvent = new AnvilClickEvent(e);
+            Bukkit.getPluginManager().callEvent(customEvent);
+            return;
+        }
+        //CreateTNTRunStage
+        if(title.equals("TNTRun_CreateStage")){
+            CreateTNTRunStageInventoryEvent customEvent = new CreateTNTRunStageInventoryEvent(p,e.getRawSlot());
+            Bukkit.getPluginManager().callEvent(customEvent);
+            return;
         }
         InventoryAction action = actionMap.get(title);
         if (action != null) {
