@@ -2,9 +2,9 @@ package net.oriserver.aether.aether.TNTRun;
 
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -63,18 +63,59 @@ public class CreateStageManager extends SQLiteAPI {
         CreateStage createStage = createMap.get(String.valueOf(p.getUniqueId()));
         HandlerList.unregisterAll(createStage);
         createMap.remove(String.valueOf(p.getUniqueId()),createStage);
+        p.sendMessage("作成をやめました");
     }
     public void completeStage(Player p){
         CreateStage createStage = createMap.get(String.valueOf(p.getUniqueId()));
-
-
-
         Object[] objects = createStage.getData();
+        for(Object object:objects){
+            if(object==null){
+                p.sendMessage(ChatColor.DARK_RED+"作成中のステージに設定していないパラメータがあります");
+                return;
+            }
+        }
         setData(objects);
         HandlerList.unregisterAll(createStage);
         createMap.remove(String.valueOf(p.getUniqueId()),createStage);
+        p.sendMessage("作成しました");
     }
+    public void reworkStage(Player p,String name){
+        ArrayList<Object> list = getData(name);
+
+    }
+
+
+    public ArrayList<Object> getData(String name) {
+        List<Object> stagedata = getDB("SELECT * FROM TNTRunStage WHERE stage_name = ?", Arrays.asList(name), rs -> {
+            List<Object> pd = new ArrayList<>();
+            while(rs.next()){
+                pd.add(rs.getString("stage_name"));
+                pd.add(rs.getDouble("x1"));
+                pd.add(rs.getDouble("y1"));
+                pd.add(rs.getDouble("z1"));
+                pd.add(rs.getDouble("x2"));
+                pd.add(rs.getDouble("y2"));
+                pd.add(rs.getDouble("z2"));
+                pd.add(rs.getInt("max_player"));
+                pd.add(rs.getInt("min_player"));
+                pd.add(rs.getInt("death_line"));
+                pd.add(rs.getInt("disappear_speed"));
+                pd.add(rs.getDouble("sx"));
+                pd.add(rs.getDouble("sy"));
+                pd.add(rs.getDouble("sz"));
+                pd.add(rs.getString("create_player"));
+            }
+            return pd;
+        });
+        return  (ArrayList<Object>) stagedata;
+    }
+
+
+
     public void setData(Object[] objects){
+        if(isStage((String)objects[0])){
+           deteleData((String)objects[0]);
+        }
         setDB("INSERT OR IGNORE INTO TNTRunStage (stage_name,x1,y1,z1,x2,y2,z2,max_player,min_player,death_line,disappear_speed,sx,sy,sz,create_player) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
                 Arrays.asList(
                         (String)objects[0],
@@ -101,5 +142,8 @@ public class CreateStageManager extends SQLiteAPI {
             return pt;
         });
         return (boolean)exists.get(0);
+    }
+    public void deteleData(String name){
+        setDB("DELETE FROM TNTRunStage WHERE stage_name = ?",Arrays.asList(name));
     }
 }

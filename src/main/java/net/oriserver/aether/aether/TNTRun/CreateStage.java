@@ -18,6 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+
 public class CreateStage implements Listener {
 
     private String creatorName;
@@ -28,7 +30,8 @@ public class CreateStage implements Listener {
     private double speed = 5;
     private int deathLine;
     private double sx,sy,sz;
-    private CreateStageManager createStageManager;
+    private String oldName = "";
+    private final CreateStageManager createStageManager;
 
     Inventory invCreateStage = Bukkit.createInventory(null, 27, "TNTRun_CreateStage");
     public CreateStage(String creatorName,CreateStageManager createStageManager){
@@ -37,8 +40,8 @@ public class CreateStage implements Listener {
         invCreateStage.setItem(0, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "名前を設定してください", ""));
         invCreateStage.setItem(1, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "範囲選択1を設定してください", "",ChatColor.YELLOW+"クリックして設定ピッケルを入手"));
         invCreateStage.setItem(2, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "範囲選択2を設定してください", "",ChatColor.YELLOW+"クリックして設定ピッケルを入手"));
-        invCreateStage.setItem(3, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "最低人数を設定してください", ""));
-        invCreateStage.setItem(4, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "最高人数を設定してください", ""));
+        invCreateStage.setItem(3, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "最高人数を設定してください", ""));
+        invCreateStage.setItem(4, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "最低人数を設定してください", ""));
         invCreateStage.setItem(5, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "デスラインを設定してください", ChatColor.WHITE+"設定したいところに多ってクリック"));
         invCreateStage.setItem(6, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "ブロックの消える速さ:"+speed,"",ChatColor.YELLOW+"クリックして設定できます"));
         invCreateStage.setItem(7, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "スポーン位置を設定してください", ChatColor.WHITE+"設定したいところに多ってクリック"));
@@ -81,6 +84,7 @@ public class CreateStage implements Listener {
             invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"SpawnPoint: "+ChatColor.WHITE + "X="+sx+" Y="+sy+" Z="+sz, ""));
             player.closeInventory();
         }else if(slot == 18){
+            createStageManager.deteleData(oldName);
             createStageManager.completeStage(player);
         }else if(slot==19){
             createStageManager.quitStage(player);
@@ -97,7 +101,7 @@ public class CreateStage implements Listener {
             y1 = l.getY();
             z1 = l.getZ();
             e.getPlayer().sendMessage("FirstPoint" + "x:"+x1+" y:"+y1+" z:"+z1);
-            invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"FirstPoint: " + "X="+x1+" Y="+y1+" Z="+z1, ""));
+            invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"FirstPoint: " + "X="+x1+" Y="+y1+" Z="+z1, ""));
         }
         else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Location l = e.getClickedBlock().getLocation();
@@ -141,7 +145,7 @@ public class CreateStage implements Listener {
                         try {
                             maxPlayer = Integer.parseInt(item.getItemMeta().getDisplayName());
                             player.sendMessage(ChatColor.GREEN + "最高人数が " + minPlayer + " に設定されました!");
-                            invCreateStage.setItem(0, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"MaxPlayer: "+ChatColor.WHITE + maxPlayer, ""));
+                            invCreateStage.setItem(3, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"MaxPlayer: "+ChatColor.WHITE + maxPlayer, ""));
                             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                         } catch (NumberFormatException ex) {
                             player.sendMessage(ChatColor.RED + "無効な数値です!");
@@ -151,7 +155,7 @@ public class CreateStage implements Listener {
                         try {
                             minPlayer = Integer.parseInt(item.getItemMeta().getDisplayName());
                             player.sendMessage(ChatColor.GREEN + "最低人数が " + minPlayer + " に設定されました!");
-                            invCreateStage.setItem(0, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"MinPlayer: "+ChatColor.WHITE + minPlayer, ""));
+                            invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"MinPlayer: "+ChatColor.WHITE + minPlayer, ""));
                             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                         } catch (NumberFormatException ex) {
                             player.sendMessage(ChatColor.RED + "無効な数値です!");
@@ -161,7 +165,7 @@ public class CreateStage implements Listener {
                         try {
                             speed = Integer.parseInt(item.getItemMeta().getDisplayName());
                             player.sendMessage(ChatColor.GREEN + "ブロックの消えるスピードが " + speed + " に設定されました!");
-                            invCreateStage.setItem(0, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"Speed: "+ChatColor.WHITE + speed, ""));
+                            invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"Speed: "+ChatColor.WHITE + speed, ""));
                             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                         } catch (NumberFormatException ex) {
                             player.sendMessage(ChatColor.RED + "無効な数値です!");
@@ -172,20 +176,47 @@ public class CreateStage implements Listener {
         }
     }
     public Object[] getData(){
-        Object[] objects = new Object[13];
-        objects[0] = x1;
-        objects[1] = y1;
-        objects[2] = z1;
-        objects[3] = x2;
-        objects[4] = y2;
-        objects[5] = z2;
-        objects[6] = maxPlayer;
-        objects[7] = minPlayer;
-        objects[8] = speed;
-        objects[9] = deathLine;
-        objects[10] = sx;
-        objects[11] = sy;
-        objects[12] = sz;
+        Object[] objects = new Object[15];
+        objects[0] = name;
+        objects[1] = x1;
+        objects[2] = y1;
+        objects[3] = z1;
+        objects[4] = x2;
+        objects[5] = y2;
+        objects[6] = z2;
+        objects[7] = maxPlayer;
+        objects[8] = minPlayer;
+        objects[9] = speed;
+        objects[10] = deathLine;
+        objects[11] = sx;
+        objects[12] = sy;
+        objects[13] = sz;
+        objects[14] = creatorName;
         return objects;
+    }
+    public void reworkData(ArrayList<Object> list){
+        oldName = (String)list.get(0);
+        x1 = (double)list.get(1);
+        y1 = (double)list.get(2);
+        z1 = (double)list.get(3);
+        x2 = (double)list.get(4);
+        y2 = (double)list.get(5);
+        z2 = (double)list.get(6);
+        maxPlayer = (int)list.get(7);
+        minPlayer = (int)list.get(8);
+        speed = (double)list.get(9);
+        deathLine = (int)list.get(10);
+        sx = (double)list.get(11);
+        sy = (double)list.get(12);
+        sz = (double)list.get(13);
+
+        invCreateStage.setItem(0, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"StageName: "+ChatColor.WHITE + name, "クリックして設定できます"));
+        invCreateStage.setItem(1, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"FirstPoint: " + "X="+x1+" Y="+y1+" Z="+z1, ChatColor.YELLOW+"クリックして設定ピッケルを入手"));
+        invCreateStage.setItem(2, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"SecondPoint: " + "X="+x2+" Y="+y2+" Z="+z2, ChatColor.YELLOW+"クリックして設定ピッケルを入手"));
+        invCreateStage.setItem(3, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"MaxPlayer: "+ChatColor.WHITE + maxPlayer, "クリックして設定できます"));
+        invCreateStage.setItem(4, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"MinPlayer: "+ChatColor.WHITE + minPlayer, "クリックして設定できます"));
+        invCreateStage.setItem(5, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.GREEN+"DeathLine: "+ChatColor.WHITE + deathLine, ChatColor.WHITE+"設定したいところに立ってクリック"));
+        invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"Speed: "+ChatColor.WHITE + speed,ChatColor.YELLOW+"クリックして設定できます"));
+        invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"SpawnPoint: "+ChatColor.WHITE + "X="+sx+" Y="+sy+" Z="+sz,  ChatColor.WHITE+"設定したいところに立ってクリック"));
     }
 }
