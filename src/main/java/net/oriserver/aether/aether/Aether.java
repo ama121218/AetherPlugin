@@ -54,7 +54,7 @@ public final class Aether extends JavaPlugin{
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
 
         pluginManager.registerEvents(new UsualListener(playerManager,sqLiteManager, chatManager,saveInventoryManager,hideShow),this);
-        pluginManager.registerEvents(new ItemClickListener(inventoryManager,pressureListener,hideShow,plugin),this);
+        pluginManager.registerEvents(new ItemClickListener(inventoryManager,pressureListener,hideShow,plugin,tntRunMain),this);
         pluginManager.registerEvents(new InventoryClickListener(playerManager,inventoryManager,plugin),this);
         pluginManager.registerEvents(pressureListener,this);
 

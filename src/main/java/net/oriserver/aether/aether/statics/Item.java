@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.statics;
 
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -181,6 +182,30 @@ public class Item {
         }
     }
 
+    static public void removeCustomNamedItemFromInventory(Inventory inventory, Material material, String customName) {
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() == material && item.hasItemMeta() && customName.equals(item.getItemMeta().getDisplayName())) {
+                inventory.remove(item);
+            }
+        }
+    }
+
+    public static void setItemNameNMS(net.minecraft.server.v1_12_R1.ItemStack itemStack, String name) {
+        NBTTagCompound tagCompound = itemStack.getTag();
+
+        if (tagCompound == null) {
+            tagCompound = new NBTTagCompound();
+            itemStack.setTag(tagCompound);
+        }
+
+        NBTTagCompound display = tagCompound.getCompound("display");
+
+        if (!tagCompound.hasKey("display")) {
+            tagCompound.set("display", display);
+        }
+
+        display.setString("Name", name);
+    }
 
 
 

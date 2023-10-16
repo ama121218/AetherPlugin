@@ -1,8 +1,10 @@
 package net.oriserver.aether.aether.TNTRun;
 
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
+import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +21,7 @@ public class CreateStageManager extends SQLiteAPI {
 
     CreateStageManager(JavaPlugin plugin, TNTRunMain tntRunMain){
 
-        super(plugin,"TNtRunStage");
+        super(plugin,"TNTRunStage");
         this.tntRunMain = tntRunMain;
         this.plugin = plugin;
 
@@ -53,6 +55,7 @@ public class CreateStageManager extends SQLiteAPI {
         CreateStage createStage = new CreateStage(p.getName(),this);
         Bukkit.getServer().getPluginManager().registerEvents(createStage, this.plugin);
         createMap.put(String.valueOf(p.getUniqueId()),createStage);
+        p.getInventory().addItem(Item.createitem(Material.SHULKER_SHELL,1,"TNTRun create stage tool"));
     }
 
     public void quitStage(Player p){
@@ -64,24 +67,34 @@ public class CreateStageManager extends SQLiteAPI {
         HandlerList.unregisterAll(createStage);
         createMap.remove(String.valueOf(p.getUniqueId()),createStage);
         p.sendMessage("作成をやめました");
+        Item.removeCustomNamedItemFromInventory(p.getInventory(),Material.SHULKER_SHELL,"TNTRun create stage tool");
+        Item.removeCustomNamedItemFromInventory(p.getInventory(),Material.WOOD_PICKAXE, "TNTRun_Setting");
     }
-    public void completeStage(Player p){
+    public boolean completeStage(Player p){
         CreateStage createStage = createMap.get(String.valueOf(p.getUniqueId()));
         Object[] objects = createStage.getData();
         for(Object object:objects){
             if(object==null){
                 p.sendMessage(ChatColor.DARK_RED+"作成中のステージに設定していないパラメータがあります");
-                return;
+                return false;
             }
         }
         setData(objects);
         HandlerList.unregisterAll(createStage);
         createMap.remove(String.valueOf(p.getUniqueId()),createStage);
         p.sendMessage("作成しました");
+        Item.removeCustomNamedItemFromInventory(p.getInventory(),Material.SHULKER_SHELL,"TNTRun create stage tool");
+        Item.removeCustomNamedItemFromInventory(p.getInventory(),Material.WOOD_PICKAXE, "TNTRun_Setting");
+        return true;
     }
+
     public void reworkStage(Player p,String name){
         ArrayList<Object> list = getData(name);
+        CreateStage createStage = new CreateStage(p.getName(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(createStage, this.plugin);
+        createMap.put(String.valueOf(p.getUniqueId()),createStage);
 
+        createStage.reworkStage(list);
     }
 
 
@@ -145,5 +158,12 @@ public class CreateStageManager extends SQLiteAPI {
     }
     public void deteleData(String name){
         setDB("DELETE FROM TNTRunStage WHERE stage_name = ?",Arrays.asList(name));
+    }
+    public CreateStage getCreateStage(Player p){
+        if(!createMap.containsKey(String.valueOf(p.getUniqueId()))){
+            p.sendMessage("作成中のステージがありません");
+            return null;
+        }
+        return createMap.get(String.valueOf(p.getUniqueId()));
     }
 }

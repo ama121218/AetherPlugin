@@ -143,12 +143,14 @@ public class InventoryClickListener implements Listener {
         }
         //AnvilInventoryだった場合
         if(e.getInventory().getType() == InventoryType.ANVIL){
+            e.setCancelled(true);
             AnvilClickEvent customEvent = new AnvilClickEvent(e);
             Bukkit.getPluginManager().callEvent(customEvent);
             return;
         }
         //CreateTNTRunStage
         if(title.equals("TNTRun_CreateStage")){
+            e.setCancelled(true);
             CreateTNTRunStageInventoryEvent customEvent = new CreateTNTRunStageInventoryEvent(p,e.getRawSlot());
             Bukkit.getPluginManager().callEvent(customEvent);
             return;

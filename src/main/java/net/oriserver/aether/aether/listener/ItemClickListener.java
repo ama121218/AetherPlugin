@@ -1,5 +1,7 @@
 package net.oriserver.aether.aether.listener;
 
+import net.oriserver.aether.aether.TNTRun.CreateStage;
+import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
 import net.oriserver.aether.aether.events.CreateTNTRunStageInventoryEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
@@ -20,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,13 +36,15 @@ public class ItemClickListener implements Listener {
     private final PressureListener pressureListener;
     private final HideShow hideShow;
     private final Plugin plugin;
+    private final TNTRunMain tntRunMain;
     private final HashSet<String> itemCoolTime = new HashSet<String>();
-    public ItemClickListener(InventoryManager inventoryManager, PressureListener pressureListener,HideShow hideShow ,Plugin plugin){
+    public ItemClickListener(InventoryManager inventoryManager, PressureListener pressureListener,HideShow hideShow ,Plugin plugin,TNTRunMain tntRunMain){
         featherInventory = new FeatherInventory();
         this.inventoryManager = inventoryManager;
         this.pressureListener = pressureListener;
         this.hideShow = hideShow;
         this.plugin = plugin;
+        this.tntRunMain = tntRunMain;
     }
 
     @EventHandler
@@ -152,6 +157,12 @@ public class ItemClickListener implements Listener {
             if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun_Setting")) {
                 e.setCancelled(true);
                 Bukkit.getPluginManager().callEvent(new CreateTNTRunStageClickItemEvent(e));
+            }
+        }else if(item.getType() == Material.SHULKER_SHELL){
+            if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun create stage tool")) {
+                CreateStage createStage = tntRunMain.getCreateStageManager().getCreateStage(p);
+                if(createStage == null)return;
+                p.openInventory(createStage.getInvCreateStage());
             }
         }
     }

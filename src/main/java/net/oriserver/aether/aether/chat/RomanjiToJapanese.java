@@ -123,6 +123,12 @@ public class RomanjiToJapanese {
         romanjiToHiraganaMap.put("che", "ちぇ");
         romanjiToHiraganaMap.put("cho", "ちょ");
 
+        romanjiToHiraganaMap.put("tya", "ちゃ");
+        romanjiToHiraganaMap.put("tyi", "ちぃ");
+        romanjiToHiraganaMap.put("tyu", "ちゅ");
+        romanjiToHiraganaMap.put("tye", "ちぇ");
+        romanjiToHiraganaMap.put("tyo", "ちょ");
+
         romanjiToHiraganaMap.put("nya", "にゃ");
         romanjiToHiraganaMap.put("nyi", "にぃ");
         romanjiToHiraganaMap.put("nyu", "にゅ");

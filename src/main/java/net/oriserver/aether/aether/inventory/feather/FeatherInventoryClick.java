@@ -1,8 +1,10 @@
 package net.oriserver.aether.aether.inventory.feather;
 
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -33,8 +35,15 @@ public class FeatherInventoryClick {
         else if(material == Material.FEATHER && slot == 7){p.setWalkSpeed(1.0f);p.setFlySpeed(1.0f);p.sendMessage("your speed level : 6");
             for(PotionEffect effect : p.getActivePotionEffects()) {p.removePotionEffect(effect.getType());}
         }
-        else if(material == Material.FEATHER && slot == 8){p.setWalkSpeed(1.0f);p.setFlySpeed(1.0f);p.sendMessage("your speed level : 7");
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 50));
+        else if(material == Material.FEATHER && slot == 8){
+            //p.setWalkSpeed(1.0f);p.setFlySpeed(1.0f);p.sendMessage("your speed level : 7");
+            //p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 50));
+
+            EntityPlayer entityPlayer = ((CraftPlayer) p).getHandle();
+            entityPlayer.abilities.flySpeed = 2.0f; // 1.0より大きな値を設定可能
+            entityPlayer.updateAbilities(); // 能力をアップデート
+
+            p.setWalkSpeed(1.0f);
         }
         if(slot!=1)p.setGameMode(GameMode.CREATIVE);
         p.closeInventory();
