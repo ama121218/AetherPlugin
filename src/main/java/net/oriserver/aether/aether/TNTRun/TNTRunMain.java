@@ -18,7 +18,7 @@ public class TNTRunMain {
         this.plugin = plugin;
 
         // 各マネージャークラスのインスタンスを生成
-        this.stageManager = new StageManager(this);
+        this.stageManager = new StageManager(plugin,this);
         this.createStageManager = new CreateStageManager(this.plugin,this);
         this.lobbyManager = new LobbyManager(this);
         this.gameManager = new GameManager(this);

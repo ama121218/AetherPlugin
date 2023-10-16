@@ -20,7 +20,6 @@ public class CreateStageManager extends SQLiteAPI {
     final private HashMap<String,CreateStage> createMap = new HashMap<>();
 
     CreateStageManager(JavaPlugin plugin, TNTRunMain tntRunMain){
-
         super(plugin,"TNTRunStage");
         this.tntRunMain = tntRunMain;
         this.plugin = plugin;
