@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.inventory;
 
-import javafx.scene.chart.Chart;
+
 import net.oriserver.aether.aether.inventory.chart.ChartInventory;
 import net.oriserver.aether.aether.inventory.global.GlobalInventory;
 import net.oriserver.aether.aether.inventory.home.HomeInventory;

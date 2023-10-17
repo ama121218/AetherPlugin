@@ -8,6 +8,7 @@ public class Lobby {
     private String lobbyName;
     private Stage stage;
     private String lobbyCreatorName;
+    private boolean isRun = false;
 
     private HashSet<String> playerSet = new HashSet<>();
     Lobby(Stage stage,String lobbyCreatorName){

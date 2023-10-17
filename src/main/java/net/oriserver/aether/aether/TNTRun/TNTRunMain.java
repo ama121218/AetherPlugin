@@ -10,7 +10,6 @@ public class TNTRunMain {
     final private StageManager stageManager;
     final private LobbyManager lobbyManager;
     final private GameManager gameManager;
-    final private GamePlayerManager playerManager;
     final private CreateStageManager createStageManager;
 
     public TNTRunMain(JavaPlugin plugin) {
@@ -22,7 +21,6 @@ public class TNTRunMain {
         this.createStageManager = new CreateStageManager(this.plugin,this);
         this.lobbyManager = new LobbyManager(this);
         this.gameManager = new GameManager(this);
-        this.playerManager = new GamePlayerManager(this);
 
         // その他の初期化処理...
 
@@ -43,9 +41,5 @@ public class TNTRunMain {
 
     public GameManager getGameManager () {
         return gameManager;
-    }
-
-    public GamePlayerManager getPlayerManager () {
-        return playerManager;
     }
 }
