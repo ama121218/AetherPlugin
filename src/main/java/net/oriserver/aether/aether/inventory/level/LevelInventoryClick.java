@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.inventory.level;
 
+import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.player.PlayerManager;
@@ -37,16 +38,22 @@ public class LevelInventoryClick {
             }
         }else if(material == Material.GRASS && slot == 7){
             inventoryManager.getLevelInventory().setinv(p, 1  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(1);
         }else if(material == Material.LOG && slot == 16){
             inventoryManager.getLevelInventory().setinv(p, 3  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(3);
         }else if(material == Material.SMOOTH_BRICK && slot == 25){
             inventoryManager.getLevelInventory().setinv(p, 5  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(5);
         }else if(material == Material.LAPIS_BLOCK && slot == 34){
             inventoryManager.getLevelInventory().setinv(p, 7  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(7);
         }else if(material == Material.MAGMA && slot == 43){
             inventoryManager.getLevelInventory().setinv(p, 9  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(9);
         }else if(material == Material.QUARTZ_BLOCK && slot == 52){
             inventoryManager.getLevelInventory().setinv(p, 11  ,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
+            inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).setLevel_page(11);
         }
         else if (material == Material.ARROW && (slot == 48 || slot == 50)) {
             ItemStack pageItem = p.getOpenInventory().getTopInventory().getItem(1);
@@ -55,6 +62,10 @@ public class LevelInventoryClick {
             int sub_page = Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0));
             PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
             inventoryManager.getLevelInventory().setinv(p, (main_page - 1) * 2 + sub_page,playerStats.getLevel());
+            playerStats.setLevel_page((main_page - 1) * 2 + sub_page);
+        }
+        else if(material == Material.CHORUS_FRUIT_POPPED && slot == 18){
+            CommonMethods.setTeleport(p,AthleticLocation.getLocation(AthleticLocation.SHRINE),"Level_Lobby",inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())));
         }
     }
 }

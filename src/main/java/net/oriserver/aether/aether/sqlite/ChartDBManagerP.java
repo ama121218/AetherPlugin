@@ -84,6 +84,17 @@ public class ChartDBManagerP extends SQLiteAPI {
         setDB("UPDATE Chart_Data_Player SET clear_count = ? WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(clear_count, uuid, stage_id));
     }
 
+    public void setgoalcount1(String uuid,int stage_id){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String date = now.format(formatter);
+        List<Integer> list = getclear_count(uuid,stage_id);
+        if(list.size()==0){
+            setDB("INSERT OR IGNORE INTO Chart_Data_Player (player_uuid,stage_id,clear_count,chart_time,date) VALUES(?,?,?,?,?)",Arrays.asList(uuid,stage_id,1,6039999,date));
+        }else{
+            setDB("UPDATE Chart_Data_Player SET clear_count = ? WHERE player_uuid = ? AND stage_id = ?", Arrays.asList(list.get(0)+1, uuid, stage_id));
+        }
+    }
 
 
 

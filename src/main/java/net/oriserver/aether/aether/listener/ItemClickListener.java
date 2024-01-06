@@ -2,12 +2,13 @@ package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.TNTRun.CreateStage;
 import net.oriserver.aether.aether.TNTRun.TNTRunMain;
+import net.oriserver.aether.aether.chart.events.*;
 import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
-import net.oriserver.aether.aether.events.CreateTNTRunStageInventoryEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
-import net.oriserver.aether.aether.inventory.chart.ChartLocation;
+import net.oriserver.aether.aether.chart.stage.ChartLocation;
 import net.oriserver.aether.aether.inventory.global.GlobalLocation;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
+import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventory;
@@ -22,7 +23,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,15 +33,13 @@ public class ItemClickListener implements Listener {
 
     private final FeatherInventory featherInventory;
     private final InventoryManager inventoryManager;
-    private final PressureListener pressureListener;
     private final HideShow hideShow;
     private final Plugin plugin;
     private final TNTRunMain tntRunMain;
     private final HashSet<String> itemCoolTime = new HashSet<String>();
-    public ItemClickListener(InventoryManager inventoryManager, PressureListener pressureListener,HideShow hideShow ,Plugin plugin,TNTRunMain tntRunMain){
+    public ItemClickListener(InventoryManager inventoryManager,HideShow hideShow , Plugin plugin, TNTRunMain tntRunMain){
         featherInventory = new FeatherInventory();
         this.inventoryManager = inventoryManager;
-        this.pressureListener = pressureListener;
         this.hideShow = hideShow;
         this.plugin = plugin;
         this.tntRunMain = tntRunMain;
@@ -75,9 +73,9 @@ public class ItemClickListener implements Listener {
         }else if(item.getType() == Material.PRISMARINE_SHARD){
             e.setCancelled(true);
             if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
-                pressureListener.resetChartStart(p);
+                Bukkit.getPluginManager().callEvent(new ChartTimeResetEvent(p));
             }
-        }else if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().charAt(0)=='/') {
+        }else if(p.isOp() && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().charAt(0)=='/') {
             e.setCancelled(true);
             if(item.getItemMeta().getDisplayName().contains(";")){
                 String[] left_right = ChatColor.stripColor(item.getItemMeta().getDisplayName()).split(";");
@@ -104,9 +102,16 @@ public class ItemClickListener implements Listener {
         }else if(item.getType()==Material.IRON_INGOT){
             e.setCancelled(true);
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                if(p.getLocation().getWorld().getName().equals("shrine"))inventoryManager.getLevelInventory().setinv(p,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getLevel());
-                else if(p.getLocation().getWorld().getName().equals("chart"))inventoryManager.getChartInventory().setinv(p,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getChart());
-                else if(p.getLocation().getWorld().getName().equals("global"))inventoryManager.getGlobalInventory().setinv(p,1);
+                PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
+                if(p.getLocation().getWorld().getName().equals("shrine")){
+                    inventoryManager.getLevelInventory().setinv(p,playerStats.getLevel_page(),playerStats.getLevel());
+                }
+                else if(p.getLocation().getWorld().getName().equals("chart")){
+                    Bukkit.getPluginManager().callEvent(new ChartIronIngotClickEvent(p,playerStats.getChart_page(),playerStats.getChart()));
+                }
+                else if(p.getLocation().getWorld().getName().equals("global")){
+                    inventoryManager.getGlobalInventory().setinv(p,1);
+                }
             }
         }else if (item.getType() == Material.EYE_OF_ENDER){
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -130,17 +135,7 @@ public class ItemClickListener implements Listener {
             e.setCancelled(true);
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (p.getWorld().getName().equals("chart")) {
-                    String string_location = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString()).getLocation();
-                    if (string_location.startsWith("Chart") && !string_location.equals("Chart_Lobby")) {
-                        String[] parts = string_location.split("_");
-
-                        // main_pageとsub_pageを取得する
-                        int main_page = Integer.parseInt(parts[0].replace("Chart", ""));
-                        int sub_page = Integer.parseInt(parts[1]);
-
-                        p.teleport(ChartLocation.getChartLocation((main_page - 1) * 14 + sub_page));
-                    }
-
+                    Bukkit.getPluginManager().callEvent(new ChartCheckPointTPEvent(p));
                 } else if (p.getWorld().getName().equals("shrine")) {
                     String string_location = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString()).getLocation();
                     if (string_location.startsWith("Level") && !string_location.equals("Level_Lobby")) {
@@ -153,16 +148,19 @@ public class ItemClickListener implements Listener {
                     }
                 }
             }
-        }else if(item.getType() == Material.WOOD_PICKAXE){
+        }else if(p.isOp() && item.getType() == Material.WOOD_PICKAXE){
             if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun_Setting")) {
                 e.setCancelled(true);
                 Bukkit.getPluginManager().callEvent(new CreateTNTRunStageClickItemEvent(e));
             }
-        }else if(item.getType() == Material.SHULKER_SHELL){
+        }else if(p.isOp() && item.getType() == Material.SHULKER_SHELL){
+            e.setCancelled(true);
             if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun create stage tool")) {
                 CreateStage createStage = tntRunMain.getCreateStageManager().getCreateStage(p);
                 if(createStage == null)return;
                 p.openInventory(createStage.getInvCreateStage());
+            }else if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE+"Chart Stage Create Tool")){
+                Bukkit.getPluginManager().callEvent(new ChartCreateToolClickEvent(p));
             }
         }
     }
@@ -193,7 +191,10 @@ public class ItemClickListener implements Listener {
                     event.setCancelled(true); // 任意でイベントをキャンセル
                     // 例: プレイヤーにメッセージを表示
                     if(player.getLocation().getWorld().getName().equals("shrine"))inventoryManager.getLevelInventory().setinv(player,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(player.getUniqueId())).getLevel());
-                    else if(player.getLocation().getWorld().getName().equals("chart"))inventoryManager.getChartInventory().setinv(player,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(player.getUniqueId())).getChart());
+                    else if(player.getLocation().getWorld().getName().equals("chart")){
+                        PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(player.getUniqueId().toString());
+                        Bukkit.getPluginManager().callEvent(new ChartIronIngotClickEvent(player,playerStats.getChart_page(),playerStats.getChart()));
+                    }
                     else if(player.getLocation().getWorld().getName().equals("global"))inventoryManager.getGlobalInventory().setinv(player,1);
 
                 }

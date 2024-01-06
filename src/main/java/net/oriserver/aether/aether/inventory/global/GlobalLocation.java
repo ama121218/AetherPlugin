@@ -1,6 +1,5 @@
 package net.oriserver.aether.aether.inventory.global;
 
-import net.oriserver.aether.aether.inventory.chart.ChartLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

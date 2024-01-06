@@ -10,6 +10,8 @@ import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.saveinventory.SaveInventoryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.sound.midi.Soundbank;
+
 public class CommandSetter {
     private final JavaPlugin plugin;
     private final PlayerManager pm;
@@ -17,7 +19,9 @@ public class CommandSetter {
     private final SaveInventoryManager saveInventoryManager;
     private final HideShow hideShow;
     private final TNTRunMain tntRunMain;
-    public CommandSetter(JavaPlugin plugin, PlayerManager playerManager, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow,TNTRunMain tntRunMain){
+
+    public CommandSetter(JavaPlugin plugin, PlayerManager playerManager, ChatManager chatManager, SaveInventoryManager saveInventoryManager,
+                         HideShow hideShow, TNTRunMain tntRunMain){
         this.plugin = plugin;
         this.pm = playerManager;
         this.chatManager = chatManager;
@@ -39,5 +43,6 @@ public class CommandSetter {
         plugin.getCommand("teleportaether").setExecutor(new TeleportAether());
         plugin.getCommand("i").setExecutor(new I());
         plugin.getCommand("TNTRun").setExecutor(new TNTRun(tntRunMain));
+        new PlaySound(plugin);
     }
 }

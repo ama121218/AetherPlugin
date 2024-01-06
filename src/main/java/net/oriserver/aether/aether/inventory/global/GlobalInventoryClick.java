@@ -1,13 +1,10 @@
 package net.oriserver.aether.aether.inventory.global;
 
-import net.oriserver.aether.aether.inventory.chart.ChartLocation;
+import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.statics.CommonMethods;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class GlobalInventoryClick {
 
@@ -27,6 +24,9 @@ public class GlobalInventoryClick {
         }
         else if (material == Material.INK_SACK && slot==5){
             CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(3),"Global_3",pm.getPlayer(p.getUniqueId().toString()));
+        }
+        else if(material == Material.CHORUS_FRUIT_POPPED && slot == 18){
+            CommonMethods.setTeleport(p, AthleticLocation.getLocation(AthleticLocation.GLOBAL),"GLOBAL_Lobby",pm.getPlayer(String.valueOf(p.getUniqueId())));
         }
     }
 }

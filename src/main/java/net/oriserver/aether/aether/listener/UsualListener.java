@@ -84,7 +84,7 @@ public class UsualListener implements Listener {
         if(!pm.isPlayer(uuid)) {
             pm.addPlayer(player);
         }
-
+        //サーバー内のプレイヤーデータ
         PlayerStats playerStats = pm.getPlayer(uuid);
         playerStats.setPlayer(player);
         if(playerStats.isChatroomonoff()){
@@ -98,8 +98,8 @@ public class UsualListener implements Listener {
         }
 
         Item.player_partition.put(uuid,playerStats.getPartition());
-        if(!playerStats.isPlayersidebaronoff())playerStats.getPlayerSidebar().setSidebar(player);
-        else playerStats.getPlayerSidebar().cancelSidebar();
+        //if(!playerStats.isPlayersidebaronoff())playerStats.getPlayerSidebar().setSidebar(player);
+        //else playerStats.getPlayerSidebar().cancelSidebar();
 
         if(!player.isOp()){
             player.getInventory().clear();
@@ -108,6 +108,8 @@ public class UsualListener implements Listener {
         playerStats.setListName();
         hideShow.handleNewPlayerJoin(player);
         playerStats.setJoin_time(System.currentTimeMillis());
+
+
 
         if(player.isOp()){
             player.performCommand("wea");
@@ -175,6 +177,7 @@ public class UsualListener implements Listener {
         }
         String uuid = String.valueOf(player.getUniqueId());
         PlayerStats playerStats = pm.getPlayer(uuid);
+        if(playerStats==null)return;
         playerStats.setChatroom("General");
 
         boolean[] setting = playerStats.getSetting();
@@ -187,7 +190,6 @@ public class UsualListener implements Listener {
         playerStats.setPast_time(playerStats.getPast_time() + System.currentTimeMillis()-playerStats.getJoin_time());
         sqLiteManager.getPlayerDBManagerJQ().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
     }
-
     private final Set<UUID> playersJumping = new HashSet<>();
 
     @EventHandler
@@ -312,7 +314,7 @@ public class UsualListener implements Listener {
     public void onItemSpawn(ItemSpawnEvent event) {
         event.setCancelled(true);
     }
-    @EventHandler
+    @EventHandler()
     public void onEntityExplode(EntityExplodeEvent event) {
         event.setCancelled(true);
     }

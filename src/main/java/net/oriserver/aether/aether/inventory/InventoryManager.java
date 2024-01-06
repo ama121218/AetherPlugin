@@ -1,18 +1,16 @@
 package net.oriserver.aether.aether.inventory;
 
 
-import net.oriserver.aether.aether.inventory.chart.ChartInventory;
+import net.oriserver.aether.aether.chart.inventory.ChartInventory;
 import net.oriserver.aether.aether.inventory.global.GlobalInventory;
 import net.oriserver.aether.aether.inventory.home.HomeInventory;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventory;
-import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventoryClick;
 import net.oriserver.aether.aether.inventory.home.admin.saveitem.SaveItemInventory;
 import net.oriserver.aether.aether.inventory.home.admin.saveteleport.SaveTeleportInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.badge.BadgeInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.headblock.HeadBlockInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.particle.ParticleInventory;
-import net.oriserver.aether.aether.inventory.home.appearance.particle.ParticleInventoryClick;
 import net.oriserver.aether.aether.inventory.home.athletic.AthleticInventory;
 import net.oriserver.aether.aether.inventory.home.minigame.MiniGameInventory;
 import net.oriserver.aether.aether.inventory.home.phonesetting.PhoneSettingInventory;
@@ -41,7 +39,6 @@ public class InventoryManager {
     final private PhonePartitionInventory phonePartitionInventory;
     final private PhoneSettingInventory phoneSettingInventory;
     final private LevelInventory levelInventory;
-    final private ChartInventory chartInventory;
     final private GlobalInventory globalInventory;
 
     public InventoryManager(PlayerManager pm){
@@ -62,7 +59,6 @@ public class InventoryManager {
         phonePartitionInventory = new PhonePartitionInventory();
         phoneSettingInventory = new PhoneSettingInventory();
         levelInventory = new LevelInventory();
-        chartInventory = new ChartInventory(pm);
         globalInventory = new GlobalInventory();
     }
     public PlayerManager getPlayerManager(){return this.pm;}
@@ -82,6 +78,5 @@ public class InventoryManager {
     public PhonePartitionInventory getPhonePartitionInventory(){return this.phonePartitionInventory;}
     public PhoneSettingInventory getPhoneSettingInventory(){return this.phoneSettingInventory;}
     public LevelInventory getLevelInventory(){return levelInventory;}
-    public ChartInventory getChartInventory(){return chartInventory;}
     public GlobalInventory getGlobalInventory(){return  globalInventory;}
 }

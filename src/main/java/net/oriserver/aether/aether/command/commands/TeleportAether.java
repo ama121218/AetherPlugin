@@ -1,10 +1,8 @@
 package net.oriserver.aether.aether.command.commands;
 
 import net.oriserver.aether.aether.AthleticLocation;
-import net.oriserver.aether.aether.inventory.chart.ChartLocation;
+import net.oriserver.aether.aether.chart.stage.ChartLocation;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

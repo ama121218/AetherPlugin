@@ -1,4 +1,4 @@
-package net.oriserver.aether.aether.inventory.chart;
+package net.oriserver.aether.aether.chart.stage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -98,3 +98,4 @@ public enum ChartLocation {
         return chartLocation.name;
     }
 }
+

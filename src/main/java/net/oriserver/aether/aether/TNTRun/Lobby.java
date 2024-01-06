@@ -31,7 +31,7 @@ public class Lobby {
         }
         playerSet.add(p);
         if(this.playerSet.size()>=stage.getMinPlayer()){
-            startPreGame();
+            //startPreGame();
         }
     }
     public void removePlayer(Player p){
@@ -39,7 +39,7 @@ public class Lobby {
     }
 
 
-    public void startPreGame() {
+    /*public void startPreGame() {
         if (game == null) game = new Game();
         if (countdownTask == null) { // タスクがまだスケジュールされていない場合のみ
             countdownTask = new BukkitRunnable() {
@@ -75,9 +75,9 @@ public class Lobby {
                         game.start();
                     }
                 }
-            }.runTaskTimer(/* プラグインのインスタンス */, 0L, 20L); // 20 ticks = 1 second
+            }.runTaskTimer(/* プラグインのインスタンス , 0L, 20L); // 20 ticks = 1 second
         }
-    }
+    }*/
 
     public void stopPreGame() {
         if (countdownTask != null) {
@@ -89,9 +89,9 @@ public class Lobby {
 
 
 
-    public HashSet<String> getPlayerSet(){
+    /*public HashSet<String> getPlayerSet(){
         return this.playerSet;
-    }
+    }*/
 
 
 }

@@ -26,6 +26,8 @@ public class LevelInventory {
         invLevel.setItem(0, Item.createitem(Material.IRON_INGOT, 1, ChatColor.WHITE+"Teleport_Option", ""));
         invLevel.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
 
+        invLevel.setItem(18,Item.createitem(Material.CHORUS_FRUIT_POPPED,1,ChatColor.GREEN+"Teleport_Spawn",""));
+
         invLevel.setItem(1,Item.createitem(Material.QUARTZ_STAIRS, 1, "Level_Athletic", ChatColor.WHITE+"1"));
 
         invLevel.setItem(7, Item.createitem(Material.GRASS, 1, "草原ステージ", ""));

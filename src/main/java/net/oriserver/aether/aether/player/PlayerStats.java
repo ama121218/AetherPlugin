@@ -39,6 +39,10 @@ public class PlayerStats {
     private int partition;
     private int checkpoint;
 
+
+    private int chart_page = 1;
+    private int level_page = 1;
+
     private String language;
 
     PlayerStats(Player player,SQLiteManager sqLiteManager){
@@ -184,4 +188,10 @@ public class PlayerStats {
 
     public Long getJoin_time(){return this.join_time;}
     public void setJoin_time(Long time){this.join_time=time;}
+
+    public int getChart_page() {return chart_page;}
+    public void setChart_page(int chart_page){this.chart_page = chart_page;}
+
+    public int getLevel_page() {return level_page;}
+    public void setLevel_page(int level_page){this.level_page = level_page;}
 }

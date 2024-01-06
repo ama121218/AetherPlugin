@@ -59,3 +59,15 @@ commands:
       - TNTrun
       - tntrun
       - TNTRun
+
+  chart:
+    description: chartStage
+    usage: /<command> [create-rework] [stage_id]
+    aliases:
+      - chart
+      - chartStage
+      - ChartStage
+
+  sound:
+    description: play sound
+    usage: /<command> [check-off]

@@ -1,8 +1,5 @@
 package net.oriserver.aether.aether.inventory.global;
 
-import net.oriserver.aether.aether.inventory.chart.ChartLocation;
-import net.oriserver.aether.aether.inventory.chart.ChartTimeStandard;
-import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,11 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-
-import static net.oriserver.aether.aether.inventory.chart.ChartTimeStandard.*;
-import static net.oriserver.aether.aether.inventory.chart.ChartTimeStandard.getChartStandard;
 
 public class GlobalInventory {
     Inventory invGlobal = Bukkit.createInventory(null, 54, "Global Athletic");
@@ -32,6 +24,7 @@ public class GlobalInventory {
         invGlobal.setItem(4,Item.changename(gray_dye,"ピラミッド"));
         invGlobal.setItem(5,Item.changename(gray_dye,"日本"));
 
+        invGlobal.setItem(18,Item.createitem(Material.CHORUS_FRUIT_POPPED,1,ChatColor.GREEN+"Teleport_Spawn",""));
     }
     public void setinv(Player p, int global){
         Inventory openinv = Item.inventorycopy(invGlobal);

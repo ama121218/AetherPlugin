@@ -1,7 +1,7 @@
 package net.oriserver.aether.aether;
 
-import net.oriserver.aether.aether.TNTRun.CreateStageManager;
 import net.oriserver.aether.aether.TNTRun.TNTRunMain;
+import net.oriserver.aether.aether.chart.ChartManager;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.command.CommandSetter;
 import net.oriserver.aether.aether.hideshow.HideShow;
@@ -27,44 +27,36 @@ public final class Aether extends JavaPlugin{
 
 
     private static JavaPlugin plugin;
-    SQLiteManager sqLiteManager;
     PlayerManager playerManager;
-    InventoryManager inventoryManager;
-    CommandSetter cm;
-    ChatManager chatManager;
-    Hologram hologram;
-    SaveInventoryManager saveInventoryManager;
-    HideShow hideShow;
-    TNTRunMain tntRunMain;
 
     @Override
     public void onEnable(){
         plugin = this;
-        sqLiteManager = new SQLiteManager(this);
+        SQLiteManager sqLiteManager = new SQLiteManager(this);
         playerManager = new PlayerManager(sqLiteManager);
-        inventoryManager = new InventoryManager(playerManager);
-        hologram = new Hologram(sqLiteManager.getChartRankingDB());
-        saveInventoryManager = new SaveInventoryManager();
-        hideShow = new HideShow(plugin);
-        chatManager = new ChatManager();
-        tntRunMain = new TNTRunMain(plugin);
+        InventoryManager inventoryManager = new InventoryManager(playerManager);
+        Hologram hologram = new Hologram(sqLiteManager.getChartRankingDB());
+        SaveInventoryManager saveInventoryManager = new SaveInventoryManager();
+        HideShow hideShow = new HideShow(plugin);
+        ChatManager chatManager = new ChatManager();
+        TNTRunMain tntRunMain = new TNTRunMain(plugin);
+        ChartManager chartManager = new ChartManager(plugin,playerManager,hologram);
 
-        PressureListener pressureListener = new PressureListener(playerManager,sqLiteManager, hologram,plugin);
-        cm = new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain);
+        new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain);
+
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-
         pluginManager.registerEvents(new UsualListener(playerManager,sqLiteManager, chatManager,saveInventoryManager,hideShow),this);
-        pluginManager.registerEvents(new ItemClickListener(inventoryManager,pressureListener,hideShow,plugin,tntRunMain),this);
+        pluginManager.registerEvents(new ItemClickListener(inventoryManager,hideShow,plugin,tntRunMain),this);
         pluginManager.registerEvents(new InventoryClickListener(playerManager,inventoryManager,plugin),this);
-        pluginManager.registerEvents(pressureListener,this);
+        pluginManager.registerEvents(new PressureListener(playerManager,sqLiteManager, hologram,plugin),this);
+
 
         for (World world : Bukkit.getWorlds()) {
             world.setGameRuleValue("announceAdvancements", "false");
         }
+
     }
     public void onDisable(){
-
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             // ここで、プレイヤーのデータをデータベースに保存する処理を行う
             String uuid = player.getUniqueId().toString();

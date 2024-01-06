@@ -1,8 +1,8 @@
 package net.oriserver.aether.aether.listener;
 
-import net.oriserver.aether.aether.events.AnvilClickEvent;
-import net.oriserver.aether.aether.events.CreateTNTRunStageInventoryEvent;
-import net.oriserver.aether.aether.inventory.chart.ChartInventoryClick;
+import net.oriserver.aether.aether.chart.events.ChartInventoryClickEvent;
+import net.oriserver.aether.aether.chart.events.ChartStartEvent;
+import net.oriserver.aether.aether.events.*;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
 import net.oriserver.aether.aether.inventory.global.GlobalInventoryClick;
 import net.oriserver.aether.aether.inventory.home.HomeInventoryClick;
@@ -10,10 +10,8 @@ import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventoryClick;
 import net.oriserver.aether.aether.inventory.home.admin.saveitem.SaveItemInventoryClick;
 import net.oriserver.aether.aether.inventory.home.admin.saveteleport.SaveTeleportInventoryClick;
-import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventoryClick;
 import net.oriserver.aether.aether.inventory.home.appearance.badge.BadgeInventoryClick;
-import net.oriserver.aether.aether.inventory.home.appearance.headblock.HeadBlockInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.headblock.HeadBlockInventoryClick;
 import net.oriserver.aether.aether.inventory.home.appearance.particle.ParticleInventoryClick;
 import net.oriserver.aether.aether.inventory.home.athletic.AthleticInventoryClick;
@@ -42,26 +40,25 @@ import java.util.Map;
 
 public class InventoryClickListener implements Listener {
 
-    final private InventoryManager inventoryManager;
+    private final InventoryManager inventoryManager;
 
-    final private FeatherInventoryClick featherInventoryClick;
-    final private HomeInventoryClick homeInventoryClick;
-    final private AthleticInventoryClick athleticInventoryClick;
-    final private MiniGameInventoryClick miniGameInventoryClick;
-    final private AppearanceInventoryClick appearanceInventoryClick;
-    final private ParticleInventoryClick particleInventoryClick;
-    final private HeadBlockInventoryClick headBlockInventoryClick;
-    final private BadgeInventoryClick badgeInventoryClick;
-    final private SettingInventoryClick settingInventoryClick;
-    final private GiveItemInventoryClick giveItemInventoryClick;
-    final private SaveItemInventoryClick saveItemInventoryClick;
-    final private SaveTeleportInventoryClick saveTeleportInventoryClick;
-    final private PhoneAppearanceInventoryClick phoneAppearanceInventoryClick;
-    final private PhonePartitionInventoryClick phonePartitionInventoryClick;
-    final private PhoneSettingInventoryClick phoneSettingInventoryClick;
-    final private ChartInventoryClick chartInventoryClick;
-    final private LevelInventoryClick levelInventoryClick;
-    final private GlobalInventoryClick globalInventoryClick;
+    private final FeatherInventoryClick featherInventoryClick;
+    private final HomeInventoryClick homeInventoryClick;
+    private final AthleticInventoryClick athleticInventoryClick;
+    private final MiniGameInventoryClick miniGameInventoryClick;
+    private final AppearanceInventoryClick appearanceInventoryClick;
+    private final ParticleInventoryClick particleInventoryClick;
+    private final HeadBlockInventoryClick headBlockInventoryClick;
+    private final BadgeInventoryClick badgeInventoryClick;
+    private final SettingInventoryClick settingInventoryClick;
+    private final GiveItemInventoryClick giveItemInventoryClick;
+    private final SaveItemInventoryClick saveItemInventoryClick;
+    private final SaveTeleportInventoryClick saveTeleportInventoryClick;
+    private final PhoneAppearanceInventoryClick phoneAppearanceInventoryClick;
+    private final PhonePartitionInventoryClick phonePartitionInventoryClick;
+    private final PhoneSettingInventoryClick phoneSettingInventoryClick;
+    private final LevelInventoryClick levelInventoryClick;
+    private final GlobalInventoryClick globalInventoryClick;
     private final Plugin plugin;
 
     final public PlayerManager pm;
@@ -90,7 +87,6 @@ public class InventoryClickListener implements Listener {
         phonePartitionInventoryClick = new PhonePartitionInventoryClick(inventoryManager);
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
         levelInventoryClick = new LevelInventoryClick(inventoryManager,pm);
-        chartInventoryClick = new ChartInventoryClick(inventoryManager,pm);
         globalInventoryClick = new GlobalInventoryClick(pm);
 
 
@@ -120,13 +116,17 @@ public class InventoryClickListener implements Listener {
         actionMap.put(ChatColor.DARK_RED + "Admin Delete Save Teleport", saveTeleportInventoryClick::admindeleteevent);
 
         actionMap.put("Level Athletic", levelInventoryClick::event);
-        actionMap.put("Chart Athletic", chartInventoryClick::event);
+        actionMap.put("Chart Athletic", (player, type,slot, event) -> Bukkit.getPluginManager().callEvent(new ChartInventoryClickEvent(player,type,slot,event.getInventory())));
 
         actionMap.put("Phone Setting", (player, type, slot, event) -> phoneSettingInventoryClick.event(player, type, slot));
         actionMap.put("Phone Appearance", (player, type, slot, event) -> phoneAppearanceInventoryClick.event(player, type, slot));
         actionMap.put("Phone Partition 1", (player, type, slot, event) -> phonePartitionInventoryClick.event1(player, type, slot));
         actionMap.put("Phone Partition 2", (player, type, slot, event) -> phonePartitionInventoryClick.event2(player, type, slot));
         actionMap.put("Global Athletic",(player,type,slot, event)-> globalInventoryClick.event(player,type,slot));
+        
+        actionMap.put("TNTRun_CreateStage",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new CreateTNTRunStageInventoryEvent(player,slot))));
+
+        actionMap.put("PlaySound",(player,type,slot,event)->Bukkit.getPluginManager().callEvent(new PlaySoundEvent(player,slot)));
     }
 
     @EventHandler
@@ -148,11 +148,10 @@ public class InventoryClickListener implements Listener {
             Bukkit.getPluginManager().callEvent(customEvent);
             return;
         }
-        //CreateTNTRunStage
-        if(title.equals("TNTRun_CreateStage")){
+        //CreateChart
+        if(title.endsWith("CreateChartStage")||title.endsWith("CreateCheckPoint")){
             e.setCancelled(true);
-            CreateTNTRunStageInventoryEvent customEvent = new CreateTNTRunStageInventoryEvent(p,e.getRawSlot());
-            Bukkit.getPluginManager().callEvent(customEvent);
+            Bukkit.getPluginManager().callEvent(new CreateChartStageInventoryEvent(p,e.getRawSlot(),clickItem.getType(),title));
             return;
         }
         InventoryAction action = actionMap.get(title);
