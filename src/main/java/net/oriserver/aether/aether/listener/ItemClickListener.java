@@ -5,7 +5,6 @@ import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.chart.events.*;
 import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
-import net.oriserver.aether.aether.chart.stage.ChartLocation;
 import net.oriserver.aether.aether.inventory.global.GlobalLocation;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.player.PlayerStats;

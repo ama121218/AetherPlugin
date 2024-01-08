@@ -4,6 +4,7 @@ import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.chart.ChartManager;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.command.CommandSetter;
+import net.oriserver.aether.aether.command.commands.TeleportAether;
 import net.oriserver.aether.aether.hideshow.HideShow;
 import net.oriserver.aether.aether.hologram.Hologram;
 import net.oriserver.aether.aether.inventory.InventoryManager;
@@ -41,6 +42,7 @@ public final class Aether extends JavaPlugin{
         ChatManager chatManager = new ChatManager();
         TNTRunMain tntRunMain = new TNTRunMain(plugin);
         ChartManager chartManager = new ChartManager(plugin,playerManager,hologram);
+        new TeleportAether(plugin,chartManager.getChartStageInfo());
 
         new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain);
 
@@ -49,6 +51,8 @@ public final class Aether extends JavaPlugin{
         pluginManager.registerEvents(new ItemClickListener(inventoryManager,hideShow,plugin,tntRunMain),this);
         pluginManager.registerEvents(new InventoryClickListener(playerManager,inventoryManager,plugin),this);
         pluginManager.registerEvents(new PressureListener(playerManager,sqLiteManager, hologram,plugin),this);
+
+
 
 
         for (World world : Bukkit.getWorlds()) {

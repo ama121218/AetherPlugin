@@ -1,7 +1,6 @@
 package net.oriserver.aether.aether.chart.stage;
 
 import net.minecraft.server.v1_12_R1.*;
-import net.oriserver.aether.aether.chart.ChartStageCreateManager;
 import net.oriserver.aether.aether.chart.events.ChartCreateToolClickEvent;
 import net.oriserver.aether.aether.events.AnvilClickEvent;
 import net.oriserver.aether.aether.events.CreateChartStageInventoryEvent;
@@ -148,7 +147,10 @@ public class ChartStageCreate implements Listener {
             }
             player.closeInventory();
             createChartStageManager.complete(player,list,getCheckPointList());
-        }else if(slot==19)createChartStageManager.quit(player);
+        }else if(slot==19){
+            player.closeInventory();
+            createChartStageManager.quit(player);
+        }
         else if(slot == 23 && material == Material.IRON_PLATE){
             player.getInventory().addItem(Item.createitem2(Material.IRON_PLATE, 1, ChatColor.WHITE+"SetCheckpoint ContinuousAddition", ChatColor.WHITE+""+(checkPoint_list.size()+1),ChatColor.WHITE+"右クリックでチェックポイントを連続設定"));
             player.closeInventory();

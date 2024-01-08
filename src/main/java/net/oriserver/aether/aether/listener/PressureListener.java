@@ -95,13 +95,6 @@ public class PressureListener implements Listener {
         return "Chart"+((number - 1) / 14 + 1)+"_"+((number - 1) % 14 + 1);
     }
 
-
-
-
-
-
-
-
     public void handleGlobalGoal(Player p){
 
     }

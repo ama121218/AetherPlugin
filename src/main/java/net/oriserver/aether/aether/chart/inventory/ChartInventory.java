@@ -1,7 +1,5 @@
 package net.oriserver.aether.aether.chart.inventory;
 
-
-import net.oriserver.aether.aether.chart.stage.ChartLocation;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.player.PlayerManager;
@@ -48,7 +46,8 @@ public class ChartInventory {
         ArrayList<Object[]> objects = pm.getSqLiteManager().getChartDBManagerP().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
         Inventory openinv = Item.inventorycopy(invChart);
         for(int i = 0; i < chart+1-((page-1)*14) && i < 14; i++){
-            String map_name = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+page+"_"+(i+1)+" "+ ChartLocation.getChartName(i+1+((page-1)*14));
+            try{
+            String map_name = ChatColor.WHITE+""+ChatColor.BOLD+"chart "+page+"_"+(i+1)+" "+ chartStageInfo.getStageName(i+1+((page-1)*14));
             long time = 0L;
             int count = 0;
             if(i < objects.size() && objects.get(i) != null){
@@ -64,6 +63,10 @@ public class ChartInventory {
             else if(star==1){openinv.setItem(a[i],Item.createitem(Material.APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
             else if(star==2){openinv.setItem(a[i],Item.createitem(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
             else{openinv.setItem(a[i],Item.createitem2(Material.GOLDEN_APPLE,1,eq,map_name,"",you_time,string_star,"",standardtimes[0]+starStrings[0],standardtimes[1]+starStrings[1],standardtimes[2]+starStrings[2],"",teleport,eq));}
+            }
+            catch (NullPointerException e){
+                openinv.setItem(a[i],Item.changename(gray_dye,eq,ChatColor.WHITE+""+ChatColor.BOLD+"chart "+page+"_"+(i+1),eq));
+            }
         }
         openinv.setItem(1,Item.createitem(Material.APPLE,1,"",ChatColor.WHITE+""+page));
 

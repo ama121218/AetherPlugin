@@ -2,7 +2,6 @@ package net.oriserver.aether.aether.chart;
 
 
 import net.oriserver.aether.aether.chart.events.*;
-import net.oriserver.aether.aether.chart.stage.ChartLocation;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.hologram.Hologram;
 import net.oriserver.aether.aether.player.PlayerManager;
@@ -136,13 +135,13 @@ public class ChartGame implements Listener {
         ChartInfo chartInfo = saveChartStageTime.get(p.getUniqueId().toString());
         if(chartInfo == null || chartInfo.getStartTime() == null) {
             ChartDBManagerP chartDBManagerP = pm.getSqLiteManager().getChartDBManagerP();
-            p.sendMessage(ChartLocation.getChartName(chart) + "をクリアしました。 タイム : 測定不能");
+            p.sendMessage(chartStageInfo.getStageName(chart) + "をクリアしました。 タイム : 測定不能");
             chartDBManagerP.setgoalcount1(uuid,chart);
             return;
         }
 
         int stage_id = chartInfo.getStageID();
-        String stage_name = ChartLocation.getChartName(chart);
+        String stage_name = chartStageInfo.getStageName(chart);
 
         Long this_time = System.currentTimeMillis() - chartInfo.getStartTime();
         ChartDBManagerP chartDBManagerP = pm.getSqLiteManager().getChartDBManagerP();

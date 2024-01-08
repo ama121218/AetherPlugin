@@ -71,3 +71,6 @@ commands:
   sound:
     description: play sound
     usage: /<command> [check-off]
+
+  skull:
+    description: skin入手

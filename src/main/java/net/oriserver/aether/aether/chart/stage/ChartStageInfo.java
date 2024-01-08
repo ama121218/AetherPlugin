@@ -45,8 +45,8 @@ public class ChartStageInfo {
         timeStandardMap.clear();
 
         for(int i=1;i<=56;i++){
-            int main_page = (i/14)+1;
-            int sub_page = i%14;
+            int main_page = (i - 1) / 14 + 1;
+            int sub_page = (i - 1) % 14 + 1;
             String stage_id = main_page+"_"+sub_page;
             final int index = i;
             chartStageDB.getDB("SELECT * FROM ChartStage WHERE stage_id = ?", Arrays.asList(stage_id), rs -> {
@@ -92,10 +92,10 @@ public class ChartStageInfo {
             });
         }
 
-        List<Map.Entry<Integer, Location>> entries = new ArrayList<>(stageTPMap.entrySet());
+        List<Map.Entry<Integer, Long[]>> entries = new ArrayList<>(timeStandardMap.entrySet());
         for(Map.Entry entry:entries){
-            Location l = (Location) entry.getValue();
-            Bukkit.getServer().getLogger().info("Key: " + entry.getKey()+" value: "+l.getX()+" "+l.getY()+" "+l.getZ());
+            Long[] l = (Long[]) entry.getValue();
+            Bukkit.getServer().getLogger().info("Key: " + entry.getKey()+" value: "+l[0]+" "+l[1]+" "+l[2]);
         }
     }
 
@@ -214,11 +214,11 @@ public class ChartStageInfo {
         Long[] timeStandard = getStandardTime(number);
         if(timeStandard==null)return -1;
         if(time==0)return 0;
-        if (time <= timeStandard[2]) {
+        if (time <= timeStandard[0]) {
             return 3; // スター3
         } else if (time <= timeStandard[1]) {
             return 2; // スター2
-        } else if (time <= timeStandard[0]) {
+        } else if (time <= timeStandard[2]) {
             return 1; // スター1
         } else {
             return 0; // スター0 (基準タイムを全て超えた場合)

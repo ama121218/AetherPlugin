@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.chart.command;
 
-import net.oriserver.aether.aether.chart.ChartStageCreateManager;
+import net.oriserver.aether.aether.chart.stage.ChartStageCreateManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

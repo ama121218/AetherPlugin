@@ -1,5 +1,7 @@
-package net.oriserver.aether.aether.chart;
+package net.oriserver.aether.aether.chart.stage;
 
+import net.oriserver.aether.aether.chart.events.ChartCreateToolClickEvent;
+import net.oriserver.aether.aether.chart.events.ChartInventoryClickEvent;
 import net.oriserver.aether.aether.chart.stage.ChartStageCreate;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
@@ -41,6 +43,7 @@ public class ChartStageCreateManager {
         Bukkit.getServer().getPluginManager().registerEvents(createChartStage, this.plugin);
         createMap.put(String.valueOf(p.getUniqueId()), createChartStage);
         p.getInventory().addItem(Item.createitem(Material.SHULKER_SHELL, 1, ChatColor.WHITE+"Chart Stage Create Tool"));
+        Bukkit.getPluginManager().callEvent(new ChartCreateToolClickEvent(p));
     }
 
     public void quit(Player p) {

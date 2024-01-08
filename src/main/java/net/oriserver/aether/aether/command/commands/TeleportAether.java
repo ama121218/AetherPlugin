@@ -1,16 +1,27 @@
 package net.oriserver.aether.aether.command.commands;
 
 import net.oriserver.aether.aether.AthleticLocation;
-import net.oriserver.aether.aether.chart.stage.ChartLocation;
+import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import static net.oriserver.aether.aether.AthleticLocation.getLocation;
 
 public class TeleportAether implements CommandExecutor {
+
+    private final ChartStageInfo chartStageInfo;
+    private final JavaPlugin plugin;
+
+    public TeleportAether(JavaPlugin plugin, ChartStageInfo chartStageInfo){
+        this.chartStageInfo = chartStageInfo;
+        this.plugin = plugin;
+        plugin.getCommand("teleportaether").setExecutor(this);
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
@@ -37,7 +48,7 @@ public class TeleportAether implements CommandExecutor {
                         return false;
                     }
                     if(i>=1&&56>=i){
-                        player.teleport(ChartLocation.getChartLocation(i));
+                        player.teleport(chartStageInfo.getStageTP(i));
                     }else{
                         player.sendMessage("最大ステージ数オーバー");
                     }

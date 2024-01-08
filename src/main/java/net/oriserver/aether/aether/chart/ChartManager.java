@@ -4,12 +4,12 @@ import net.oriserver.aether.aether.chart.command.ChartStage;
 import net.oriserver.aether.aether.chart.inventory.ChartInventory;
 import net.oriserver.aether.aether.chart.listener.ChartInventoryClickListener;
 import net.oriserver.aether.aether.chart.listener.ChartItemClickListener;
+import net.oriserver.aether.aether.chart.stage.ChartStageCreateManager;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.hologram.Hologram;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -48,13 +48,13 @@ public class ChartManager {
         plugin.getCommand("chart").setExecutor(new ChartStage(createChartStageManager));
 
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new ChartInventoryClickListener(pm,chartInventory),plugin);
+        pluginManager.registerEvents(new ChartInventoryClickListener(pm,chartInventory,chartStageInfo),plugin);
         pluginManager.registerEvents(new ChartItemClickListener(chartInventory),plugin);
         pluginManager.registerEvents(chartGame,plugin);
     }
 
 
-
+    public ChartStageInfo getChartStageInfo(){return this.chartStageInfo;}
 
     public void initializeDB(){
         chartStageDB.initialize("CREATE TABLE IF NOT EXISTS ChartStage (" +
