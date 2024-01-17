@@ -175,7 +175,7 @@ public class ChartGame implements Listener {
                 return;
             }
         }
-        int ranking = pm.getSqLiteManager().getChartRankingDB().insertOrUpdateScoreIfTop5(stage_id,uuid,p.getUniqueId().toString(),this_time);
+        int ranking = pm.getSqLiteManager().getChartRankingDB().insertOrUpdateScoreIfTop5(stage_id,p.getUniqueId().toString(),p.getName(),this_time);
         p.sendMessage("ranking"+ranking);
         printChartClear(p,stage_name,past_time,this_time,past_star,this_star,ranking);
         saveChartStageTime.remove(p.getUniqueId().toString());
