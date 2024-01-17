@@ -236,7 +236,7 @@ public class ChartStageCreate implements Listener {
                 Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetStartLocation");
 
                 p.sendMessage("StartLocation("+ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z + ")を設定しました");
-                invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
+                invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
             }
         }else if(itemInHand.getType() == Material.GOLD_PLATE){
             if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetGoalLocation")) {
@@ -249,7 +249,7 @@ public class ChartStageCreate implements Listener {
                 Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "GoalLocation");
 
                 p.sendMessage("GoalLocation("+ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z + ")を設定しました");
-                invCreateStage.setItem(3, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
+                invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
             }
         }
     }
@@ -276,7 +276,7 @@ public class ChartStageCreate implements Listener {
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆3タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(5, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_3 = time;
                     player.closeInventory();
@@ -286,7 +286,7 @@ public class ChartStageCreate implements Listener {
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆2タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_2 = time;
                     player.closeInventory();
@@ -296,7 +296,7 @@ public class ChartStageCreate implements Listener {
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆1タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_1 = time;
                     player.closeInventory();
