@@ -1,7 +1,6 @@
 package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.chart.events.ChartInventoryClickEvent;
-import net.oriserver.aether.aether.chart.events.ChartStartEvent;
 import net.oriserver.aether.aether.events.*;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
 import net.oriserver.aether.aether.inventory.global.GlobalInventoryClick;
@@ -29,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -39,8 +39,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class InventoryClickListener implements Listener {
-
-    private final InventoryManager inventoryManager;
 
     private final FeatherInventoryClick featherInventoryClick;
     private final HomeInventoryClick homeInventoryClick;
@@ -71,12 +69,11 @@ public class InventoryClickListener implements Listener {
         featherInventoryClick = new FeatherInventoryClick();
         this.pm = pm;
         this.plugin = plugin;
-        this.inventoryManager = inventoryManager;
         athleticInventoryClick = new AthleticInventoryClick(inventoryManager,pm);
         homeInventoryClick = new HomeInventoryClick(inventoryManager,pm);
         miniGameInventoryClick = new MiniGameInventoryClick(inventoryManager);
         appearanceInventoryClick = new AppearanceInventoryClick(inventoryManager);
-        particleInventoryClick = new ParticleInventoryClick(inventoryManager);
+        particleInventoryClick = new ParticleInventoryClick(plugin,inventoryManager);
         headBlockInventoryClick = new HeadBlockInventoryClick(inventoryManager);
         badgeInventoryClick = new BadgeInventoryClick(inventoryManager);
         settingInventoryClick = new SettingInventoryClick(inventoryManager);
@@ -88,7 +85,6 @@ public class InventoryClickListener implements Listener {
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
         levelInventoryClick = new LevelInventoryClick(inventoryManager,pm);
         globalInventoryClick = new GlobalInventoryClick(pm);
-
 
         actionMap.put("Speed Select", (player, type, slot, event) -> featherInventoryClick.event(player, type, slot));
         actionMap.put("Home", (player, type, slot, event) -> homeInventoryClick.event(player, type, slot));
@@ -134,13 +130,13 @@ public class InventoryClickListener implements Listener {
         Player p = (Player) e.getWhoClicked();
         String title = e.getInventory().getTitle();
         final ItemStack clickItem = e.getCurrentItem();
-        if(clickItem==null||clickItem.getType()== Material.AIR) return;
         if(!p.isOp()) {
             e.setCancelled(true);
             if (!isCoolTimeClick(p.getName())) {
                 p.sendMessage(ChatColor.DARK_RED + "高速で連打しないでください");
             }
         }
+        if(clickItem==null||clickItem.getType()== Material.AIR) return;
         //AnvilInventoryだった場合
         if(e.getInventory().getType() == InventoryType.ANVIL){
             e.setCancelled(true);
@@ -160,6 +156,16 @@ public class InventoryClickListener implements Listener {
             action.execute(p, e.getCurrentItem().getType(), e.getRawSlot(), e);
         }
     }
+    @EventHandler
+    public void dragInventory(InventoryDragEvent e){
+        String title = e.getInventory().getTitle();
+        if(!e.getWhoClicked().isOp())e.setCancelled(true);
+        else if(actionMap.containsKey(title))e.setCancelled(true);
+        else if(e.getInventory().getType() == InventoryType.ANVIL)e.setCancelled(true);
+        else if(title.endsWith("CreateChartStage")||title.endsWith("CreateCheckPoint"))e.setCancelled(true);
+    }
+
+
     @FunctionalInterface
     interface InventoryAction {
         void execute(Player player, Material type, int slot, InventoryClickEvent event);
