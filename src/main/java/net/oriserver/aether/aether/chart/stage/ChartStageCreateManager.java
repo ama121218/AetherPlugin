@@ -1,7 +1,9 @@
 package net.oriserver.aether.aether.chart.stage;
 
+import net.oriserver.aether.aether.chart.ChartManager;
 import net.oriserver.aether.aether.chart.events.ChartCreateToolClickEvent;
 import net.oriserver.aether.aether.chart.events.ChartInventoryClickEvent;
+import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.chart.stage.ChartStageCreate;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
@@ -24,13 +26,14 @@ public class ChartStageCreateManager {
     private final SQLiteAPI chartStageDB;
     private final SQLiteAPI chartCheckPointDB;
     private final ChartStageInfo chartStageInfo;
-
+    private final ChartHologram chartHologram;
     private final JavaPlugin plugin;
-    public ChartStageCreateManager(JavaPlugin plugin,SQLiteAPI chartStageDB,SQLiteAPI chartCheckPointDB,ChartStageInfo chartStageInfo) {
+    public ChartStageCreateManager(JavaPlugin plugin, SQLiteAPI chartStageDB, SQLiteAPI chartCheckPointDB, ChartStageInfo chartStageInfo,ChartHologram chartHologram) {
         this.plugin = plugin;
         this.chartStageDB = chartStageDB;
         this.chartCheckPointDB = chartCheckPointDB;
         this.chartStageInfo = chartStageInfo;
+        this.chartHologram = chartHologram;
     }
 
     public void create(Player p, String stage_id) {
@@ -66,8 +69,8 @@ public class ChartStageCreateManager {
         setData(createChartStage,list,checkPoint_list);
         HandlerList.unregisterAll(createChartStage);
         int stage_id = chartStageInfo.getStage_id(createChartStage.getStage_id());
-        if(stage_id == -1)p.sendMessage("エラー");
-        chartStageInfo.setIndexMap(stage_id);
+        if(stage_id == -1){p.sendMessage("エラー");return;}
+        chartStageInfo.setIndexMap(stage_id);//hologram
         createMap.remove(String.valueOf(p.getUniqueId()), createChartStage);
         p.sendMessage(createChartStage.getStage_id()+"のステージを作成しました");
 
@@ -80,6 +83,7 @@ public class ChartStageCreateManager {
             p.sendMessage("作成中のステージがあります");
             return;
         }
+        if(!isStage(stage_id)){p.sendMessage(stage_id+"はありません");return;}
         p.sendMessage(stage_id + " " + "を作り直します");
         ArrayList<Object> stage_list = getStageData(stage_id);
         ArrayList<Double[]> checkPoint_list = getCheckPointData(stage_id);
@@ -143,10 +147,11 @@ public class ChartStageCreateManager {
     }
 
     public void setData(ChartStageCreate createChartStage, ArrayList<Object> list, ArrayList<Double[]> checkPoint_List) {
-        if(isStage(createChartStage.getStage_id()))deteleData(createChartStage.getStage_id());
+        if(isStage(createChartStage.getStage_id()))deleteData(createChartStage.getStage_id());
         chartStageDB.setDB("INSERT OR IGNORE INTO ChartStage (stage_id,stage_name,stage_tp_x,stage_tp_y,stage_tp_z,stage_tp_yaw,stage_tp_pitch,start_x,start_y,start_z,start_tp_x,start_tp_y,start_tp_z,start_tp_yaw,start_tp_pitch,goal_x,goal_y,goal_z,goal_tp_x,goal_tp_y,goal_tp_z,goal_tp_yaw,goal_tp_pitch,star_time_3,star_time_2,star_time_1) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);" ,list);
         for (int i = 0; i < checkPoint_List.size(); i++) {
             Double[] doubles = checkPoint_List.get(i);
+            chartHologram.setCheckPointWhenCreateStage(doubles);
             chartCheckPointDB.setDB("INSERT OR IGNORE INTO ChartCheckPoint (stage_id,point,x,y,z) VALUES(?,?,?,?,?);", Arrays.asList(createChartStage.getStage_id(), i, doubles[0], doubles[1], doubles[2]));
         }
     }
@@ -161,8 +166,9 @@ public class ChartStageCreateManager {
         return (boolean) exists.get(0);
     }
 
-    public void deteleData(String stage_id) {
+    public void deleteData(String stage_id) {
         chartStageDB.setDB("DELETE FROM ChartStage WHERE stage_id = ?", Arrays.asList(stage_id));
+        chartHologram.deleteOldCheckPoint(getCheckPointData(stage_id));
         chartCheckPointDB.setDB("DELETE FROM ChartCheckPoint WHERE stage_id = ?", Arrays.asList(stage_id));
     }
 

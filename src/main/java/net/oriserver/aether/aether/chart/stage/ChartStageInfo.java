@@ -1,6 +1,8 @@
 package net.oriserver.aether.aether.chart.stage;
 
 
+import net.oriserver.aether.aether.chart.ChartManager;
+import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +16,7 @@ public class ChartStageInfo {
 
     private final SQLiteAPI chartStageDB;
     private final SQLiteAPI chartCheckPointDB;
-
+    private final ChartManager chartManager;
 
     private final HashMap<Integer,String> stageNameMap = new HashMap<>();
     private final HashMap<Integer,Location> stageTPMap = new HashMap<>();
@@ -27,9 +29,10 @@ public class ChartStageInfo {
     private final HashMap<Integer,Integer> checkPointAmount = new HashMap<>();
     private final HashMap<Integer, Long[]> timeStandardMap = new HashMap<>();
 
-    public ChartStageInfo(SQLiteAPI chartStageDB,SQLiteAPI chartCheckPointDB){
+    public ChartStageInfo(SQLiteAPI chartStageDB, SQLiteAPI chartCheckPointDB,ChartManager chartManager){
         this.chartStageDB = chartStageDB;
         this.chartCheckPointDB = chartCheckPointDB;
+        this.chartManager = chartManager;
         setAllMap();
     }
 
@@ -81,7 +84,7 @@ public class ChartStageInfo {
             });
 
             chartCheckPointDB.getDB("SELECT * FROM ChartCheckPoint WHERE stage_id = ? ORDER BY point ASC", Arrays.asList(stage_id), rs -> {
-                int j = 1;
+                int j = 0;
                 while (rs.next()) {
                     checkPointMap.put(rs.getString("x")+","+rs.getString("y")+","+rs.getString("z"),index+"_"+j);
                     checkPointTPMap.put(index+"_"+j,new Location(Bukkit.getWorld("chart"),rs.getDouble("x")+0.5,rs.getDouble("y"),rs.getDouble("z")+0.5));
@@ -100,9 +103,16 @@ public class ChartStageInfo {
     }
 
     public void setIndexMap(int i){
+
         if(i == -1)return;
-        int main_page = (i/14)+1;
-        int sub_page = i%14;
+        int main_page = (i - 1) / 14 + 1;
+        int sub_page = (i - 1) % 14 + 1;
+
+        ChartHologram chartHologram = chartManager.getChartHologram();
+        chartHologram.deleteWhenCreateStage(getKey(startMap,i));
+        chartHologram.deleteWhenCreateStage(getKey(goalMap,i));
+        chartHologram.deleteOldStageName(i);
+
         String stage_id = main_page+"_"+sub_page;
         final int index = i;
         chartStageDB.getDB("SELECT * FROM ChartStage WHERE stage_id = ?", Arrays.asList(stage_id), rs -> {
@@ -115,6 +125,7 @@ public class ChartStageInfo {
                     stageTPMap.put(index, location);
                 }
                 String start = rs.getString("start_x")+","+rs.getString("start_y")+","+rs.getString("start_z");
+                chartHologram.setStartWhenCreateStage(start);
                 startMap.put(start,index);
                 {
                     Location location = new Location(Bukkit.getWorld("chart"), rs.getDouble("start_tp_x"), rs.getDouble("start_tp_y"),
@@ -123,6 +134,7 @@ public class ChartStageInfo {
                     startTPMap.put(index, location);
                 }
                 String goal = rs.getString("goal_x")+","+rs.getString("goal_y")+","+rs.getString("goal_z");
+                chartHologram.setGaolWhenCreateStage(goal);
                 goalMap.put(goal,index);
                 {
                     Location location = new Location(Bukkit.getWorld("chart"), rs.getDouble("goal_tp_x"), rs.getDouble("goal_tp_y"),
@@ -137,7 +149,7 @@ public class ChartStageInfo {
         });
 
         chartCheckPointDB.getDB("SELECT * FROM ChartCheckPoint WHERE stage_id = ? ORDER BY point ASC", Arrays.asList(stage_id), rs -> {
-            int j = 1;
+            int j = 0;
             while (rs.next()) {
                 checkPointMap.put(rs.getString("x")+","+rs.getString("y")+","+rs.getString("z"),index+"_"+j);
                 checkPointTPMap.put(index+"_"+j,new Location(Bukkit.getWorld("chart"),rs.getDouble("x")+0.5,rs.getDouble("y"),rs.getDouble("z")+0.5));
@@ -146,8 +158,18 @@ public class ChartStageInfo {
             checkPointAmount.put(i,j);
             return null;
         });
+
+
+
+
+
+
+
+
     }
 
+    public HashMap<String, Integer> getStartMap(){return this.startMap;}
+    public HashMap<String, Integer> getGoalMap(){return this.goalMap;}
 
     public String getStageName(int i){
         if(stageNameMap.containsKey(i)){
@@ -207,7 +229,7 @@ public class ChartStageInfo {
         if(checkPointAmount.containsKey(i)){
             return checkPointAmount.get(i);
         }
-        return -1;
+        return 0;
     }
 
     public int getStarRating(int number, long time) {
@@ -254,4 +276,12 @@ public class ChartStageInfo {
         }
     }
 
+    public <K, V> K getKey(HashMap<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }

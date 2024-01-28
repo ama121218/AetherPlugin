@@ -1,4 +1,4 @@
-package net.oriserver.aether.aether.chart;
+package net.oriserver.aether.aether.chart.stage;
 
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 
@@ -8,7 +8,7 @@ public class TemporaryData {
 
     SQLiteAPI chartDB;
 
-    TemporaryData(SQLiteAPI chartDB) {
+    public TemporaryData(SQLiteAPI chartDB) {
         this.chartDB = chartDB;
 
 

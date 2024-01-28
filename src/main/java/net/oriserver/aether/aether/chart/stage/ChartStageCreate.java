@@ -246,7 +246,7 @@ public class ChartStageCreate implements Listener {
                 goal_y = location.getY();
                 goal_z = location.getZ();
 
-                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "GoalLocation");
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetGoalLocation");
 
                 p.sendMessage("GoalLocation("+ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z + ")を設定しました");
                 invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));

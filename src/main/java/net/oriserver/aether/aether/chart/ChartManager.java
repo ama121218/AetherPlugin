@@ -1,14 +1,16 @@
 package net.oriserver.aether.aether.chart;
 
 import net.oriserver.aether.aether.chart.command.ChartStage;
+import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.chart.inventory.ChartInventory;
 import net.oriserver.aether.aether.chart.listener.ChartInventoryClickListener;
 import net.oriserver.aether.aether.chart.listener.ChartItemClickListener;
 import net.oriserver.aether.aether.chart.stage.ChartStageCreateManager;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
-import net.oriserver.aether.aether.hologram.Hologram;
+import net.oriserver.aether.aether.chart.stage.TemporaryData;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
+import net.oriserver.aether.aether.sqlite.SQLiteManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,26 +26,29 @@ public class ChartManager {
     private final ChartInventory chartInventory;
     private final SQLiteAPI chartStageDB;
     private final SQLiteAPI chartCheckPointDB;
+    private final ChartHologram chartHologram;
 
     private final ChartStageCreateManager createChartStageManager;
 
-
-    public ChartManager(JavaPlugin plugin, PlayerManager pm, Hologram hologram){
+    public ChartManager(JavaPlugin plugin, PlayerManager pm,ChartRankingDB chartRankingDB){
         this.plugin = plugin;
 
 
         chartStageDB = new SQLiteAPI(plugin, "ChartStage");
         chartCheckPointDB = new SQLiteAPI(plugin,"ChartCheckPoint");
+
         initializeDB();
 
-        new TemporaryData(chartStageDB);
+        //new TemporaryData(chartStageDB);
 
 
-        chartStageInfo = new ChartStageInfo(chartStageDB,chartCheckPointDB);
-        createChartStageManager = new ChartStageCreateManager(plugin,chartStageDB,chartCheckPointDB,chartStageInfo);
+        chartStageInfo = new ChartStageInfo(chartStageDB,chartCheckPointDB,this);
+        chartHologram = new ChartHologram(chartRankingDB,chartStageInfo);
+        createChartStageManager = new ChartStageCreateManager(plugin,chartStageDB,chartCheckPointDB,chartStageInfo,chartHologram);
+
 
         chartInventory = new ChartInventory(pm,chartStageInfo);
-        chartGame = new ChartGame(chartStageInfo,hologram,pm);
+        chartGame = new ChartGame(chartStageInfo,chartHologram,pm);
 
         plugin.getCommand("chart").setExecutor(new ChartStage(createChartStageManager));
 
@@ -96,5 +101,9 @@ public class ChartManager {
                 "PRIMARY KEY (`stage_id`, `point`)" +
                 ");"
         );
+    }
+
+    public ChartHologram getChartHologram(){
+        return this.chartHologram;
     }
 }

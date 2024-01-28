@@ -1,6 +1,7 @@
-package net.oriserver.aether.aether.sqlite;
+package net.oriserver.aether.aether.chart;
 
 import net.oriserver.aether.aether.Aether;
+import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
@@ -79,8 +80,8 @@ public class ChartRankingDB extends SQLiteAPI {
             String insertSql = "INSERT INTO Chart_Ranking(stage_id, player_uuid, player_name, time, date) VALUES(?, ?, ?, ?, ?)";
             setDB(insertSql, Arrays.asList(stage_id, player_uuid, player_name, time, date));
         } else {
-            String updateSql = "UPDATE Chart_Ranking SET time = ? WHERE stage_id = ? AND player_uuid = ?";
-            setDB(updateSql, Arrays.asList(time, stage_id, player_uuid));
+            String updateSql = "UPDATE Chart_Ranking SET time = ?, player_name = ? WHERE stage_id = ? AND player_uuid = ?";
+            setDB(updateSql, Arrays.asList(time,player_name, stage_id, player_uuid));
         }
     }
 

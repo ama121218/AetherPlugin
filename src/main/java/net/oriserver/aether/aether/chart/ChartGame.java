@@ -3,13 +3,12 @@ package net.oriserver.aether.aether.chart;
 
 import net.oriserver.aether.aether.chart.events.*;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
-import net.oriserver.aether.aether.hologram.Hologram;
+import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.sqlite.ChartDBManagerP;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,13 +23,13 @@ import java.util.HashMap;
 public class ChartGame implements Listener {
 
     private final ChartStageInfo chartStageInfo;
-    private final Hologram hologram;
+    private final ChartHologram hologram;
     private final PlayerManager pm;
 
     private final HashMap<String, ChartInfo> saveChartStageTime = new HashMap<>();
     private final ItemStack prismarine = Item.createitem(Material.PRISMARINE_SHARD,1, ChatColor.GREEN +"time_reset","");
 
-    public ChartGame(ChartStageInfo chartStageInfo,Hologram hologram,PlayerManager pm){
+    public ChartGame(ChartStageInfo chartStageInfo, ChartHologram hologram, PlayerManager pm){
         this.chartStageInfo = chartStageInfo;
         this.hologram = hologram;
         this.pm = pm;
@@ -49,7 +48,7 @@ public class ChartGame implements Listener {
         }
         p.sendMessage(ChatColor.BOLD+"測定を開始します");
         saveChartStageTime.put(p.getUniqueId().toString(),new ChartInfo(chart,System.currentTimeMillis(),location));
-        saveChartStageTime.get(p.getUniqueId().toString()).setCheckPoint(location);
+        saveChartStageTime.get(p.getUniqueId().toString()).setCheckPoint(location.clone());
         CommonMethods.setTeleport(p,location,""+chart,pm.getPlayer(p.getUniqueId().toString()));
         p.getInventory().addItem(prismarine);
 
@@ -88,17 +87,17 @@ public class ChartGame implements Listener {
         if(!saveChartStageTime.containsKey(p.getUniqueId().toString())){
             saveChartStageTime.put(p.getUniqueId().toString(),new ChartInfo(Integer.parseInt(string_checkpoint_index.split("_")[0]),null,location));
             saveChartStageTime.get(p.getUniqueId().toString()).setStringCheckPointIndex(string_checkpoint_index);
-            p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+Integer.parseInt(string_checkpoint_index.split("_")[1])+"/"+chartStageInfo.getCheckPointAmount(Integer.parseInt(string_checkpoint_index.split("_")[0]))+")");
+            p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1])+1)+"/"+chartStageInfo.getCheckPointAmount(Integer.parseInt(string_checkpoint_index.split("_")[0]))+")");
             return;
         }
 
         ChartInfo chartInfo = saveChartStageTime.get(p.getUniqueId().toString());
         if(chartInfo.getStringCheckPointIndex().equals(string_checkpoint_index))return;
 
-        chartInfo.setCheckPoint(location);
+        chartInfo.setCheckPoint(location.clone());
         chartInfo.setStringCheckPointIndex(string_checkpoint_index);
 
-        p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+Integer.parseInt(string_checkpoint_index.split("_")[1])+"/"+chartStageInfo.getCheckPointAmount(chartInfo.getStageID())+")");
+        p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1])+1)+"/"+chartStageInfo.getCheckPointAmount(chartInfo.getStageID())+")");
 
     }
     @EventHandler
@@ -137,6 +136,7 @@ public class ChartGame implements Listener {
             ChartDBManagerP chartDBManagerP = pm.getSqLiteManager().getChartDBManagerP();
             p.sendMessage(chartStageInfo.getStageName(chart) + "をクリアしました。 タイム : 測定不能");
             chartDBManagerP.setgoalcount1(uuid,chart);
+            saveChartStageTime.remove(p.getUniqueId().toString());
             return;
         }
 
@@ -208,7 +208,7 @@ public class ChartGame implements Listener {
         ChartInfo(int stageID,Long startTime,Location start_location){
             this.stageID = stageID;
             this.startTime = startTime;
-            this.checkPoint = start_location;
+            this.checkPoint = start_location.clone();
             stageID_checkpoint = stageID + "_0";
         }
         public int getStageID(){
@@ -223,7 +223,7 @@ public class ChartGame implements Listener {
         public String getStringCheckPointIndex(){return stageID_checkpoint;}
         public void setStringCheckPointIndex(String stageID_checkpoint){this.stageID_checkpoint = stageID_checkpoint;}
         public void setCheckPoint(Location checkPoint){
-            this.checkPoint = checkPoint;
+            this.checkPoint = checkPoint.clone();
         }
     }
 }
