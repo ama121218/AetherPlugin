@@ -3,8 +3,8 @@ package net.oriserver.aether.aether.listener;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.oriserver.aether.aether.AthleticLocation;
-import net.oriserver.aether.aether.InventoryTitle;
 import net.oriserver.aether.aether.hideshow.HideShow;
+import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.chat.ChatRoom;
@@ -15,7 +15,6 @@ import net.oriserver.aether.aether.sqlite.PhoneSetting;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerUUID;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,10 +26,8 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,17 +39,17 @@ public class UsualListener implements Listener {
     private final SQLiteManager sq;
     private final ChatManager chatManager;
     private final SaveInventoryManager saveInventoryManager;
+    private final ParticleManager particleManager;
     private final HideShow hideShow;
 
 
-    public UsualListener(PlayerManager pm, SQLiteManager sq, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow){
+    public UsualListener(PlayerManager pm, SQLiteManager sq, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow,ParticleManager particleManager){
         this.pm = pm;
         this.sq = sq;
         this.chatManager = chatManager;
         this.saveInventoryManager = saveInventoryManager;
         this.hideShow = hideShow;
-
-
+        this.particleManager = particleManager;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -117,14 +114,7 @@ public class UsualListener implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
     }
 
-    @EventHandler
-    public void dragInventory(InventoryDragEvent e){
-        String title = e.getInventory().getTitle();
-        InventoryTitle titleEnum = InventoryTitle.fromString(title);
-        if (titleEnum != null) {
-            e.setCancelled(true);
-        }
-    }
+
     @EventHandler
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
@@ -142,15 +132,19 @@ public class UsualListener implements Listener {
         e.setCancelled(true);
         Player p = e.getPlayer();
         ChatRoom room = chatManager.getPlayerRooms().get(p);
+        PlayerStats playerStats = pm.getPlayer(p.getUniqueId().toString());
         if (room != null) {
-            String message = "["+room.getName()+"] "+p.getName()+" > "+chatManager.getJapanese(e.getMessage())+ ChatColor.GRAY+" ("+e.getMessage()+")";
+            String message =
+                    "["+room.getName()+"] "+
+                    playerStats.getTag()+ " "+
+                    playerStats.getBadge()+" "+p.getName()+ " " + playerStats.getBadgeReverse() + " > "+
+                    chatManager.getJapanese(e.getMessage())+ ChatColor.GRAY+" ("+e.getMessage()+")"
+            ;
             for (Player member : room.getMembers())member.sendMessage(message);
             for (Player member : chatManager.getChatrooms().get("Admin").getMembers()) member.sendMessage(ChatColor.GRAY+message);
         }else{
-
             p.sendMessage("チャットルームに入っていないため発言できません。");
             p.sendMessage("General チャットルームに入りますか？");
-
             String cmd1 = "/chatroom join General";
             TextComponent textComponent1 = new TextComponent("[入る]");
             textComponent1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd1));
@@ -161,8 +155,7 @@ public class UsualListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         ChatRoom room = chatManager.getPlayerRooms().get(player);
-
-        if (room != null) {
+        if(room != null) {
             room.removeMember(player);
             chatManager.getPlayerRooms().remove(player);
             if (room.getOwner()!=null && room.getOwner().equals(player)) {
@@ -180,6 +173,8 @@ public class UsualListener implements Listener {
         if(playerStats==null)return;
         playerStats.setChatroom("General");
 
+        particleManager.setQuitPlayer(player);
+
         boolean[] setting = playerStats.getSetting();
         SQLiteManager sqLiteManager = pm.getSqLiteManager();
         sqLiteManager.getPlayerDBManagerSetting().setPlayerData(uuid,setting);
@@ -190,26 +185,28 @@ public class UsualListener implements Listener {
         playerStats.setPast_time(playerStats.getPast_time() + System.currentTimeMillis()-playerStats.getJoin_time());
         sqLiteManager.getPlayerDBManagerJQ().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
     }
-    private final Set<UUID> playersJumping = new HashSet<>();
+    private final Set<String> playersJumping = new HashSet<>();
 
     @EventHandler
     public void onPlayerJump(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
-        UUID playerUUID = player.getUniqueId();
+        String player_uuid = player.getUniqueId().toString();
 
         // Y座標が上がっているか確認（ジャンプまたは上昇中）
         if (event.getFrom().getY() < event.getTo().getY()) {
             // 地面にいない（ジャンプまたは上昇中）＆＆まだカウントされていない
-            if (!player.isOnGround() && !playersJumping.contains(playerUUID)) {
+            if (!player.isOnGround() && !playersJumping.contains(player_uuid)) {
                 // ジャンプ回数を増やす
-                pm.getPlayer(playerUUID.toString()).setJumpcount1();
-                // ジャンプを開始したとしてUUIDをセットに追加
-                playersJumping.add(playerUUID);
+                if(pm.isPlayer(player_uuid)) {
+                    pm.getPlayer(player_uuid.toString()).setJumpcount1();
+                    // ジャンプを開始したとしてUUIDをセットに追加
+                    playersJumping.add(player_uuid);
+                }
             }
-        } else if (player.isOnGround()) {
+        }else if (player.isOnGround()) {
             // 地面にいる場合、セットからUUIDを削除
-            playersJumping.remove(playerUUID);
+            playersJumping.remove(player_uuid);
         }
     }
 
