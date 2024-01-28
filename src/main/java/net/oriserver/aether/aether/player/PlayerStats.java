@@ -23,8 +23,13 @@ public class PlayerStats {
     private String status;
 
     private String chatroom;
-    private String[] friend;
-    private String[] headblock;
+    private String[] friends;
+    private String[] headblocks;
+    private String[] badges;
+    private String[] tags;
+
+    private String badge = "";
+    private String tag = "";
 
     private boolean particleonoff;
     private boolean mailonoff;
@@ -79,7 +84,7 @@ public class PlayerStats {
 
         ArrayList<Object> arrayList_HeadBlock = sqLiteManager.getPlayerDBManagerHeadBlock().getData(uuid);
         if(arrayList_HeadBlock==null)return;
-        this.headblock = new String[]{String.valueOf(arrayList_HeadBlock.get(0)),
+        this.headblocks = new String[]{String.valueOf(arrayList_HeadBlock.get(0)),
                 String.valueOf(arrayList_HeadBlock.get(1)),
                 String.valueOf(arrayList_HeadBlock.get(2)),
                 String.valueOf(arrayList_HeadBlock.get(3))
@@ -89,13 +94,17 @@ public class PlayerStats {
         this.chatroom = this.chatroomonoff ? "" : "General";
         this.playerSidebar = new PlayerSidebar(player.getName(),this.level,this.global,this.star,this.AP,this.chatroom,this.location);
 
-        this.headblock[0] = "111111111111111";
-        this.headblock[1] = "111111111111111";
-        this.headblock[2] = "111111111111111";
-        this.headblock[3] = "111111111111111";
+        this.headblocks[0] = "111111111111111";
+        this.headblocks[1] = "111111111111111";
+        this.headblocks[2] = "111111111111111";
+        this.headblocks[3] = "111111111111111";
+
+        this.badges = new String[1];
+        this.badges[0] = "111111111111111";
     }
 
     public Player getPlayer() {return this.player;}
+    public void setPlayer(Player player) {this.player = player;}
     public int getLevel() {return this.level;}
     public void setLevel(int level) {
         this.level = level;
@@ -172,8 +181,8 @@ public class PlayerStats {
         return playerSidebar;
     }
 
-    public String[] getHeadblock(){return this.headblock;}
-    public void setHeadblock(String[] headblock){this.headblock = headblock;}
+    public String[] getHeadblock(){return this.headblocks;}
+    public void setHeadblock(String[] headblocks){this.headblocks = headblocks;}
 
     public void setListName(){
         if(this.level==121){
@@ -184,7 +193,6 @@ public class PlayerStats {
             player.setPlayerListName(player.getName()+ ChatColor.GRAY+" ["+ChatColor.AQUA+ChatColor.BOLD+level+ChatColor.GRAY+"] ");
         }
     }
-    public void setPlayer(Player player){this.player = player;}
 
     public Long getJoin_time(){return this.join_time;}
     public void setJoin_time(Long time){this.join_time=time;}
@@ -194,4 +202,15 @@ public class PlayerStats {
 
     public int getLevel_page() {return level_page;}
     public void setLevel_page(int level_page){this.level_page = level_page;}
+
+    public String getBadge(){return this.badge;}
+    public String getBadgeReverse(){return new StringBuilder(ChatColor.stripColor(badge)).reverse().toString();}
+    public void setBadge(String badge){this.badge = badge;}
+
+
+    public String getTag(){return this.tag;}
+    public void setTag(String tag){this.tag = tag;}
+
+    public String getBadges(int page){return this.badges[page];}
+    public void setBadges(int page,String badge){this.badges[page] = badge;}
 }

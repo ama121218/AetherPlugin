@@ -3,9 +3,8 @@ package net.oriserver.aether.aether.listener;
 import net.oriserver.aether.aether.chart.events.ChartCheckPointEvent;
 import net.oriserver.aether.aether.chart.events.ChartGoalEvent;
 import net.oriserver.aether.aether.chart.events.ChartStartEvent;
-import net.oriserver.aether.aether.chart.events.ChartTimeResetEvent;
 import net.oriserver.aether.aether.statics.CommonMethods;
-import net.oriserver.aether.aether.hologram.Hologram;
+import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.listener.pressurelocation.*;
@@ -24,8 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class PressureListener implements Listener {
@@ -40,7 +37,7 @@ public class PressureListener implements Listener {
 
 
 
-    public PressureListener(PlayerManager pm, SQLiteManager sqLiteManager, Hologram hologram, Plugin plugin) {
+    public PressureListener(PlayerManager pm, SQLiteManager sqLiteManager, Plugin plugin) {
         this.pm = pm;
         this.sqLiteManager = sqLiteManager;
         this.plugin = plugin;

@@ -1,9 +1,10 @@
 package net.oriserver.aether.aether.statics;
 
 import net.oriserver.aether.aether.player.PlayerStats;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class CommonMethods {
@@ -32,5 +33,48 @@ public class CommonMethods {
             p.getInventory().remove(Material.IRON_INGOT);
         }
     }
+
+
+    public static void setArmorStandOption(ArmorStand stand, String setName){
+        stand.setGravity(false);
+        stand.setCanPickupItems(false);
+        stand.setCustomName(setName);
+        stand.setVisible(false);
+        stand.setCustomNameVisible(true);
+        stand.setSmall(true);
+    }
+    public static void setHologram(Location location, String displayName){
+        int chunkX = (int)location.getX() >> 4;
+        int chunkZ = (int)location.getZ() >> 4;
+        World world = location.getWorld();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                Chunk chunk = world.getChunkAt(chunkX + dx, chunkZ + dz);
+                if(!chunk.isLoaded())chunk.load();
+            }
+        }
+        ArmorStand armorStand = world.spawn(location, ArmorStand.class);
+        setArmorStandOption(armorStand,displayName);
+    }
+    public static void deleteHologram(Location location){
+        int chunkX = (int)location.getX() >> 4;
+        int chunkZ = (int)location.getZ() >> 4;
+        World world = location.getWorld();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                Chunk chunk = world.getChunkAt(chunkX + dx, chunkZ + dz);
+                if(!chunk.isLoaded())chunk.load();
+                for(Entity entity :chunk.getEntities()){
+                    if (entity.getType() == EntityType.ARMOR_STAND) {
+                        Location local = entity.getLocation();
+                        if(location.getX() == local.getX() && location.getZ()==local.getZ()) {
+                            entity.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 }

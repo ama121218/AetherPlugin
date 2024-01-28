@@ -14,7 +14,7 @@ public class ParticleManager {
 
     private final int range = 30;
 
-    private final HashMap<String,BukkitRunnable> playerParticleMap = new HashMap<>();
+    private final HashMap<String,ParticleTask> particleTaskMap = new HashMap<>();
     private final HashSet<String> blockPlayerParticleSet = new HashSet<>();
     private final Particle particle;
     private final Plugin plugin;
@@ -24,39 +24,81 @@ public class ParticleManager {
     }
 
     public void setPlayerParticle(Player p,org.bukkit.Particle particle, Particle.ParticleAction particleAction){
+        if(blockPlayerParticleSet.contains(p.getUniqueId().toString())){
+            p.sendMessage("パーティクルをブロックしているため表示できません");
+            return;
+        }
         p.sendMessage("パーティクルをオンにしました。");
         String player_uuid = p.getUniqueId().toString();
-        if(playerParticleMap.containsKey(player_uuid))playerParticleMap.get(player_uuid).cancel();
-        HashSet<Player> nearbyPlayers = new HashSet<>();
+        if(particleTaskMap.containsKey(player_uuid))particleTaskMap.get(player_uuid).cancel();
+        HashSet<Player> nearPlayers = new HashSet<>();
         for(Player worldPlayer : p.getWorld().getPlayers()) {
             if(blockPlayerParticleSet.contains(worldPlayer.getUniqueId().toString()))continue;
             if(worldPlayer.getLocation().distance(p.getLocation()) <= range) {
-                nearbyPlayers.add(worldPlayer);
+                nearPlayers.add(worldPlayer);
             }
         }
-        BukkitRunnable task = new BukkitRunnable() {
-            private int runCount = 0;
-            @Override
-            public void run() {
-                particleAction.display(p.getLocation(),particle,nearbyPlayers);
-                if(runCount >= 50){this.cancel();return;}
-                runCount++;
-            }
-        };
-        playerParticleMap.put(p.getUniqueId().toString(),task);
+        ParticleTask task = new ParticleTask(p,particle,particleAction,nearPlayers);
+        particleTaskMap.put(p.getUniqueId().toString(),task);
         task.runTaskTimer(plugin, 20L, 5L);
     }
 
-    public BukkitRunnable getPlayerParticle(String player_UUID){return playerParticleMap.get(player_UUID);}
+    public ParticleTask getPlayerParticle(String player_UUID){return particleTaskMap.get(player_UUID);}
+
     public void cancelPlayerParticle(Player player){
-        playerParticleMap.get(player.getUniqueId().toString()).cancel();
-        playerParticleMap.remove(player.getUniqueId().toString());
+        ParticleTask particleTask = particleTaskMap.remove(player.getUniqueId().toString());
+        if(particleTask != null) particleTask.cancel();
         player.sendMessage("パーティクルをオフにしました。");
     }
 
+    public void onBlockPlayerParticle(Player p){
+        blockPlayerParticleSet.add(p.getUniqueId().toString());
+        for(ParticleTask task:particleTaskMap.values()){
+            task.getNearPlayersSet().remove(p);
+        }
+        p.sendMessage("パーティクルをブロックしました。");
+    }
+
+    public void offBlockPlayerParticle(Player p){
+        blockPlayerParticleSet.remove(p.getUniqueId().toString());
+        p.sendMessage("パーティクルをブロックを解除しました。");
+    }
 
     public Particle getParticle(){return particle;}
 
+    public class ParticleTask extends BukkitRunnable {
+        private int runCount = 0;
+        private final HashSet<Player> nearPlayers;
+        private final Particle.ParticleAction particleAction;
+        private final org.bukkit.Particle particle;
+        private final Player p;
+        public ParticleTask(Player p,org.bukkit.Particle particle,Particle.ParticleAction particleAction,HashSet<Player> nearPlayers) {
+            this.p = p;
+            this.nearPlayers = nearPlayers;
+            this.particleAction = particleAction;
+            this.particle = particle;
+        }
+        @Override
+        public void run() {
+            particleAction.display(p.getLocation(),particle,nearPlayers,runCount);
+            if(runCount >= 50){
+                this.cancel();
+                particleTaskMap.remove(p.getUniqueId().toString());
+                return;
+            }
+            runCount++;
+        }
+        public HashSet<Player> getNearPlayersSet() {
+            return nearPlayers;
+        }
+    }
 
+    public void setQuitPlayer(Player p){
+        ParticleTask particleTask = particleTaskMap.remove(p.getUniqueId().toString());
+        if(particleTask != null) particleTask.cancel();
+        for(ParticleTask task:particleTaskMap.values()){
+            task.getNearPlayersSet().remove(p);
+        }
+    }
 
 }

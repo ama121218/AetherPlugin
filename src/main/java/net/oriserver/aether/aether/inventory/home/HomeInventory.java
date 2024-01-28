@@ -35,5 +35,4 @@ public class HomeInventory {
         }
         Item.setInventory(p,openinv);
     }
-
 }

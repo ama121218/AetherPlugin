@@ -1,15 +1,18 @@
 package net.oriserver.aether.aether.inventory.home.setting;
 
 import net.oriserver.aether.aether.inventory.InventoryManager;
+import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.player.PlayerStats;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class SettingInventoryClick {
 
-    final private InventoryManager inventoryManager;
-    public SettingInventoryClick(InventoryManager inventoryManager){
+    private final InventoryManager inventoryManager;
+    private final ParticleManager particleManager;
+    public SettingInventoryClick(InventoryManager inventoryManager, ParticleManager particleManager){
         this.inventoryManager = inventoryManager;
+        this.particleManager = particleManager;
     }
 
     public void event(Player p, Material material,int slot){
@@ -21,6 +24,8 @@ public class SettingInventoryClick {
             PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
             if(slot == 12){
                 playerStats.setParticleonoff(value);
+                if(value)particleManager.onBlockPlayerParticle(p);
+                else particleManager.offBlockPlayerParticle(p);
             }
             else if(slot == 13){
                 playerStats.setMailonoff(value);

@@ -20,6 +20,7 @@ import net.oriserver.aether.aether.inventory.home.phonesetting.appearance.PhoneA
 import net.oriserver.aether.aether.inventory.home.phonesetting.partition.PhonePartitionInventoryClick;
 import net.oriserver.aether.aether.inventory.home.setting.SettingInventoryClick;
 import net.oriserver.aether.aether.inventory.level.LevelInventoryClick;
+import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,19 +65,20 @@ public class InventoryClickListener implements Listener {
     private final Map<String, InventoryAction> actionMap = new HashMap<>();
     private final HashSet<String> clickCoolTime = new HashSet<String>();
 
-    public InventoryClickListener(PlayerManager pm,InventoryManager inventoryManager, Plugin plugin){
+    public InventoryClickListener(PlayerManager pm,InventoryManager inventoryManager,ParticleManager particleManager,Plugin plugin){
 
         featherInventoryClick = new FeatherInventoryClick();
         this.pm = pm;
         this.plugin = plugin;
+
         athleticInventoryClick = new AthleticInventoryClick(inventoryManager,pm);
         homeInventoryClick = new HomeInventoryClick(inventoryManager,pm);
         miniGameInventoryClick = new MiniGameInventoryClick(inventoryManager);
         appearanceInventoryClick = new AppearanceInventoryClick(inventoryManager);
-        particleInventoryClick = new ParticleInventoryClick(plugin,inventoryManager);
+        particleInventoryClick = new ParticleInventoryClick(plugin,inventoryManager,particleManager);
         headBlockInventoryClick = new HeadBlockInventoryClick(inventoryManager);
         badgeInventoryClick = new BadgeInventoryClick(inventoryManager);
-        settingInventoryClick = new SettingInventoryClick(inventoryManager);
+        settingInventoryClick = new SettingInventoryClick(inventoryManager,particleManager);
         giveItemInventoryClick = new GiveItemInventoryClick(inventoryManager);
         saveItemInventoryClick = new SaveItemInventoryClick(inventoryManager);
         saveTeleportInventoryClick = new SaveTeleportInventoryClick(inventoryManager);
@@ -93,7 +95,7 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Appearance", (player, type, slot, event) -> appearanceInventoryClick.event(player, type, slot));
         actionMap.put("Particle", (player, type, slot, event) -> particleInventoryClick.event(player, type, slot));
         actionMap.put("HeadBlock", headBlockInventoryClick::event);
-        actionMap.put("Badge", (player, type, slot, event) -> badgeInventoryClick.event(player, type, slot));
+        actionMap.put("Badge", badgeInventoryClick::event);
         actionMap.put("Setting", (player, type, slot, event) -> settingInventoryClick.event(player, type, slot));
 
         actionMap.put("Give Item", (player, type, slot, event) -> giveItemInventoryClick.event(player, type, slot));

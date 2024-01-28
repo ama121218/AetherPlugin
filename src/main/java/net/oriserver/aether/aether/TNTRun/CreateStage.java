@@ -27,7 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 
 public class CreateStage implements Listener {
- 
+
     private String creatorName;
     private String name;
     private double x1,y1,z1,x2,y2,z2;

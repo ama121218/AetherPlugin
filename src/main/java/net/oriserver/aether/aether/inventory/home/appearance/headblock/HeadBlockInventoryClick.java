@@ -48,8 +48,8 @@ public class HeadBlockInventoryClick {
             inventoryManager.getParticleInventory().setinv(p);
         }
         else if(material == Material.PRISMARINE_CRYSTALS && slot == 16) {
-            //PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId()));
-            inventoryManager.getBadgeInventory().setinv(p);
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString());
+            inventoryManager.getBadgeInventory().setinv(p,playerStats.getBadges(0),1);
         }
 
 

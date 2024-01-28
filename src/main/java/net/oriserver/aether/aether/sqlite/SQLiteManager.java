@@ -1,5 +1,6 @@
 package net.oriserver.aether.aether.sqlite;
 
+import net.oriserver.aether.aether.chart.ChartRankingDB;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SQLiteManager {
