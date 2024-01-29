@@ -48,7 +48,9 @@ public class TeleportAether implements CommandExecutor {
                         return false;
                     }
                     if(i>=1&&56>=i){
-                        player.teleport(chartStageInfo.getStageTP(i));
+                        if(chartStageInfo.getStageTP(i)!=null) {
+                            player.teleport(chartStageInfo.getStageTP(i));
+                        }
                     }else{
                         player.sendMessage("最大ステージ数オーバー");
                     }
