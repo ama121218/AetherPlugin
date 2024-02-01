@@ -152,7 +152,7 @@ public class ChartStageCreateManager {
         for (int i = 0; i < checkPoint_List.size(); i++) {
             Double[] doubles = checkPoint_List.get(i);
             chartHologram.setCheckPointWhenCreateStage(doubles);
-            chartCheckPointDB.setDB("INSERT OR IGNORE INTO ChartCheckPoint (stage_id,point,x,y,z) VALUES(?,?,?,?,?);", Arrays.asList(createChartStage.getStage_id(), i, doubles[0], doubles[1], doubles[2]));
+            chartCheckPointDB.setDB("INSERT OR IGNORE INTO ChartCheckPoint (stage_id,point,x,y,z) VALUES(?,?,?,?,?);", Arrays.asList(createChartStage.getStage_id(), i+1, doubles[0], doubles[1], doubles[2]));
         }
     }
 

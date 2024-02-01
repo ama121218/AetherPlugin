@@ -5,12 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ChartStartEvent extends Event {
+public class ChartStartGoalEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
     private final String location;
-    public ChartStartEvent(Player player,Location location) {
+    public ChartStartGoalEvent(Player player,Location location) {
         this.player = player;
         this.location = location.getX()+","+location.getY()+","+location.getZ();
     }
@@ -26,4 +26,3 @@ public class ChartStartEvent extends Event {
     }
 
 }
-

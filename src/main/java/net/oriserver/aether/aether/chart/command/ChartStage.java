@@ -1,6 +1,8 @@
 package net.oriserver.aether.aether.chart.command;
 
+import net.oriserver.aether.aether.chart.inventory.ChartStageInventory;
 import net.oriserver.aether.aether.chart.stage.ChartStageCreateManager;
+import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,7 +10,12 @@ import org.bukkit.entity.Player;
 
 public class ChartStage implements CommandExecutor {
     final private ChartStageCreateManager createChartStageManager;
-    public ChartStage(ChartStageCreateManager createChartStageManager){this.createChartStageManager = createChartStageManager;}
+    final ChartStageInventory chartStageInventory;
+
+    public ChartStage(ChartStageCreateManager createChartStageManager,ChartStageInventory chartStageInventory){
+        this.createChartStageManager = createChartStageManager;
+        this.chartStageInventory = chartStageInventory;
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -17,22 +24,28 @@ public class ChartStage implements CommandExecutor {
         }
         Player player = (Player) sender;
         if(!player.isOp())return false;
-
+        if(args.length == 1){
+            if (args[0].equals("create")) {
+                chartStageInventory.setinv(player,1);
+            }else {
+                player.sendMessage("例：/chart create 1_1");
+            }
+        }
         if (args.length == 2) {
             if (args[0].equals("create")) {
                 if (!isChart(args[1])) {
-                    player.sendMessage("例：/checkpoint chart create 1_1");
+                    player.sendMessage("例：/chart create 1_1");
                     return false;
                 }
                 createChartStageManager.create(player, args[1]);
             } else if (args[0].equals("rework")) {
                 if (!isChart(args[1])) {
-                    player.sendMessage("例：/checkpoint chart create 1_1");
+                    player.sendMessage("例：/chart rework 1_1");
                     return false;
                 }
                 createChartStageManager.rework(player, args[1]);
             } else {
-                player.sendMessage("例：/checkpoint chart create 1_1");
+                player.sendMessage("例：/chart create 1_1");
             }
 
         }else if(args.length == 1) {

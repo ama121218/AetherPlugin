@@ -64,7 +64,7 @@ public class ChartStageCreate implements Listener {
 
         invCreateStage.setItem(0, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "名前を設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
         invCreateStage.setItem(1, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージのtp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
-        invCreateStage.setItem(2, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始位置を設定してください", "",ChatColor.YELLOW+"クリックして石の感圧板を入手"));
+        invCreateStage.setItem(2, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始位置を設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
         invCreateStage.setItem(3, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始tp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
         invCreateStage.setItem(4, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了位置を設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
         invCreateStage.setItem(5, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了tp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
@@ -109,7 +109,7 @@ public class ChartStageCreate implements Listener {
             invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageTPLocation","",ChatColor.WHITE+ "x:" + stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z));
             player.closeInventory();
         }else if(slot == 2){
-            player.getInventory().addItem(Item.createitem(Material.STONE_PLATE, 1, ChatColor.WHITE+"SetStartLocation", "",ChatColor.WHITE+"右クリックでスタート位置設定"));
+            player.getInventory().addItem(Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE+"SetStartLocation", "",ChatColor.WHITE+"右クリックでスタート位置設定"));
             player.closeInventory();
         }else if(slot == 3){
             Location location = player.getLocation();
@@ -225,7 +225,7 @@ public class ChartStageCreate implements Listener {
                     p.getInventory().addItem(Item.createitem2(Material.IRON_PLATE, 1, ChatColor.WHITE + "SetCheckpoint ContinuousAddition", ChatColor.WHITE + "" + (checkPoint_list.size() + 1), ChatColor.WHITE + "右クリックでチェックポイントを連続設定"));
                 }
             }
-        }else if(itemInHand.getType() == Material.STONE_PLATE){
+        }else if(itemInHand.getType() == Material.GOLD_PLATE){
             if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetStartLocation")) {
 
                 Location location = e.getBlock().getLocation();
@@ -233,13 +233,12 @@ public class ChartStageCreate implements Listener {
                 start_y = location.getY();
                 start_z = location.getZ();
 
-                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetStartLocation");
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetStartLocation");
 
                 p.sendMessage("StartLocation("+ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z + ")を設定しました");
                 invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
             }
-        }else if(itemInHand.getType() == Material.GOLD_PLATE){
-            if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetGoalLocation")) {
+            else if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetGoalLocation")) {
 
                 Location location = e.getBlock().getLocation();
                 goal_x = location.getX();
@@ -383,6 +382,7 @@ public class ChartStageCreate implements Listener {
         invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + getStringTime(star_time_3), ""));
         invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + getStringTime(star_time_2), ""));
         invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + getStringTime(star_time_1), ""));
+        invCreateStage.setItem(9, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
         setCheckPointInventory();
     }
 

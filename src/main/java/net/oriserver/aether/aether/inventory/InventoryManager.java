@@ -5,6 +5,8 @@ import net.oriserver.aether.aether.chart.inventory.ChartInventory;
 import net.oriserver.aether.aether.inventory.global.GlobalInventory;
 import net.oriserver.aether.aether.inventory.home.HomeInventory;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventory;
+import net.oriserver.aether.aether.inventory.home.admin.savecommand.SaveCommandInventory;
+import net.oriserver.aether.aether.inventory.home.admin.saveinventory.SaveInventoryInventory;
 import net.oriserver.aether.aether.inventory.home.admin.saveitem.SaveItemInventory;
 import net.oriserver.aether.aether.inventory.home.admin.saveteleport.SaveTeleportInventory;
 import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventory;
@@ -22,24 +24,27 @@ import net.oriserver.aether.aether.inventory.level.LevelInventory;
 import net.oriserver.aether.aether.player.PlayerManager;
 
 public class InventoryManager {
-    final private PlayerManager pm;
-    final private HomeInventory homeInventory;
-    final private AthleticInventory athleticInventory;
-    final private MiniGameInventory miniGameInventory;
-    final private AppearanceInventory appearanceInventory;
-    final private ParticleInventory particleInventory;
-    final private HeadBlockInventory headBlockInventory;
-    final private BadgeInventory badgeInventory;
-    final private SettingInventory settingInventory;
-    final private GiveItemInventory giveItemInventory;
-    final private SaveItemInventory saveItemInventory;
-    final private SaveTeleportInventory saveTeleportInventory;
-    final private ShopInventory shopInventory;
-    final private PhoneAppearanceInventory phoneAppearanceInventory;
-    final private PhonePartitionInventory phonePartitionInventory;
-    final private PhoneSettingInventory phoneSettingInventory;
-    final private LevelInventory levelInventory;
-    final private GlobalInventory globalInventory;
+    private final PlayerManager pm;
+    private final HomeInventory homeInventory;
+    private final AthleticInventory athleticInventory;
+    private final MiniGameInventory miniGameInventory;
+    private final AppearanceInventory appearanceInventory;
+    private final ParticleInventory particleInventory;
+    private final HeadBlockInventory headBlockInventory;
+    private final BadgeInventory badgeInventory;
+    private final SettingInventory settingInventory;
+    private final GiveItemInventory giveItemInventory;
+    private final SaveItemInventory saveItemInventory;
+    private final SaveTeleportInventory saveTeleportInventory;
+    private final SaveInventoryInventory saveInventoryInventory;
+    private final SaveCommandInventory saveCommandInventory;
+    private final ShopInventory shopInventory;
+    private final PhoneAppearanceInventory phoneAppearanceInventory;
+    private final PhonePartitionInventory phonePartitionInventory;
+    private final PhoneSettingInventory phoneSettingInventory;
+    private final LevelInventory levelInventory;
+    private final GlobalInventory globalInventory;
+
 
     public InventoryManager(PlayerManager pm){
         this.pm = pm;
@@ -54,6 +59,8 @@ public class InventoryManager {
         giveItemInventory = new GiveItemInventory();
         saveItemInventory = new SaveItemInventory(pm);
         saveTeleportInventory = new SaveTeleportInventory(pm);
+        saveInventoryInventory = new SaveInventoryInventory(pm);
+        saveCommandInventory = new SaveCommandInventory(pm);
         shopInventory = new ShopInventory();
         phoneAppearanceInventory = new PhoneAppearanceInventory();
         phonePartitionInventory = new PhonePartitionInventory();
@@ -73,6 +80,8 @@ public class InventoryManager {
     public GiveItemInventory getGiveItemInventory(){return this.giveItemInventory;}
     public SaveItemInventory getSaveItemInventory(){return this.saveItemInventory;}
     public SaveTeleportInventory getSaveTeleportInventory(){return this.saveTeleportInventory;}
+    public SaveInventoryInventory getSaveInventoryInventory(){return this.saveInventoryInventory;}
+    public SaveCommandInventory getSaveCommandInventory(){return this.saveCommandInventory;}
     public ShopInventory getShopInventory(){return this.shopInventory;}
     public PhoneAppearanceInventory getPhoneAppearanceInventory(){return this.phoneAppearanceInventory;}
     public PhonePartitionInventory getPhonePartitionInventory(){return this.phonePartitionInventory;}

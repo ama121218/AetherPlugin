@@ -29,6 +29,8 @@ public class HomeInventory {
         Inventory openinv = Item.inventorycopy(invHome);
         openinv.setItem(39, Item.getHead(p.getName()));
         if(p.isOp()) {
+            openinv.setItem(16, Item.createitem(Material.COMMAND, 1, ChatColor.GREEN + "Save_Command", ""));
+            openinv.setItem(25, Item.createitem(Material.CHEST, 1, ChatColor.GREEN + "Save_Inventory", ""));
             openinv.setItem(34, Item.createitem(Material.IRON_AXE, 1, ChatColor.GREEN + "Save_Item", ""));
             openinv.setItem(43, Item.createitem(Material.ENDER_PEARL, 1, ChatColor.GREEN + "Save_Teleport", ""));
             openinv.setItem(52, Item.createitem(Material.ARMOR_STAND, 1, ChatColor.GREEN + "Give_Item", ""));

@@ -7,8 +7,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class CommonMethods {
+import java.util.Arrays;
+import java.util.HashSet;
 
+public class CommonMethods {
+    private static final HashSet<Integer> slotSet = new HashSet<>(Arrays.asList(3,4,5,12,13,14,21,22,23,30,31,32,39,40,41));
     static public void setTeleport(Player p, Location location, String string_location, PlayerStats playerStats){
         p.teleport(location);
         playerStats.setLocation(string_location);
@@ -75,6 +78,8 @@ public class CommonMethods {
             }
         }
     }
-
+    public static boolean isInSlotSet(int slot){
+        return slotSet.contains(slot);
+    }
 
 }

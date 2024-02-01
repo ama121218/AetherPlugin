@@ -86,9 +86,9 @@ public class ChartStageInfo {
             chartCheckPointDB.getDB("SELECT * FROM ChartCheckPoint WHERE stage_id = ? ORDER BY point ASC", Arrays.asList(stage_id), rs -> {
                 int j = 0;
                 while (rs.next()) {
+                    j++;
                     checkPointMap.put(rs.getString("x")+","+rs.getString("y")+","+rs.getString("z"),index+"_"+j);
                     checkPointTPMap.put(index+"_"+j,new Location(Bukkit.getWorld("chart"),rs.getDouble("x")+0.5,rs.getDouble("y"),rs.getDouble("z")+0.5));
-                    j++;
                 }
                 checkPointAmount.put(index,j);
                 return null;
@@ -151,23 +151,18 @@ public class ChartStageInfo {
         chartCheckPointDB.getDB("SELECT * FROM ChartCheckPoint WHERE stage_id = ? ORDER BY point ASC", Arrays.asList(stage_id), rs -> {
             int j = 0;
             while (rs.next()) {
+                j++;
                 checkPointMap.put(rs.getString("x")+","+rs.getString("y")+","+rs.getString("z"),index+"_"+j);
                 checkPointTPMap.put(index+"_"+j,new Location(Bukkit.getWorld("chart"),rs.getDouble("x")+0.5,rs.getDouble("y"),rs.getDouble("z")+0.5));
-                j++;
             }
             checkPointAmount.put(i,j);
             return null;
         });
 
-
-
-
-
-
-
-
+        chartHologram.setNumberAndNameWhenCreateStage(i);
     }
 
+    public HashMap<Integer, String> getStageNameMap(){return this.stageNameMap;}
     public HashMap<String, Integer> getStartMap(){return this.startMap;}
     public HashMap<String, Integer> getGoalMap(){return this.goalMap;}
 

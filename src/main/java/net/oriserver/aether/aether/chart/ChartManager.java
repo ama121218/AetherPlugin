@@ -3,8 +3,10 @@ package net.oriserver.aether.aether.chart;
 import net.oriserver.aether.aether.chart.command.ChartStage;
 import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.chart.inventory.ChartInventory;
+import net.oriserver.aether.aether.chart.inventory.ChartStageInventory;
 import net.oriserver.aether.aether.chart.listener.ChartInventoryClickListener;
 import net.oriserver.aether.aether.chart.listener.ChartItemClickListener;
+import net.oriserver.aether.aether.chart.listener.ChartStageInventoryClick;
 import net.oriserver.aether.aether.chart.stage.ChartStageCreateManager;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.chart.stage.TemporaryData;
@@ -27,6 +29,7 @@ public class ChartManager {
     private final SQLiteAPI chartStageDB;
     private final SQLiteAPI chartCheckPointDB;
     private final ChartHologram chartHologram;
+    private final ChartStageInventory chartStageInventory;
 
     private final ChartStageCreateManager createChartStageManager;
 
@@ -39,7 +42,7 @@ public class ChartManager {
 
         initializeDB();
 
-        //new TemporaryData(chartStageDB);
+        new TemporaryData(chartStageDB);
 
 
         chartStageInfo = new ChartStageInfo(chartStageDB,chartCheckPointDB,this);
@@ -48,14 +51,17 @@ public class ChartManager {
 
 
         chartInventory = new ChartInventory(pm,chartStageInfo);
+        chartStageInventory = new ChartStageInventory(chartStageInfo);
+
         chartGame = new ChartGame(chartStageInfo,chartHologram,pm);
 
-        plugin.getCommand("chart").setExecutor(new ChartStage(createChartStageManager));
+        plugin.getCommand("chart").setExecutor(new ChartStage(createChartStageManager,chartStageInventory));
 
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         pluginManager.registerEvents(new ChartInventoryClickListener(pm,chartInventory,chartStageInfo),plugin);
         pluginManager.registerEvents(new ChartItemClickListener(chartInventory),plugin);
         pluginManager.registerEvents(chartGame,plugin);
+        pluginManager.registerEvents(new ChartStageInventoryClick(chartStageInventory,chartStageInfo),plugin);
     }
 
 

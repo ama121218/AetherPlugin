@@ -1,23 +1,21 @@
-package net.oriserver.aether.aether.saveinventory;
+package net.oriserver.aether.aether.createinventory;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class SaveInventory {
+public class CreateInventory {
 
     ArrayList<ItemStack[]> item_list = new ArrayList<ItemStack[]>();
     ArrayList<String> item_string = new ArrayList<String>();
     int number;
 
-    SaveInventory(Player p){
+    CreateInventory(Player p){
         number = 0;
         ItemStack[] temp = new ItemStack[9];
         Inventory player_inventory = p.getInventory();

@@ -2,6 +2,7 @@ package net.oriserver.aether.aether.inventory.home.admin.saveteleport;
 
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.sqlite.SaveTeleportDB;
+import net.oriserver.aether.aether.statics.CommonMethods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,24 +22,24 @@ public class SaveTeleportInventoryClick {
 
     public SaveTeleportInventoryClick(InventoryManager inventoryManager){this.inventoryManager = inventoryManager;}
     public void event(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             List<String> list = e.getCurrentItem().getItemMeta().getLore();
             Location location = new Location(Bukkit.getWorld(list.get(0)),Float.parseFloat(list.get(1)),Float.parseFloat(list.get(2)),Float.parseFloat(list.get(3)),Float.parseFloat(list.get(4)),Float.parseFloat(list.get(5)));
             p.teleport(location);
         }
-        else if(material == Material.BARRIER && slot == 7){
+        else if(slot == 7 && material == Material.BARRIER){
             inventoryManager.getSaveTeleportInventory().setDeleteinv(p,1);
         }
-        else if(material == Material.MINECART && slot == 16){
+        else if(slot == 16 && material == Material.MINECART){
             inventoryManager.getSaveTeleportInventory().setSelectinv1(p,1);
         }
-        else if(material == Material.CHORUS_FRUIT_POPPED && slot == 18){
+        else if(slot == 18 && material == Material.CHORUS_FRUIT_POPPED){
             p.teleport(p.getLocation().getWorld().getSpawnLocation());
         }
-        else if(material == Material.REDSTONE && slot == 52) {
+        else if(slot == 52 && material == Material.REDSTONE) {
             inventoryManager.getSaveTeleportInventory().setAdmininv(p, 1);
         }
-        else if(material == Material.SADDLE && slot == 8){
+        else if(slot == 8 && material == Material.SADDLE){
             Random random = new Random();
             String st_name = String.format("%06d", random.nextInt(1000000));
             String item = String.valueOf(Material.STONE);
@@ -47,59 +48,59 @@ public class SaveTeleportInventoryClick {
             p.sendMessage(ChatColor.GOLD + "現在地を" + ChatColor.WHITE + st_name + ChatColor.GOLD + "として設定しました");
             p.closeInventory();
         }
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && slot == 0)inventoryManager.getHomeInventory().setinv(p);
-        else if(material == Material.BARRIER && slot == 45)p.closeInventory();
+        else if(slot == 0 && material == Material.IRON_DOOR)inventoryManager.getHomeInventory().setinv(p);
+        else if(slot == 45 && material == Material.BARRIER)p.closeInventory();
     }
     public void deleteevent(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             ItemStack item = e.getCurrentItem();
             if(item==null||!item.hasItemMeta()||!item.getItemMeta().hasDisplayName())return;
             inventoryManager.getPlayerManager().getSqLiteManager().getSaveTeleportDB().deleteData(String.valueOf(p.getUniqueId()),item.getItemMeta().getDisplayName());
             p.sendMessage(ChatColor.WHITE+""+e.getCurrentItem().getItemMeta().getDisplayName()+ChatColor.DARK_RED+"を削除しました");
             p.closeInventory();
         }
-        else if(material == Material.ENDER_PEARL && slot == 1){
+        else if(slot == 1 && material == Material.ENDER_PEARL){
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
 
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setDeleteinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setDeleteinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && e.getRawSlot() == 0)inventoryManager.getHomeInventory().setinv(p);
-        else if(material == Material.BARRIER && e.getRawSlot() == 45)p.closeInventory();
+        else if(slot == 0 && material == Material.IRON_DOOR)inventoryManager.getHomeInventory().setinv(p);
+        else if(slot == 45 && material == Material.BARRIER)p.closeInventory();
     }
     public void selectevent1(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             select.put(p.getName(),e.getCurrentItem());
             inventoryManager.getSaveTeleportInventory().setSelectinv2(p,1);
         }
-        else if(material == Material.ENDER_PEARL && slot == 1){
+        else if(slot == 1 && material == Material.ENDER_PEARL){
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
 
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setSelectinv1(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setSelectinv1(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && e.getRawSlot() == 0)inventoryManager.getHomeInventory().setinv(p);
-        else if(material == Material.BARRIER && e.getRawSlot() == 45)p.closeInventory();
+        else if(slot == 0 && material == Material.IRON_DOOR)inventoryManager.getHomeInventory().setinv(p);
+        else if(slot == 45 && material == Material.BARRIER)p.closeInventory();
     }
     public void selectevent2(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             ItemStack item2 = e.getCurrentItem();
             if(item2==null||!item2.hasItemMeta()||!item2.getItemMeta().hasDisplayName())return;
             String ts_name2 = item2.getItemMeta().getDisplayName();
@@ -149,71 +150,71 @@ public class SaveTeleportInventoryClick {
             p.sendMessage(ChatColor.GREEN+ts_name1+""+ChatColor.WHITE+"と"+ChatColor.GREEN+ts_name2+""+ChatColor.WHITE+"を入れ替えました");
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
-        else if(material == Material.ENDER_PEARL && slot == 1){
+        else if(slot == 1 && material == Material.ENDER_PEARL){
             select.remove(p.getName());
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
 
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setSelectinv2(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setSelectinv2(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && e.getRawSlot() == 0){
+        else if(slot == 0 && material == Material.IRON_DOOR){
             select.remove(p.getName());
             inventoryManager.getHomeInventory().setinv(p);
         }
-        else if(material == Material.BARRIER && e.getRawSlot() == 45){
+        else if(slot == 45 && material == Material.BARRIER){
             select.remove(p.getName());
             p.closeInventory();
         }
     }
     public void adminevent(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             List<String> list = e.getCurrentItem().getItemMeta().getLore();
             Location location = new Location(Bukkit.getWorld(list.get(0)),Float.parseFloat(list.get(1)),Float.parseFloat(list.get(2)),Float.parseFloat(list.get(3)),Float.parseFloat(list.get(4)),Float.parseFloat(list.get(5)));
             p.teleport(location);
         }
-        else if(material == Material.ENDER_PEARL && slot == 1){
+        else if(slot == 1 && material == Material.ENDER_PEARL){
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
-        else if(material == Material.BARRIER && slot == 7){
+        else if(slot == 7 && material == Material.BARRIER){
             inventoryManager.getSaveTeleportInventory().setAdminDeleteinv(p,1);
         }
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setAdmininv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setAdmininv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && slot == 0)inventoryManager.getHomeInventory().setinv(p);
-        else if(material == Material.BARRIER && slot == 45)p.closeInventory();
+        else if(slot == 0 && material == Material.IRON_DOOR)inventoryManager.getHomeInventory().setinv(p);
+        else if(slot == 45 && material == Material.BARRIER)p.closeInventory();
     }
     public void admindeleteevent(Player p, Material material, int slot, InventoryClickEvent e){
-        if(slot == 3||slot == 4||slot == 5||slot == 12||slot == 13||slot == 14||slot == 21||slot == 22||slot == 23||slot == 30||slot == 31||slot == 32||slot == 39||slot == 40||slot == 41){
+        if(CommonMethods.isInSlotSet(slot)){
             ItemStack item = e.getCurrentItem();
             if(item==null||!item.hasItemMeta()||!item.getItemMeta().hasDisplayName())return;
             inventoryManager.getPlayerManager().getSqLiteManager().getSaveTeleportDB().deleteData("admin",item.getItemMeta().getDisplayName());
             p.sendMessage(ChatColor.WHITE+""+e.getCurrentItem().getItemMeta().getDisplayName()+ChatColor.DARK_RED+"(admin)を削除しました");
             p.closeInventory();
         }
-        else if(material == Material.ENDER_PEARL && slot == 1){
+        else if(slot == 1 && material == Material.ENDER_PEARL){
             inventoryManager.getSaveTeleportInventory().setinv(p,1);
         }
-        else if(material == Material.REDSTONE && slot == 10){
+        else if(slot == 10 && material == Material.REDSTONE){
             inventoryManager.getSaveTeleportInventory().setAdmininv(p,1);
         }
-        else if(material == Material.ARROW && slot == 48){
+        else if(slot == 48 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setAdminDeleteinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
-        else if(material == Material.ARROW && slot == 50){
+        else if(slot == 50 && material == Material.ARROW){
             inventoryManager.getSaveTeleportInventory().setAdminDeleteinv(p,Character.getNumericValue(e.getCurrentItem().getItemMeta().getDisplayName().charAt(0)));
         }
 
-        else if(material == Material.IRON_DOOR && e.getRawSlot() == 0)inventoryManager.getHomeInventory().setinv(p);
-        else if(material == Material.BARRIER && e.getRawSlot() == 45)p.closeInventory();
+        else if(slot == 0 && material == Material.IRON_DOOR)inventoryManager.getHomeInventory().setinv(p);
+        else if(slot == 45 && material == Material.BARRIER)p.closeInventory();
     }
 }

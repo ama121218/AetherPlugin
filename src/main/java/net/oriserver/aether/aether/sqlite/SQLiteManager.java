@@ -14,6 +14,8 @@ public class SQLiteManager {
     private final SaveTeleportDB saveTeleportDB;
     private final SaveItemDB saveItemDB;
     private final ChartRankingDB chartRankingDB;
+    private final SaveInventoryDB saveInventoryDB;
+    private final SaveCommandDB saveCommandDB;
 
     public SQLiteManager(JavaPlugin plugin){
         playerDBManagerJQ = new PlayerDBManagerJQ(plugin,"Player_data_JQ");
@@ -26,6 +28,8 @@ public class SQLiteManager {
         saveTeleportDB = new SaveTeleportDB(plugin,"Save_Teleport");
         saveItemDB = new SaveItemDB(plugin,"Save_Item");
         chartRankingDB = new ChartRankingDB(plugin,"Chart_Ranking");
+        saveInventoryDB = new SaveInventoryDB(plugin,"Save_Inventory");
+        saveCommandDB = new SaveCommandDB(plugin,"Save_Command");
     }
 
     public PlayerDBManagerJQ getPlayerDBManagerJQ(){
@@ -41,5 +45,7 @@ public class SQLiteManager {
     public HeadBlockDB getPlayerDBManagerHeadBlock(){return this.headBlockDB;}
     public SaveTeleportDB getSaveTeleportDB(){return this.saveTeleportDB;}
     public SaveItemDB getSaveItemDB(){return this.saveItemDB;}
+    public SaveCommandDB getSaveCommandDB(){return this.saveCommandDB;}
     public ChartRankingDB getChartRankingDB(){return this.chartRankingDB;}
+    public SaveInventoryDB getSaveInventoryDB(){return this.saveInventoryDB;}
 }

@@ -145,6 +145,15 @@ public class ChartHologram {
         Location location = new Location(Bukkit.getWorld("chart"),doubles[0]+0.5,doubles[1]+0.3,doubles[2]+0.5);
         CommonMethods.setHologram(location,ChatColor.GOLD+"|||"+ChatColor.WHITE+""+ChatColor.BOLD+"goal"+ChatColor.GOLD+"|||");
     }
+    public void setNumberAndNameWhenCreateStage(int i){
+        int mainStage = (i - 1) / 14 + 1;
+        int subStage = (i - 1) % 14 + 1;
+        Local_xyz local_xyz = coordinatesChartNumber.get(i);
+        Location location = new Location(Bukkit.getWorld("chart"), local_xyz.x, local_xyz.y, local_xyz.z);
+        CommonMethods.setHologram(location, ChatColor.BOLD + "* " + mainStage + " - " + subStage + " *");
+        location.setY(local_xyz.y-0.3);
+        CommonMethods.setHologram(location, stageNameColor.get(i)+"--- "+chartStageInfo.getStageName(i)+" ---");
+    }
 
     public void deleteWhenCreateStage(String locationString){
         if(locationString==null)return;
@@ -166,6 +175,8 @@ public class ChartHologram {
             CommonMethods.deleteHologram(location);
         }
     }
+    
+
 
     private void putData(){
         coordinatesChartTime.put(1, new Local_xyz(-1583.5, 11.75, 2071.5));

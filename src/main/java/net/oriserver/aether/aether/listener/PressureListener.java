@@ -1,10 +1,8 @@
 package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.chart.events.ChartCheckPointEvent;
-import net.oriserver.aether.aether.chart.events.ChartGoalEvent;
-import net.oriserver.aether.aether.chart.events.ChartStartEvent;
+import net.oriserver.aether.aether.chart.events.ChartStartGoalEvent;
 import net.oriserver.aether.aether.statics.CommonMethods;
-import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
 import net.oriserver.aether.aether.listener.pressurelocation.*;
@@ -56,14 +54,13 @@ public class PressureListener implements Listener {
                     handleLevelGoal(player,level);
                 }
                 else if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))) {
-                    Bukkit.getPluginManager().callEvent(new ChartGoalEvent(player,e.getClickedBlock().getLocation()));
+                    Bukkit.getPluginManager().callEvent(new ChartStartGoalEvent(player,e.getClickedBlock().getLocation()));
                 }
                 else if(player.getLocation().getWorld().equals(Bukkit.getWorld("global"))){
                     handleGlobalGoal(player);
                 }
             } else if (e.getClickedBlock().getType() == Material.STONE_PLATE) {
                 if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))) {
-                    Bukkit.getPluginManager().callEvent(new ChartStartEvent(player,e.getClickedBlock().getLocation()));
                 }
             }else if(e.getClickedBlock().getType() == Material.IRON_PLATE){
                 if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))){

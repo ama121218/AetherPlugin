@@ -35,12 +35,7 @@ public class ChartGame implements Listener {
         this.pm = pm;
     }
 
-    @EventHandler
-    public void handleChartStart(ChartStartEvent e){
-        int chart = chartStageInfo.getStartStage(e.getLocation());
-        if(chart==-1)return;
-
-        Player p = e.getPlayer();
+    public void handleChartStart(Player p,int chart){
         Location location = chartStageInfo.getStartLocation(chart);
         if(location==null){
             p.sendMessage("ステージがありません");
@@ -87,7 +82,7 @@ public class ChartGame implements Listener {
         if(!saveChartStageTime.containsKey(p.getUniqueId().toString())){
             saveChartStageTime.put(p.getUniqueId().toString(),new ChartInfo(Integer.parseInt(string_checkpoint_index.split("_")[0]),null,location));
             saveChartStageTime.get(p.getUniqueId().toString()).setStringCheckPointIndex(string_checkpoint_index);
-            p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1])+1)+"/"+chartStageInfo.getCheckPointAmount(Integer.parseInt(string_checkpoint_index.split("_")[0]))+")");
+            p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1]))+"/"+chartStageInfo.getCheckPointAmount(Integer.parseInt(string_checkpoint_index.split("_")[0]))+")");
             return;
         }
 
@@ -97,7 +92,7 @@ public class ChartGame implements Listener {
         chartInfo.setCheckPoint(location.clone());
         chartInfo.setStringCheckPointIndex(string_checkpoint_index);
 
-        p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1])+1)+"/"+chartStageInfo.getCheckPointAmount(chartInfo.getStageID())+")");
+        p.sendMessage(ChatColor.YELLOW+"チェックポイントを設定しました("+(Integer.parseInt(string_checkpoint_index.split("_")[1]))+"/"+chartStageInfo.getCheckPointAmount(chartInfo.getStageID())+")");
 
     }
     @EventHandler
@@ -114,13 +109,19 @@ public class ChartGame implements Listener {
         p.teleport(tp_location);
     }
 
-
     @EventHandler
-    public void handleChartGoal(ChartGoalEvent e){
-        int chart = chartStageInfo.getGoalStage(e.getLocation());
-        if(chart==-1)return;
+    public void handleChartStartGoal(ChartStartGoalEvent e){
+        int chart = chartStageInfo.getStartStage(e.getLocation());
+        if(chart!=-1){
+            handleChartStart(e.getPlayer(),chart);
+        }else{
+            chart = chartStageInfo.getGoalStage(e.getLocation());
+            if(chart==-1)return;
+            handleChartGoal(e.getPlayer(),chart);
+        }
+    }
 
-        Player p = e.getPlayer();
+    public void handleChartGoal(Player p,int chart){
         p.getInventory().remove(Material.PRISMARINE_SHARD);
         String uuid = String.valueOf(p.getUniqueId());
         CommonMethods.setTeleport(p,chartStageInfo.getGoalLocation(chart),"Chart_Lobby", pm.getPlayer(uuid));

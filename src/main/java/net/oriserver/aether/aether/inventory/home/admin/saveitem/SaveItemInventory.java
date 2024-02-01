@@ -69,7 +69,7 @@ public class SaveItemInventory {
         ItemStack[] allitem = inv.getContents();
         openinv.setContents(allitem);
         openinv.setItem(10, Item.createitem(Material.REDSTONE, 1, ChatColor.GREEN + "Admin_Save_Item", ""));
-        openinv.setItem(19, Item.createitem(Material.BARRIER, 1, ChatColor.GREEN + "Admin_Delete_Save_Teleport", ""));
+        openinv.setItem(19, Item.createitem(Material.BARRIER, 1, ChatColor.DARK_RED + "Admin_Delete_Save_Item", ""));
         Item.setInventory(p,openinv);
     }
 

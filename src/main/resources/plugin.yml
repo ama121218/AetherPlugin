@@ -77,3 +77,22 @@ commands:
 
   particle:
     description: パーティクル
+
+  createinventory:
+    description: Inventory作成
+    aliases:
+      - cinv
+      - createinv
+      - CreateInventory
+
+  savecommand:
+    description: save command
+    aliases:
+      - sc
+      - SaveCommand
+  openphone:
+    description: open phone
+    aliases:
+      - ap
+      - openPhone
+      - aetherphone

@@ -1,12 +1,15 @@
 package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.chart.events.ChartInventoryClickEvent;
+import net.oriserver.aether.aether.chart.events.ChartStageInventoryEvent;
 import net.oriserver.aether.aether.events.*;
 import net.oriserver.aether.aether.inventory.feather.FeatherInventoryClick;
 import net.oriserver.aether.aether.inventory.global.GlobalInventoryClick;
 import net.oriserver.aether.aether.inventory.home.HomeInventoryClick;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.inventory.home.admin.giveitem.GiveItemInventoryClick;
+import net.oriserver.aether.aether.inventory.home.admin.savecommand.SaveCommandInventoryClick;
+import net.oriserver.aether.aether.inventory.home.admin.saveinventory.SaveInventoryInventoryClick;
 import net.oriserver.aether.aether.inventory.home.admin.saveitem.SaveItemInventoryClick;
 import net.oriserver.aether.aether.inventory.home.admin.saveteleport.SaveTeleportInventoryClick;
 import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventoryClick;
@@ -53,6 +56,8 @@ public class InventoryClickListener implements Listener {
     private final GiveItemInventoryClick giveItemInventoryClick;
     private final SaveItemInventoryClick saveItemInventoryClick;
     private final SaveTeleportInventoryClick saveTeleportInventoryClick;
+    private final SaveInventoryInventoryClick saveInventoryInventoryClick;
+    private final SaveCommandInventoryClick saveCommandInventoryClick;
     private final PhoneAppearanceInventoryClick phoneAppearanceInventoryClick;
     private final PhonePartitionInventoryClick phonePartitionInventoryClick;
     private final PhoneSettingInventoryClick phoneSettingInventoryClick;
@@ -82,6 +87,8 @@ public class InventoryClickListener implements Listener {
         giveItemInventoryClick = new GiveItemInventoryClick(inventoryManager);
         saveItemInventoryClick = new SaveItemInventoryClick(inventoryManager);
         saveTeleportInventoryClick = new SaveTeleportInventoryClick(inventoryManager);
+        saveInventoryInventoryClick = new SaveInventoryInventoryClick(inventoryManager);
+        saveCommandInventoryClick = new SaveCommandInventoryClick(inventoryManager);
         phoneAppearanceInventoryClick = new PhoneAppearanceInventoryClick(inventoryManager);
         phonePartitionInventoryClick = new PhonePartitionInventoryClick(inventoryManager);
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
@@ -106,12 +113,26 @@ public class InventoryClickListener implements Listener {
         actionMap.put(ChatColor.LIGHT_PURPLE + "Admin Save Item", saveItemInventoryClick::adminevent);
         actionMap.put(ChatColor.DARK_RED + "Admin Delete Save Item", saveItemInventoryClick::admindeleteevent);
 
+        actionMap.put("Save Inventory", saveInventoryInventoryClick::event);
+        actionMap.put(ChatColor.DARK_RED + "Delete Save Inventory", saveInventoryInventoryClick::deleteevent);
+        actionMap.put(ChatColor.YELLOW + "Select Save Inventory 1", saveInventoryInventoryClick::selectevent1);
+        actionMap.put(ChatColor.YELLOW + "Select Save Inventory 2", saveInventoryInventoryClick::selectevent2);
+        actionMap.put(ChatColor.LIGHT_PURPLE + "Admin Save Inventory", saveInventoryInventoryClick::adminevent);
+        actionMap.put(ChatColor.DARK_RED + "Admin Delete Save Inventory", saveInventoryInventoryClick::admindeleteevent);
+
         actionMap.put("Save Teleport", saveTeleportInventoryClick::event);
         actionMap.put(ChatColor.DARK_RED + "Delete Save Teleport", saveTeleportInventoryClick::deleteevent);
         actionMap.put(ChatColor.YELLOW + "Select Save Teleport 1", saveTeleportInventoryClick::selectevent1);
         actionMap.put(ChatColor.YELLOW + "Select Save Teleport 2", saveTeleportInventoryClick::selectevent2);
         actionMap.put(ChatColor.LIGHT_PURPLE + "Admin Save Teleport", saveTeleportInventoryClick::adminevent);
         actionMap.put(ChatColor.DARK_RED + "Admin Delete Save Teleport", saveTeleportInventoryClick::admindeleteevent);
+
+        actionMap.put("Save Command", saveCommandInventoryClick::event);
+        actionMap.put(ChatColor.DARK_RED + "Delete Save Command", saveCommandInventoryClick::deleteevent);
+        actionMap.put(ChatColor.YELLOW + "Select Save Command 1", saveCommandInventoryClick::selectevent1);
+        actionMap.put(ChatColor.YELLOW + "Select Save Command 2", saveCommandInventoryClick::selectevent2);
+        actionMap.put(ChatColor.LIGHT_PURPLE + "Admin Save Command", saveCommandInventoryClick::adminevent);
+        actionMap.put(ChatColor.DARK_RED + "Admin Delete Save Command", saveCommandInventoryClick::admindeleteevent);
 
         actionMap.put("Level Athletic", levelInventoryClick::event);
         actionMap.put("Chart Athletic", (player, type,slot, event) -> Bukkit.getPluginManager().callEvent(new ChartInventoryClickEvent(player,type,slot,event.getInventory())));
@@ -123,6 +144,7 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Global Athletic",(player,type,slot, event)-> globalInventoryClick.event(player,type,slot));
         
         actionMap.put("TNTRun_CreateStage",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new CreateTNTRunStageInventoryEvent(player,slot))));
+        actionMap.put("Chart Stage Create",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new ChartStageInventoryEvent(player,type,slot,event.getCurrentItem().getItemMeta().getDisplayName()))));
 
         actionMap.put("PlaySound",(player,type,slot,event)->Bukkit.getPluginManager().callEvent(new PlaySoundEvent(player,slot)));
     }

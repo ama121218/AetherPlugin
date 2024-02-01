@@ -4,13 +4,14 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.hideshow.HideShow;
+import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.statics.Item;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.chat.ChatRoom;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
-import net.oriserver.aether.aether.saveinventory.SaveInventoryManager;
+import net.oriserver.aether.aether.createinventory.CreateInventoryManager;
 import net.oriserver.aether.aether.sqlite.PhoneSetting;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerUUID;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
@@ -31,20 +32,21 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class UsualListener implements Listener {
 
     private final PlayerManager pm;
     private final SQLiteManager sq;
     private final ChatManager chatManager;
-    private final SaveInventoryManager saveInventoryManager;
+    private final CreateInventoryManager saveInventoryManager;
     private final ParticleManager particleManager;
     private final HideShow hideShow;
+    private final InventoryManager inventoryManager;
 
 
-    public UsualListener(PlayerManager pm, SQLiteManager sq, ChatManager chatManager, SaveInventoryManager saveInventoryManager, HideShow hideShow,ParticleManager particleManager){
+    public UsualListener(PlayerManager pm, InventoryManager inventoryManager, SQLiteManager sq, ChatManager chatManager, CreateInventoryManager saveInventoryManager, HideShow hideShow, ParticleManager particleManager){
         this.pm = pm;
+        this.inventoryManager = inventoryManager;
         this.sq = sq;
         this.chatManager = chatManager;
         this.saveInventoryManager = saveInventoryManager;
@@ -119,6 +121,10 @@ public class UsualListener implements Listener {
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
         if(!p.isOp()){event.setCancelled(true);}
+        else if(p.getLocation().getPitch()==-90){
+            event.setCancelled(true);
+            inventoryManager.getHomeInventory().setinv(p);
+        }
         else{
             event.setCancelled(true);
             // シフトキーが押されているか確認

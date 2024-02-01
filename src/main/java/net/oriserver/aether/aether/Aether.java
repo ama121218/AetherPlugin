@@ -6,7 +6,6 @@ import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.chat.ChatRoom;
 import net.oriserver.aether.aether.command.CommandSetter;
 import net.oriserver.aether.aether.command.commands.TeleportAether;
-import net.oriserver.aether.aether.command.hideshow.Hide;
 import net.oriserver.aether.aether.hideshow.HideShow;
 import net.oriserver.aether.aether.inventory.InventoryManager;
 import net.oriserver.aether.aether.listener.PressureListener;
@@ -16,7 +15,7 @@ import net.oriserver.aether.aether.listener.UsualListener;
 import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
-import net.oriserver.aether.aether.saveinventory.SaveInventoryManager;
+import net.oriserver.aether.aether.createinventory.CreateInventoryManager;
 import net.oriserver.aether.aether.sqlite.PhoneSetting;
 import net.oriserver.aether.aether.sqlite.PlayerDBManagerUUID;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
@@ -45,7 +44,7 @@ public final class Aether extends JavaPlugin{
         sqLiteManager = new SQLiteManager(this);
         playerManager = new PlayerManager(sqLiteManager);
         InventoryManager inventoryManager = new InventoryManager(playerManager);
-        SaveInventoryManager saveInventoryManager = new SaveInventoryManager();
+        CreateInventoryManager saveInventoryManager = new CreateInventoryManager();
         hideShow = new HideShow(plugin);
         chatManager = new ChatManager();
         TNTRunMain tntRunMain = new TNTRunMain(plugin);
@@ -53,10 +52,10 @@ public final class Aether extends JavaPlugin{
         ChartManager chartManager = new ChartManager(plugin,playerManager,sqLiteManager.getChartRankingDB());
         new TeleportAether(plugin,chartManager.getChartStageInfo());
 
-        new CommandSetter(plugin,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain,particleManager);
+        new CommandSetter(plugin,inventoryManager,playerManager,chatManager,saveInventoryManager,hideShow,tntRunMain,particleManager);
 
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new UsualListener(playerManager,sqLiteManager, chatManager,saveInventoryManager,hideShow,particleManager),this);
+        pluginManager.registerEvents(new UsualListener(playerManager,inventoryManager,sqLiteManager, chatManager,saveInventoryManager,hideShow,particleManager),this);
         pluginManager.registerEvents(new ItemClickListener(inventoryManager,hideShow,plugin,tntRunMain),this);
         pluginManager.registerEvents(new InventoryClickListener(playerManager,inventoryManager,particleManager,plugin),this);
         pluginManager.registerEvents(new PressureListener(playerManager,sqLiteManager,plugin),this);

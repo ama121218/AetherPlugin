@@ -31,12 +31,12 @@ public class HomeInventoryClick {
             inventoryManager.getSettingInventory().setinv(p, inventoryManager.getPlayerManager().getPlayer(String.valueOf(p.getUniqueId())).getSetting());
         }
         else if (material == Material.BOOK && slot == 41){}
+
+        else if (material == Material.COMMAND && slot == 16){inventoryManager.getSaveCommandInventory().setinv(p,1);}
+        else if (material == Material.CHEST && slot == 25){inventoryManager.getSaveInventoryInventory().setinv(p,1);}
         else if (material == Material.IRON_AXE && slot == 34){inventoryManager.getSaveItemInventory().setinv(p,1);}
         else if (material == Material.ENDER_PEARL && slot == 43){inventoryManager.getSaveTeleportInventory().setinv(p,1);}
         else if (material == Material.ARMOR_STAND && slot == 52){inventoryManager.getGiveItemInventory().setinv(p);}
         else if (material == Material.PAINTING && slot == 53){inventoryManager.getPhoneSettingInventory().setinv(p);}
-
-
     }
-
 }
