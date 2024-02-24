@@ -7,7 +7,6 @@ import org.bukkit.event.HandlerList;
 
 public class ChartStartGoalEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
     private final Player player;
     private final String location;
     public ChartStartGoalEvent(Player player,Location location) {
@@ -18,11 +17,6 @@ public class ChartStartGoalEvent extends Event {
     public String getLocation() {return location;}
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+    public HandlerList getHandlers(){return handlers;}
+    public static HandlerList getHandlerList(){return handlers;}
 }

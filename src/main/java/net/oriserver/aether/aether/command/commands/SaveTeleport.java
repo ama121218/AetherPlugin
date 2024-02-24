@@ -1,6 +1,6 @@
 package net.oriserver.aether.aether.command.commands;
 
-import net.oriserver.aether.aether.sqlite.SaveTeleportDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveTeleportDB;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

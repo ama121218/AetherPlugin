@@ -25,8 +25,12 @@ public class AppearanceInventoryClick {
         }
         else if(material == Material.PRISMARINE_CRYSTALS && slot == 23) {
             PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString());
-            inventoryManager.getBadgeInventory().setinv(p,playerStats.getBadges(0),1);
+            inventoryManager.getBadgeInventory().setinv(p, playerStats.getBadges(0), 1);
         }
         else if(material == Material.JUKEBOX && slot == 30) {}
+        else if(slot == 31 && material == Material.NAME_TAG){
+            PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(p.getUniqueId().toString());
+            inventoryManager.getTagInventory().setinv(p, playerStats.getTags(0), 1);
+        }
     }
 }

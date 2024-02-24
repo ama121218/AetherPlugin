@@ -19,6 +19,7 @@ public class AppearanceInventory {
         invAppearance.setItem(22, Item.createitem(Material.IRON_HELMET, 1, ChatColor.GREEN + "HeadBlock", ""));
         invAppearance.setItem(23, Item.createitem(Material.PRISMARINE_CRYSTALS, 1, ChatColor.GREEN + "Badge", ""));
         invAppearance.setItem(30, Item.createitem(Material.JUKEBOX, 1, ChatColor.GREEN + "Music", ""));
+        invAppearance.setItem(31, Item.createitem(Material.NAME_TAG, 1, ChatColor.GREEN + "Tag", ""));
 
     }
     public void setinv(Player p){

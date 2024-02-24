@@ -1,5 +1,6 @@
-package net.oriserver.aether.aether.sqlite;
+package net.oriserver.aether.aether.sqlite.chartDB;
 
+import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;

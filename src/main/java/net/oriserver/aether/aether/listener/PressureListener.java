@@ -1,6 +1,7 @@
 package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.chart.events.ChartCheckPointEvent;
+import net.oriserver.aether.aether.chart.events.ChartStageTPEvent;
 import net.oriserver.aether.aether.chart.events.ChartStartGoalEvent;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
@@ -19,10 +20,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 
+@Component
 public class PressureListener implements Listener {
 
     final private SQLiteManager sqLiteManager;
@@ -30,12 +35,12 @@ public class PressureListener implements Listener {
     final private Plugin plugin;
     final private LevelGoalLocation levelGoalLocation;
 
-    private final HashSet<String> goalCoolTime = new HashSet<String>();
+    private final HashSet<String> goalCoolTime = new HashSet<>();
     private final ItemStack prismarine = Item.createitem(Material.PRISMARINE_SHARD,1,ChatColor.GREEN +"time_reset","");
 
-
-
-    public PressureListener(PlayerManager pm, SQLiteManager sqLiteManager, Plugin plugin) {
+    @Autowired
+    public PressureListener(JavaPlugin plugin,PlayerManager pm, SQLiteManager sqLiteManager) {
+        Bukkit.getPluginManager().registerEvents(this,plugin);
         this.pm = pm;
         this.sqLiteManager = sqLiteManager;
         this.plugin = plugin;
@@ -61,6 +66,7 @@ public class PressureListener implements Listener {
                 }
             } else if (e.getClickedBlock().getType() == Material.STONE_PLATE) {
                 if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))) {
+                    Bukkit.getPluginManager().callEvent(new ChartStageTPEvent(player,e.getClickedBlock().getLocation()));
                 }
             }else if(e.getClickedBlock().getType() == Material.IRON_PLATE){
                 if(player.getLocation().getWorld().equals(Bukkit.getWorld("chart"))){
@@ -82,8 +88,6 @@ public class PressureListener implements Listener {
         p.sendMessage(ChatColor.BOLD+"Level Athletic: "+level+" をクリアしました。");
         CommonMethods.setTeleport(p,LevelLocation.getLevelLocation(level+1),"Level_"+(level+1),pm.getPlayer(uuid));
     }
-
-
 
     public String getChartNumber(int number){
         return "Chart"+((number - 1) / 14 + 1)+"_"+((number - 1) % 14 + 1);

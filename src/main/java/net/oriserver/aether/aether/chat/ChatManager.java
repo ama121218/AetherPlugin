@@ -1,15 +1,17 @@
 package net.oriserver.aether.aether.chat;
 
 import org.bukkit.entity.Player;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+@Component
 public class ChatManager {
-
     private final HashMap<String, ChatRoom> chatRooms = new HashMap<>();
     private final HashMap<Player, ChatRoom> playerRooms = new HashMap<>();
     private final RomanjiToJapanese romanjiToJapanese;
-
+    @Autowired
     public ChatManager(){
         chatRooms.put("General",new ChatRoom("General", false));
         chatRooms.put("Admin",new ChatRoom("Admin", true));

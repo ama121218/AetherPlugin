@@ -1,9 +1,12 @@
 package net.oriserver.aether.aether.chart.stage;
 
 import net.minecraft.server.v1_12_R1.*;
+import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.chart.events.ChartCreateToolClickEvent;
+import net.oriserver.aether.aether.command.commands.Chat;
 import net.oriserver.aether.aether.events.AnvilClickEvent;
 import net.oriserver.aether.aether.events.CreateChartStageInventoryEvent;
+import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.*;
 import org.bukkit.Material;
@@ -22,69 +25,79 @@ public class ChartStageCreate implements Listener {
 
     private final String creator_name;
     private final String stage_id;
+    private String stage_color;
     private String stage_name;
-    private Double stage_tp_x;
-    private Double stage_tp_y;
-    private Double stage_tp_z;
-    private Float stage_tp_yaw;
-    private Float stage_tp_pitch;
-    private Double start_x;
-    private Double start_y;
-    private Double start_z;
-    private Double start_tp_x;
-    private Double start_tp_y;
-    private Double start_tp_z;
-    private Float start_tp_yaw;
-    private Float start_tp_pitch;
-    private Double goal_x;
-    private Double goal_y;
-    private Double goal_z;
-    private Double goal_tp_x;
-    private Double goal_tp_y;
-    private Double goal_tp_z;
-    private Float goal_tp_yaw;
-    private Float goal_tp_pitch;
+    private Double stage_x,stage_y,stage_z;
+    private Double stage_tp_x,stage_tp_y,stage_tp_z;
+    private Float stage_tp_yaw,stage_tp_pitch;
+    private Double back_stage_x,back_stage_y,back_stage_z;
+    private Double back_stage_tp_x,back_stage_tp_y,back_stage_tp_z;
+    private Float back_stage_tp_yaw,back_stage_tp_pitch;
+    private Double start_x,start_y,start_z;
+    private Double start_tp_x,start_tp_y,start_tp_z;
+    private Float start_tp_yaw,start_tp_pitch;
+    private Double goal_x,goal_y,goal_z;
+    private Double goal_tp_x,goal_tp_y,goal_tp_z;
+    private Float goal_tp_yaw,goal_tp_pitch;
+    private Double hologram_time_x,hologram_time_y,hologram_time_z;
+    private Double hologram_stageName_x,hologram_stageName_y,hologram_stageName_z;
     private Long star_time_3 = 0L;
     private Long star_time_2 = 0L;
     private Long star_time_1 = 0L;
 
-
     private ArrayList<Double[]> checkPoint_list;
     private final ChartStageCreateManager createChartStageManager;
-
     private final Inventory invCreateStage;
 
     public ChartStageCreate(String creator_name, String stage_id, ChartStageCreateManager createChartStageManager){
+        stage_color = String.valueOf(ChatColor.WHITE);
         this.createChartStageManager = createChartStageManager;
         this.creator_name = creator_name;
         this.stage_id = stage_id;
         checkPoint_list = new ArrayList<>();
 
-        invCreateStage = Bukkit.createInventory(null, 27, stage_id + " " + "CreateChartStage");
+        invCreateStage = Bukkit.createInventory(null, 54, "CreateChartStage");
+        invCreateStage.setItem(0, Item.createitem(Material.NAME_TAG, 1, ChatColor.WHITE + stage_id +"ステージの名前設定"));
+        invCreateStage.setItem(1, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "色を設定してください(default:white)", "",ChatColor.YELLOW+"クリックで選択"));
+        invCreateStage.setItem(2, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "名前を設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
 
-        invCreateStage.setItem(0, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "名前を設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
-        invCreateStage.setItem(1, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージのtp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
-        invCreateStage.setItem(2, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始位置を設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
-        invCreateStage.setItem(3, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始tp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
-        invCreateStage.setItem(4, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了位置を設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
-        invCreateStage.setItem(5, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了tp先を設定してください", "",ChatColor.YELLOW+"設定位置に立ってクリック"));
+        invCreateStage.setItem(9, Item.createitem(Material.ARMOR_STAND, 1, ChatColor.WHITE + "ホログラムの位置設定"));
+        invCreateStage.setItem(10, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージホログラムの位置を設定してください", "",ChatColor.YELLOW+"クリックして木の感圧板を入手"));
+        invCreateStage.setItem(11, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "タイムホログラムの位置を感圧板で設定してください", "",ChatColor.YELLOW+"クリックして木の感圧板を入手"));
 
-        invCreateStage.setItem(6, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆3タイムを設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
-        invCreateStage.setItem(7, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆2タイムを設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
-        invCreateStage.setItem(8, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆1タイムを設定してください","",ChatColor.YELLOW+"クリックで入力へ"));
+        invCreateStage.setItem(3, Item.createitem(Material.STONE_PLATE, 1, ChatColor.WHITE + "ステージへのテレポート設定"));
+        invCreateStage.setItem(4, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージへの位置を感圧板でしてください", "",ChatColor.YELLOW+"クリックして石の感圧板を入手"));
+        invCreateStage.setItem(5, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージのtp先を設定してください", "",ChatColor.YELLOW+"tp先の位置に立ってクリック"));
 
-        invCreateStage.setItem(9, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
+        invCreateStage.setItem(12, Item.createitem(Material.STONE_PLATE, 1, ChatColor.WHITE + "ワールドへのテレポート設定"));
+        invCreateStage.setItem(13, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ワールドへの位置を感圧板で設定してください", "",ChatColor.YELLOW+"クリックして石の感圧板を入手"));
+        invCreateStage.setItem(14, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ワールドのtp先を設定してください", "",ChatColor.YELLOW+"tp先の位置に立ってクリック"));
 
-        invCreateStage.setItem(18,Item.createitem(Material.WORKBENCH, 1, "この内容でステージ作成する", ""));
-        invCreateStage.setItem(19,Item.createitem(Material.CACTUS, 1, "作成をやめる", ChatColor.DARK_RED+"すべての設定が消えます"));
+        invCreateStage.setItem(6, Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE + "ステージの開始設定"));
+        invCreateStage.setItem(7, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始位置を感圧板で設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
+        invCreateStage.setItem(8, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの開始tp先を設定してください", "",ChatColor.YELLOW+"tp先の位置に立ってクリック"));
 
-        invCreateStage.setItem(23,Item.createitem(Material.IRON_PLATE, 1, "連続でチェックポイントを設定します", ChatColor.GREEN+"右クリックで追加します"));
-        invCreateStage.setItem(24,Item.createitem(Material.BARRIER, 1, "途中のチェックポイントを削除", ChatColor.DARK_RED+"指定したチェックポイントが消えます"));
+        invCreateStage.setItem(15, Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE + "ステージの終了設定"));
+        invCreateStage.setItem(16, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了位置を感圧板で設定してください", "",ChatColor.YELLOW+"クリックして金の感圧板を入手"));
+        invCreateStage.setItem(17, Item.createitem(Material.REDSTONE_BLOCK, 1, ChatColor.WHITE + "ステージの終了tp先を設定してください", "",ChatColor.YELLOW+"tp先の位置に立ってクリック"));
 
-        invCreateStage.setItem(26,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
+        invCreateStage.setItem(18,Item.createitem(Material.IRON_PLATE, 1, "チェックポイントを設定"));
+        invCreateStage.setItem(20,Item.createitem2(Material.IRON_PLATE, 1, "連続でチェックポイントを設定します", ChatColor.GREEN+"右クリックで追加します"));
+        invCreateStage.setItem(21,Item.createitem(Material.BARRIER, 1, "途中のチェックポイントを削除", ChatColor.DARK_RED+"指定したチェックポイントが消えます"));
+        invCreateStage.setItem(27, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして鉄の感圧板を入手"));
+
+        invCreateStage.setItem(48, Item.createitem(Material.NAME_TAG, 1, ChatColor.WHITE+ "タイム設定"));
+        invCreateStage.setItem(49, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆3タイムを設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
+        invCreateStage.setItem(50, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆2タイムを設定してください", "",ChatColor.YELLOW+"クリックで入力へ"));
+        invCreateStage.setItem(51, Item.createitem(Material.GOLD_BLOCK, 1, ChatColor.WHITE + "☆1タイムを設定してください","",ChatColor.YELLOW+"クリックで入力へ"));
+
+        invCreateStage.setItem(23,Item.createitem(Material.CHORUS_FRUIT_POPPED,1, ChatColor.WHITE + "Teleport World"));
+        invCreateStage.setItem(24,Item.createitem(Material.COMPASS,1, ChatColor.WHITE + "アスレチックの場所に飛ぶ"));
+
+        invCreateStage.setItem(45,Item.createitem(Material.WORKBENCH, 1, "この内容でステージ作成する", ""));
+        invCreateStage.setItem(46,Item.createitem(Material.CACTUS, 1, "作成をやめる", ChatColor.DARK_RED+"すべての設定が消えます"));
+        invCreateStage.setItem(53,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
     }
-
-
 
     @EventHandler
     public void clickInv(CreateChartStageInventoryEvent e){
@@ -98,45 +111,103 @@ public class ChartStageCreate implements Listener {
             checkPoint_list.remove(slot);
             setCheckPointInventory();
             player.openInventory(invCreateStage);
-            return;
+        }else if(title.charAt(0) == 'S'){
+            stage_color = CommonMethods.getColorString(slot);
+            player.sendMessage("ステージの色を"+stage_color+"にしました");
+            invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, "StageColor:"+stage_color + "色です"));
+            player.closeInventory();
         }
-        if(slot == 0) {
-            openAnvilInterface(player,"ChartStageName");
-        }else if(slot == 1){
+        else if(slot == 1){
+            Inventory woolInventory = Bukkit.createInventory(null, 18, "SelectStageColor");
+            for (int i = 0; i <= 15; i++) {
+                woolInventory.addItem(new ItemStack(Material.WOOL, 1, (short) i));
+            }
+            player.openInventory(woolInventory);
+        }
+        else if(slot == 2)openAnvilInterface(player,"ChartStageName");
+        else if(slot == 10){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.WOOD_PLATE, ChatColor.WHITE + "SetStageHologram");
+            player.getInventory().addItem(Item.createitem(Material.WOOD_PLATE, 1, ChatColor.WHITE+"SetStageHologram", "",ChatColor.WHITE+"木の感圧板を右クリックでステージホログラムの位置設定"));
+            player.closeInventory();
+        }else if(slot == 11){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.WOOD_PLATE, ChatColor.WHITE + "SetTimeHologram");
+            player.getInventory().addItem(Item.createitem(Material.WOOD_PLATE, 1, ChatColor.WHITE+"SetTimeHologram", "",ChatColor.WHITE+"木の感圧板を右クリックでタイムホログラムの位置設定"));
+            player.closeInventory();
+        }
+        else if(slot == 4){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetStageLocation");
+            player.getInventory().addItem(Item.createitem(Material.STONE_PLATE, 1, ChatColor.WHITE+"SetStageLocation", "",ChatColor.WHITE+"石の感圧板を右クリックで位置設定"));
+            player.closeInventory();
+        } else if(slot == 5){
             Location location = player.getLocation();
             stage_tp_x = location.getX();stage_tp_y = location.getY();stage_tp_z = location.getZ();stage_tp_yaw = location.getYaw();stage_tp_pitch = location.getPitch();
             player.sendMessage("StageTPLocation = x:"+ stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z);
-            invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageTPLocation","",ChatColor.WHITE+ "x:" + stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z));
+            invCreateStage.setItem(5, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageTPLocation","",ChatColor.WHITE+ "x:" + stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z));
             player.closeInventory();
-        }else if(slot == 2){
-            player.getInventory().addItem(Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE+"SetStartLocation", "",ChatColor.WHITE+"右クリックでスタート位置設定"));
+        }else if(slot == 13){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetBackStageLocation");
+            player.getInventory().addItem(Item.createitem(Material.STONE_PLATE, 1, ChatColor.WHITE+"SetBackStageLocation", "",ChatColor.WHITE+"石の感圧板を右クリックで位置設定"));
             player.closeInventory();
-        }else if(slot == 3){
+        }else if(slot == 14){
+            Location location = player.getLocation();
+            back_stage_tp_x = location.getX();back_stage_tp_y = location.getY();back_stage_tp_z = location.getZ();back_stage_tp_yaw = location.getYaw();back_stage_tp_pitch = location.getPitch();
+            player.sendMessage("BackStageTPLocation = x:"+ back_stage_tp_x + " " + "y:" + back_stage_tp_y + " " + "z:" + back_stage_tp_z);
+            invCreateStage.setItem(14, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"BackStageTPLocation","",ChatColor.WHITE+ "x:" + back_stage_tp_x + " " + "y:" + back_stage_tp_y + " " + "z:" + back_stage_tp_z));
+            player.closeInventory();
+        }
+        else if(slot == 7){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetStartLocation");
+            player.getInventory().addItem(Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE+"SetStartLocation", "",ChatColor.WHITE+"金の感圧板を右クリックでスタート位置設定"));
+            player.closeInventory();
+        }else if(slot == 8){
             Location location = player.getLocation();
             start_tp_x = location.getX();start_tp_y = location.getY();start_tp_z = location.getZ();start_tp_yaw = location.getYaw();start_tp_pitch = location.getPitch();
             player.sendMessage("StartTPLocation = x:"+ start_tp_x + " " + "y:" + start_tp_y + " " + "z:" +start_tp_z);
-            invCreateStage.setItem(3, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartTPLocation","",ChatColor.WHITE+ "x:" + start_tp_x + " " + "y:" + start_tp_y + " " + "z:" + start_tp_z));
+            invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartTPLocation","",ChatColor.WHITE+ "x:" + start_tp_x + " " + "y:" + start_tp_y + " " + "z:" + start_tp_z));
             player.closeInventory();
-        }else if(slot == 4){
-            player.getInventory().addItem(Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE+"SetGoalLocation", "",ChatColor.WHITE+"右クリックでゴール位置設定"));
+        }else if(slot == 16){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetGoalLocation");
+            player.getInventory().addItem(Item.createitem(Material.GOLD_PLATE, 1, ChatColor.WHITE+"SetGoalLocation", "",ChatColor.WHITE+"金の感圧板を右クリックでゴール位置設定"));
             player.closeInventory();
-        }else if(slot == 5){
+        }else if(slot == 17){
             Location location = player.getLocation();
             goal_tp_x = location.getX();goal_tp_y = location.getY();goal_tp_z = location.getZ();goal_tp_yaw = location.getYaw();goal_tp_pitch = location.getPitch();
-            player.sendMessage("StartTPLocation = x:"+ goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z);
-            invCreateStage.setItem(5, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalTPLocation","",ChatColor.WHITE+ "x:" + goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z));
+            player.sendMessage("GoalTPLocation = x:"+ goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z);
+            invCreateStage.setItem(17, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalTPLocation","",ChatColor.WHITE+ "x:" + goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z));
             player.closeInventory();
-        }else if(slot == 6){
+        }else if(slot == 20 && material == Material.IRON_PLATE){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.IRON_PLATE, ChatColor.WHITE + "SetCheckpoint ContinuousAddition");
+            player.getInventory().addItem(Item.createitem2(Material.IRON_PLATE, 1, ChatColor.WHITE+"SetCheckpoint ContinuousAddition", ChatColor.WHITE+""+(checkPoint_list.size()+1),ChatColor.WHITE+"右クリックでチェックポイントを連続設定"));
+            player.closeInventory();
+        }
+        else if(slot == 21 && material == Material.BARRIER){
+            Inventory deleteInvCreateStage = Bukkit.createInventory(null, 27, ChatColor.DARK_RED+"Delete CreateCheckPoint");
+            for(int i=0;i<checkPoint_list.size();i++){
+                Double[] doubles = checkPoint_list.get(i);
+                deleteInvCreateStage.setItem(i, Item.createitem(Material.IRON_BLOCK, 1, ChatColor.WHITE + "Point :"+(i+1)+"/"+checkPoint_list.size(), ChatColor.WHITE+"x: "+doubles[0],ChatColor.WHITE+"y: "+doubles[1],ChatColor.WHITE+"z: "+doubles[2]));
+            }
+            player.openInventory(deleteInvCreateStage);
+        }
+        else if(slot == 49){
             openAnvilInterface(player,"StarTime3");
-        }else if(slot == 7){
+        }else if(slot == 50){
             openAnvilInterface(player,"StarTime2");
-        }else if(slot == 8){
+        }else if(slot == 51){
             openAnvilInterface(player,"StarTime1");
         }
-        if(slot >= 9 && slot <=17 && material != null){
-            player.getInventory().addItem(Item.createitem(Material.IRON_PLATE, 1, ChatColor.WHITE+"SetCheckpoint", ChatColor.WHITE+""+(slot+1-9),ChatColor.WHITE+"右クリックでチェックポイントを設定"));
+        else if(slot >= 27 && slot <=44 && material != null){
+            Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.IRON_PLATE, ChatColor.WHITE + "SetCheckpoint");
+            player.getInventory().addItem(Item.createitem(Material.IRON_PLATE, 1, ChatColor.WHITE+"SetCheckpoint", ChatColor.WHITE+""+(slot+1-9),ChatColor.WHITE+"鉄の感圧板を右クリックでチェックポイントの位置設定"));
             player.closeInventory();
-        }else if(slot == 18){
+        }else if(slot == 23){
+            player.teleport(AthleticLocation.getLocation(AthleticLocation.CHART));
+        }else if(slot == 24){
+            String[] parts = stage_id.split("_");
+            if(parts.length != 2)return;
+            int chart = (Integer.parseInt(parts[0])-1)*14 +Integer.parseInt(parts[1]);
+            player.teleport(AthleticLocation.getChartLocation(chart));
+        }
+        else if(slot == 45){
             ArrayList<Object> list = getStageData();
             for(Object object:list) {
                 if (object == null) {
@@ -147,25 +218,11 @@ public class ChartStageCreate implements Listener {
             }
             player.closeInventory();
             createChartStageManager.complete(player,list,getCheckPointList());
-        }else if(slot==19){
+        }else if(slot == 46){
             player.closeInventory();
             createChartStageManager.quit(player);
         }
-        else if(slot == 23 && material == Material.IRON_PLATE){
-            player.getInventory().addItem(Item.createitem2(Material.IRON_PLATE, 1, ChatColor.WHITE+"SetCheckpoint ContinuousAddition", ChatColor.WHITE+""+(checkPoint_list.size()+1),ChatColor.WHITE+"右クリックでチェックポイントを連続設定"));
-            player.closeInventory();
-        }
-        else if(slot == 24 && material == Material.BARRIER){
-            Inventory deleteInvCreateStage = Bukkit.createInventory(null, 27, ChatColor.DARK_RED+"Delete"+" "+ stage_id + " " + "CreateCheckPoint");
-            for(int i=0;i<checkPoint_list.size();i++){
-                Double[] doubles = checkPoint_list.get(i);
-                deleteInvCreateStage.setItem(i, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.WHITE + "Point :"+(i+1)+"/"+checkPoint_list.size(), ChatColor.WHITE+"x: "+doubles[0],ChatColor.WHITE+"y: "+doubles[1],ChatColor.WHITE+"z: "+doubles[2]));
-            }
-            player.openInventory(deleteInvCreateStage);
-        }
-        else if(slot==26)player.closeInventory();
-
-
+        else if(slot == 53)player.closeInventory();
     }
 
     public String getStage_id(){return this.stage_id;}
@@ -207,8 +264,8 @@ public class ChartStageCreate implements Listener {
                 doubles[1] = location.getY();
                 doubles[2] = location.getZ();
 
-                if (index > 8) {
-                    p.sendMessage("9個より多くは設定できません");
+                if (index > 17) {
+                    p.sendMessage("18個より多くは設定できません");
                     return;
                 }
                 if (index >= checkPoint_list.size()) checkPoint_list.add(doubles);
@@ -225,7 +282,30 @@ public class ChartStageCreate implements Listener {
                     p.getInventory().addItem(Item.createitem2(Material.IRON_PLATE, 1, ChatColor.WHITE + "SetCheckpoint ContinuousAddition", ChatColor.WHITE + "" + (checkPoint_list.size() + 1), ChatColor.WHITE + "右クリックでチェックポイントを連続設定"));
                 }
             }
-        }else if(itemInHand.getType() == Material.GOLD_PLATE){
+        }else if(itemInHand.getType() == Material.STONE_PLATE){
+            if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetStageLocation")) {
+                Location location = e.getBlock().getLocation();
+                stage_x = location.getX();
+                stage_y = location.getY();
+                stage_z = location.getZ();
+
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetStageLocation");
+
+                p.sendMessage("StageLocation("+ChatColor.WHITE+ "x:" + stage_x + " " + "y:" + stage_y + " " + "z:" + stage_z + ")を設定しました");
+                invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageLocation","",ChatColor.WHITE+ "x:" + stage_x + " " + "y:" + stage_y + " " + "z:" + stage_z));
+            }
+            else if(ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetBackStageLocation")) {
+                Location location = e.getBlock().getLocation();
+                back_stage_x = location.getX();
+                back_stage_y = location.getY();
+                back_stage_z = location.getZ();
+
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.STONE_PLATE, ChatColor.WHITE + "SetBackStageLocation");
+
+                p.sendMessage("BackStageLocation("+ChatColor.WHITE+ "x:" + back_stage_x + " " + "y:" + back_stage_y + " " + "z:" + back_stage_z + ")を設定しました");
+                invCreateStage.setItem(13, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"BackStageLocation","",ChatColor.WHITE+ "x:" + back_stage_x + " " + "y:" + back_stage_y + " " + "z:" + back_stage_z));
+            }
+        } else if(itemInHand.getType() == Material.GOLD_PLATE){
             if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetStartLocation")) {
 
                 Location location = e.getBlock().getLocation();
@@ -236,7 +316,7 @@ public class ChartStageCreate implements Listener {
                 Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetStartLocation");
 
                 p.sendMessage("StartLocation("+ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z + ")を設定しました");
-                invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
+                invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
             }
             else if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetGoalLocation")) {
 
@@ -248,7 +328,32 @@ public class ChartStageCreate implements Listener {
                 Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.GOLD_PLATE, ChatColor.WHITE + "SetGoalLocation");
 
                 p.sendMessage("GoalLocation("+ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z + ")を設定しました");
-                invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
+                invCreateStage.setItem(16, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
+            }
+        }else if(itemInHand.getType() == Material.WOOD_PLATE){
+            if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetStageHologram")) {
+                e.setCancelled(true);
+                Location location = e.getBlock().getLocation();
+                hologram_stageName_x = location.getX();
+                hologram_stageName_y = location.getY();
+                hologram_stageName_z = location.getZ();
+
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.WOOD_PLATE, ChatColor.WHITE + "SetStageHologram");
+
+                p.sendMessage("StageHologramLocation("+ChatColor.WHITE+ "x:" + hologram_stageName_x + " " + "y:" + hologram_stageName_y + " " + "z:" + hologram_stageName_z + ")を設定しました");
+                invCreateStage.setItem(10, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageHologramLocation","",ChatColor.WHITE+ "x:" + hologram_stageName_x + " " + "y:" + hologram_stageName_y + " " + "z:" + hologram_stageName_z));
+            }
+            else if (ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName()).equals("SetTimeHologram")) {
+                e.setCancelled(true);
+                Location location = e.getBlock().getLocation();
+                hologram_time_x = location.getX();
+                hologram_time_y = location.getY();
+                hologram_time_z = location.getZ();
+
+                Item.removeCustomNamedItemFromInventory(p.getInventory(), Material.WOOD_PLATE, ChatColor.WHITE + "SetTimeHologram");
+
+                p.sendMessage("TimeHologramLocation("+ChatColor.WHITE+ "x:" + hologram_time_x + " " + "y:" + hologram_time_y + " " + "z:" + hologram_time_z + ")を設定しました");
+                invCreateStage.setItem(11, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"TimeHologramLocation","",ChatColor.WHITE+ "x:" + hologram_time_x + " " + "y:" + hologram_time_y + " " + "z:" + hologram_time_z));
             }
         }
     }
@@ -266,7 +371,7 @@ public class ChartStageCreate implements Listener {
                 if(inputValue.equals("ChartStageName")){
                     stage_name = item.getItemMeta().getDisplayName();
                     player.sendMessage(ChatColor.GREEN + "ステージの名前が " + stage_name + " に設定されました!");
-                    invCreateStage.setItem(0, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageName: "+ChatColor.WHITE + stage_name, ""));
+                    invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageName: "+ChatColor.WHITE + stage_name, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     player.closeInventory();
                     Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.PAPER, "ChartStageName");
@@ -275,31 +380,31 @@ public class ChartStageCreate implements Listener {
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆3タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(49, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_3 = time;
-                    player.closeInventory();
                     Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.PAPER, "StarTime3");
+                    player.openInventory(invCreateStage);
                 }else if(inputValue.equals("StarTime2")){
                     String temp = item.getItemMeta().getDisplayName();
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆2タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(50, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_2 = time;
-                    player.closeInventory();
                     Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.PAPER, "StarTime2");
+                    player.openInventory(invCreateStage);
                 }else if(inputValue.equals("StarTime1")){
                     String temp = item.getItemMeta().getDisplayName();
                     Long time = getLongStarTime(temp);
                     if(time==null){player.sendMessage("設定できない数値です。 ex= 04:56:345");return;}
                     player.sendMessage(ChatColor.GREEN + "☆1タイムが " + temp + " に設定されました!");
-                    invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + temp, ""));
+                    invCreateStage.setItem(51, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + temp, ""));
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,100,100);
                     star_time_1 = time;
-                    player.closeInventory();
                     Item.removeCustomNamedItemFromInventory(player.getInventory(), Material.PAPER, "StarTime1");
+                    player.openInventory(invCreateStage);
                 }
             }
         }
@@ -330,59 +435,88 @@ public class ChartStageCreate implements Listener {
     }
 
     public void setCheckPointInventory(){
-        for(int i=9;i<=17;i++)invCreateStage.clear(i);
+        for(int i=27;i<=44;i++)invCreateStage.clear(i);
         for(int i=0;i<checkPoint_list.size();i++){
             Double[] doubles = checkPoint_list.get(i);
-            invCreateStage.setItem(i+9, Item.createitem(Material.IRON_BLOCK, 1, ChatColor.WHITE + "Point :"+(i+1)+"/"+checkPoint_list.size(), ChatColor.WHITE+"x: "+doubles[0],ChatColor.WHITE+"y: "+doubles[1],ChatColor.WHITE+"z: "+doubles[2]));
+            invCreateStage.setItem(i+27, Item.createitem(Material.IRON_BLOCK, 1, ChatColor.WHITE + "Point :"+(i+1)+"/"+checkPoint_list.size(), ChatColor.WHITE+"x: "+doubles[0],ChatColor.WHITE+"y: "+doubles[1],ChatColor.WHITE+"z: "+doubles[2]));
             if(i==checkPoint_list.size()-1){
-                if(i<=7){
-                    invCreateStage.setItem(i+1+9, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
+                if(i<=14){
+                    invCreateStage.setItem(i+1+27, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
                 }
             }
         }
     }
 
-
     public void rework(ArrayList<Object> stage_list,ArrayList<Double[]> checkPoint_list) {
 
         this.checkPoint_list = checkPoint_list;
 
-        stage_name = (String) stage_list.get(0);
-        stage_tp_x =(Double)  stage_list.get(1);
-        stage_tp_y = (Double) stage_list.get(2);
-        stage_tp_z = (Double) stage_list.get(3);
-        stage_tp_yaw = (Float) stage_list.get(4);
-        stage_tp_pitch = (Float) stage_list.get(5);
-        start_x = (Double) stage_list.get(6);
-        start_y = (Double) stage_list.get(7);
-        start_z = (Double) stage_list.get(8);
-        start_tp_x =(Double)  stage_list.get(9);
-        start_tp_y = (Double) stage_list.get(10);
-        start_tp_z = (Double) stage_list.get(11);
-        start_tp_yaw = (Float) stage_list.get(12);
-        start_tp_pitch = (Float) stage_list.get(13);
-        goal_x = (Double) stage_list.get(14);
-        goal_y = (Double) stage_list.get(15);
-        goal_z = (Double) stage_list.get(16);
-        goal_tp_x = (Double) stage_list.get(17);
-        goal_tp_y = (Double) stage_list.get(18);
-        goal_tp_z = (Double) stage_list.get(19);
-        goal_tp_yaw = (Float) stage_list.get(20);
-        goal_tp_pitch = (Float) stage_list.get(21);
-        star_time_3 = (Long) stage_list.get(22);
-        star_time_2 = (Long) stage_list.get(23);
-        star_time_1 = (Long) stage_list.get(24);
+        stage_color = (String) stage_list.get(0);
+        stage_name = (String) stage_list.get(1);
+        stage_x = (Double) stage_list.get(2);
+        stage_y = (Double) stage_list.get(3);
+        stage_z = (Double) stage_list.get(4);
+        stage_tp_x = (Double)  stage_list.get(5);
+        stage_tp_y = (Double) stage_list.get(6);
+        stage_tp_z = (Double) stage_list.get(7);
+        stage_tp_yaw = (Float) stage_list.get(8);
+        stage_tp_pitch = (Float) stage_list.get(9);
+        back_stage_x = (Double)  stage_list.get(10);
+        back_stage_y = (Double) stage_list.get(11);
+        back_stage_z = (Double) stage_list.get(12);
+        back_stage_tp_x = (Double) stage_list.get(13);
+        back_stage_tp_y = (Double) stage_list.get(14);
+        back_stage_tp_z = (Double) stage_list.get(15);
+        back_stage_tp_yaw = (Float) stage_list.get(16);
+        back_stage_tp_pitch = (Float) stage_list.get(17);
+        start_x = (Double) stage_list.get(18);
+        start_y = (Double) stage_list.get(19);
+        start_z = (Double) stage_list.get(20);
+        start_tp_x =(Double)  stage_list.get(21);
+        start_tp_y = (Double) stage_list.get(22);
+        start_tp_z = (Double) stage_list.get(23);
+        start_tp_yaw = (Float) stage_list.get(24);
+        start_tp_pitch = (Float) stage_list.get(25);
+        goal_x = (Double) stage_list.get(26);
+        goal_y = (Double) stage_list.get(27);
+        goal_z = (Double) stage_list.get(28);
+        goal_tp_x = (Double) stage_list.get(29);
+        goal_tp_y = (Double) stage_list.get(30);
+        goal_tp_z = (Double) stage_list.get(31);
+        goal_tp_yaw = (Float) stage_list.get(32);
+        goal_tp_pitch = (Float) stage_list.get(33);
+        hologram_stageName_x = (Double) stage_list.get(34);
+        hologram_stageName_y = (Double) stage_list.get(35);
+        hologram_stageName_z = (Double) stage_list.get(36);
+        hologram_time_x = (Double) stage_list.get(37);
+        hologram_time_y = (Double) stage_list.get(38);
+        hologram_time_z = (Double) stage_list.get(39);
+        star_time_3 = (Long) stage_list.get(40);
+        star_time_2 = (Long) stage_list.get(41);
+        star_time_1 = (Long) stage_list.get(42);
 
-        invCreateStage.setItem(0, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageName: "+ChatColor.WHITE + stage_name, ""));
-        invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageTPLocation","",ChatColor.WHITE+ "x:" + stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z));
-        invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
-        invCreateStage.setItem(3, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartTPLocation","",ChatColor.WHITE+ "x:" + start_tp_x + " " + "y:" + start_tp_y + " " + "z:" + start_tp_z));
-        invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
-        invCreateStage.setItem(5, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalTPLocation","",ChatColor.WHITE+ "x:" + goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z));
-        invCreateStage.setItem(6, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + getStringTime(star_time_3), ""));
-        invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + getStringTime(star_time_2), ""));
-        invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + getStringTime(star_time_1), ""));
-        invCreateStage.setItem(9, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
+        invCreateStage.setItem(1, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageColor: "+ChatColor.WHITE + stage_color));
+        invCreateStage.setItem(2, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageName: "+ChatColor.WHITE + stage_name));
+
+        invCreateStage.setItem(10, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageHologram","",ChatColor.WHITE+ "x:" + hologram_stageName_x + " " + "y:" + hologram_stageName_y + " " + "z:" + hologram_stageName_z));
+        invCreateStage.setItem(11, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"TimeHologram","",ChatColor.WHITE+ "x:" + hologram_time_x + " " + "y:" + hologram_time_y + " " + "z:" + hologram_time_z));
+
+        invCreateStage.setItem(4, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageLocation","",ChatColor.WHITE+ "x:" + stage_x + " " + "y:" + stage_y + " " + "z:" + stage_z));
+        invCreateStage.setItem(5, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StageTPLocation","",ChatColor.WHITE+ "x:" + stage_tp_x + " " + "y:" + stage_tp_y + " " + "z:" + stage_tp_z));
+
+        invCreateStage.setItem(13, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"BackStageLocation","",ChatColor.WHITE+ "x:" + back_stage_x + " " + "y:" + back_stage_y + " " + "z:" + back_stage_z));
+        invCreateStage.setItem(14, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"BackStageTPLocation","",ChatColor.WHITE+ "x:" + back_stage_tp_x + " " + "y:" + back_stage_tp_y + " " + "z:" + back_stage_tp_z));
+
+        invCreateStage.setItem(7, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartLocation","",ChatColor.WHITE+ "x:" + start_x + " " + "y:" + start_y + " " + "z:" + start_z));
+        invCreateStage.setItem(8, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"StartTPLocation","",ChatColor.WHITE+ "x:" + start_tp_x + " " + "y:" + start_tp_y + " " + "z:" + start_tp_z));
+
+        invCreateStage.setItem(16, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalLocation","",ChatColor.WHITE+ "x:" + goal_x + " " + "y:" + goal_y + " " + "z:" + goal_z));
+        invCreateStage.setItem(17, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"GoalTPLocation","",ChatColor.WHITE+ "x:" + goal_tp_x + " " + "y:" + goal_tp_y + " " + "z:" + goal_tp_z));
+
+        invCreateStage.setItem(49, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆3タイム: "+ChatColor.WHITE + getStringTime(star_time_3), ""));
+        invCreateStage.setItem(50, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆2タイム: "+ChatColor.WHITE + getStringTime(star_time_2), ""));
+        invCreateStage.setItem(51, Item.createitem(Material.EMERALD_BLOCK, 1, ChatColor.GREEN+"☆1タイム: "+ChatColor.WHITE + getStringTime(star_time_1), ""));
+        invCreateStage.setItem(27, Item.createitem(Material.STRUCTURE_VOID, 1, ChatColor.WHITE + "CheckPointを増やす", ChatColor.WHITE+"クリックして設定アイテムをもらう"));
         setCheckPointInventory();
     }
 
@@ -390,12 +524,24 @@ public class ChartStageCreate implements Listener {
         ArrayList<Object> list = new ArrayList<>();
 
         list.add(stage_id);
+        list.add(stage_color);
         list.add(stage_name);
+        list.add(stage_x);
+        list.add(stage_y);
+        list.add(stage_z);
         list.add(stage_tp_x);
         list.add(stage_tp_y);
         list.add(stage_tp_z);
         list.add(stage_tp_yaw);
         list.add(stage_tp_pitch);
+        list.add(back_stage_x);
+        list.add(back_stage_y);
+        list.add(back_stage_z);
+        list.add(back_stage_tp_x);
+        list.add(back_stage_tp_y);
+        list.add(back_stage_tp_z);
+        list.add(back_stage_tp_yaw);
+        list.add(back_stage_tp_pitch);
         list.add(start_x);
         list.add(start_y);
         list.add(start_z);
@@ -412,14 +558,19 @@ public class ChartStageCreate implements Listener {
         list.add(goal_tp_z);
         list.add(goal_tp_yaw);
         list.add(goal_tp_pitch);
+        list.add(hologram_stageName_x);
+        list.add(hologram_stageName_y);
+        list.add(hologram_stageName_z);
+        list.add(hologram_time_x);
+        list.add(hologram_time_y);
+        list.add(hologram_time_z);
         list.add(star_time_3);
         list.add(star_time_2);
         list.add(star_time_1);
-
         return list;
     }
     public ArrayList<Double[]> getCheckPointList(){
-        return  checkPoint_list;
+        return checkPoint_list;
     }
 
     public String getStringTime(long time){

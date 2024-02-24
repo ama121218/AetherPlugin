@@ -10,11 +10,10 @@ import org.bukkit.inventory.Inventory;
 public class ChartInventoryClickEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-
-    private Player player;
-    private Material material;
-    private int slot;
-    private Inventory inv;
+    private final Player player;
+    private final Material material;
+    private final int slot;
+    private final Inventory inv;
     public ChartInventoryClickEvent(Player p, Material material, int slot, Inventory inv) {
         this.player = p;
         this.material = material;
@@ -27,12 +26,7 @@ public class ChartInventoryClickEvent extends Event {
     public Inventory getInventory() {return inv;}
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+    public HandlerList getHandlers(){return handlers;}
+    public static HandlerList getHandlerList(){return handlers;}
 }
 

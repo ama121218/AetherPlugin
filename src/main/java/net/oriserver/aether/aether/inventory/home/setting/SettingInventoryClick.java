@@ -40,6 +40,8 @@ public class SettingInventoryClick {
                 playerStats.setPlayersidebaronoff(value);
                 if(value)playerStats.getPlayerSidebar().cancelSidebar();
                 else playerStats.getPlayerSidebar().setSidebar(p);
+            }else if(slot == 32){
+                playerStats.setChartagainonoff(value);
             }
             inventoryManager.getSettingInventory().setinv(p,playerStats.getSetting());
         }

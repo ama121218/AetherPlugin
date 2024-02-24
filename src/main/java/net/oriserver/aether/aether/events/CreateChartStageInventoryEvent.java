@@ -7,11 +7,10 @@ import org.bukkit.event.HandlerList;
 
 public class CreateChartStageInventoryEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private Material material;
-    private int slot;
-    private String title;
-
+    private final Player player;
+    private final Material material;
+    private final int slot;
+    private final String title;
 
     public CreateChartStageInventoryEvent(Player player, int slot, Material material,String title) {
         this.player = player;
@@ -25,13 +24,7 @@ public class CreateChartStageInventoryEvent extends Event {
     public Material getMaterial() {return material;}
     public String getTitle(){return title;}
 
-
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+    public HandlerList getHandlers(){return handlers;}
+    public static HandlerList getHandlerList(){return handlers;}
 }

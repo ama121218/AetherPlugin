@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 import static net.oriserver.aether.aether.inventory.level.LevelLocation.getLevelLocation;
 
 public class LevelInventoryClick {
-    final private InventoryManager inventoryManager;
-    final private PlayerManager pm;
+    private final InventoryManager inventoryManager;
+    private final PlayerManager pm;
     public LevelInventoryClick(InventoryManager inventoryManager,PlayerManager pm){
         this.inventoryManager = inventoryManager;
         this.pm = pm;
@@ -23,7 +25,7 @@ public class LevelInventoryClick {
 
     public void event(Player p, Material material, int slot, InventoryClickEvent e){
         if (material == Material.BARRIER && slot == 45) {p.closeInventory();}
-        else if (slot==3||slot==4||slot==5||slot==12||slot==13||slot==14||slot==21||slot==22||slot==23||slot==30||slot==31||slot==32||slot==39||slot==40||slot==41){
+        else if (CommonMethods.isInSlotSet(slot)){
             if (material.equals(Material.INK_SACK)) {
                 p.sendMessage(ChatColor.DARK_RED+"このレベルはまだ到達していません");
                 return;

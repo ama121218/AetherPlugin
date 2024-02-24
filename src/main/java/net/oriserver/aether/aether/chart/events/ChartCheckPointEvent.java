@@ -14,14 +14,10 @@ public class ChartCheckPointEvent extends Event {
         this.player = player;
         this.s_location = location.getX()+","+location.getY()+","+location.getZ();
     }
-    public Player getPlayer() {return player;}
-    public String getS_Location() {return s_location;}
+    public Player getPlayer(){return player;}
+    public String getS_Location(){return s_location;}
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+    public HandlerList getHandlers(){return handlers;}
+    public static HandlerList getHandlerList(){return handlers;}
 }

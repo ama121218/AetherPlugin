@@ -3,7 +3,6 @@ package net.oriserver.aether.aether.command.commands;
 import net.oriserver.aether.aether.AthleticLocation;
 import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,15 +11,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import static net.oriserver.aether.aether.AthleticLocation.getLocation;
 
+
 public class TeleportAether implements CommandExecutor {
 
     private final ChartStageInfo chartStageInfo;
-    private final JavaPlugin plugin;
 
-    public TeleportAether(JavaPlugin plugin, ChartStageInfo chartStageInfo){
+    public TeleportAether(ChartStageInfo chartStageInfo){
         this.chartStageInfo = chartStageInfo;
-        this.plugin = plugin;
-        plugin.getCommand("teleportaether").setExecutor(this);
     }
 
     @Override
@@ -42,14 +39,28 @@ public class TeleportAether implements CommandExecutor {
             else if(args.length==2){
                 if(args[0].equals("chart")){
                     int i = 0;
-                    try {
-                        i = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException e) {
-                        return false;
+                    if(args[1].contains("_")){
+                        String[] parts = args[1].split("_");
+                        if(parts.length != 2)return false;
+                        try {
+                            i  = (Integer.parseInt(parts[0])-1)*14 +Integer.parseInt(parts[1]);
+                        } catch (NumberFormatException e) {
+                            player.sendMessage("無効");
+                            return false;
+                        }
+                    }else {
+                        try {
+                            i = Integer.parseInt(args[1]);
+                        } catch (NumberFormatException e) {
+                            player.sendMessage("無効");
+                            return false;
+                        }
                     }
                     if(i>=1&&56>=i){
-                        if(chartStageInfo.getStageTP(i)!=null) {
+                        if(!chartStageInfo.getStageName(i).equals("")) {
                             player.teleport(chartStageInfo.getStageTP(i));
+                        }else{
+                            player.teleport(AthleticLocation.getChartLocation(i));
                         }
                     }else{
                         player.sendMessage("最大ステージ数オーバー");

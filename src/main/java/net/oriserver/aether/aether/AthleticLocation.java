@@ -48,4 +48,19 @@ public enum AthleticLocation {
         location.setPitch(athleticLocation.pitch);
         return location;
     }
+    public static Location getChartLocation(int chart){
+
+        if(chart>=1&&chart<=14){
+            return new Location(Bukkit.getWorld("chart"),-1572.500,4,2036.500+300*(chart-1),0,0);
+        }else if(chart>=15&&chart<=28){
+            if(chart==15)return new Location(Bukkit.getWorld("chart"),-2105.500,4,1618.500,90,0);
+            else return new Location(Bukkit.getWorld("chart"),-2818.500-654*(chart-16),4,1618.500,90,0);
+        }else if(chart>=29&&chart<=42){
+            return new Location(Bukkit.getWorld("chart"),-720.500+601*(chart-29),14,1636.500,-90,0);
+        }else if(chart>=43&&chart<=56){
+            return new Location(Bukkit.getWorld("chart"),-1572.500,14,1103.500-601*(chart-43),180,0);
+        }else{
+            return getLocation(AthleticLocation.CHART);
+        }
+    }
 }

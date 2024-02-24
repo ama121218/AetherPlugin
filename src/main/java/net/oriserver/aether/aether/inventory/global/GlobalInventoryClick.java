@@ -8,25 +8,23 @@ import org.bukkit.entity.Player;
 
 public class GlobalInventoryClick {
 
-    final private PlayerManager pm;
+    final private PlayerManager playerManager;
 
-    public GlobalInventoryClick(PlayerManager pm){
-        this.pm = pm;
-    }
+    public GlobalInventoryClick(PlayerManager playerManager){this.playerManager = playerManager;}
 
     public void event(Player p, Material material, int slot){
         if (material == Material.BARRIER && slot == 45) {p.closeInventory();}
         else if (material == Material.INK_SACK && slot==3){
-            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(1),"Global_1",pm.getPlayer(p.getUniqueId().toString()));
+            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(1),"Global_1",playerManager.getPlayer(p.getUniqueId().toString()));
         }
         else if (material == Material.INK_SACK && slot==4){
-            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(2),"Global_2",pm.getPlayer(p.getUniqueId().toString()));
+            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(2),"Global_2",playerManager.getPlayer(p.getUniqueId().toString()));
         }
         else if (material == Material.INK_SACK && slot==5){
-            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(3),"Global_3",pm.getPlayer(p.getUniqueId().toString()));
+            CommonMethods.setTeleport(p,GlobalLocation.getGlobalLocation(3),"Global_3",playerManager.getPlayer(p.getUniqueId().toString()));
         }
         else if(material == Material.CHORUS_FRUIT_POPPED && slot == 18){
-            CommonMethods.setTeleport(p, AthleticLocation.getLocation(AthleticLocation.GLOBAL),"GLOBAL_Lobby",pm.getPlayer(String.valueOf(p.getUniqueId())));
+            CommonMethods.setTeleport(p, AthleticLocation.getLocation(AthleticLocation.GLOBAL),"GLOBAL_Lobby",playerManager.getPlayer(String.valueOf(p.getUniqueId())));
         }
     }
 }

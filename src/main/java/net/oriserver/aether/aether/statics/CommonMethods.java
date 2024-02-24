@@ -12,6 +12,7 @@ import java.util.HashSet;
 
 public class CommonMethods {
     private static final HashSet<Integer> slotSet = new HashSet<>(Arrays.asList(3,4,5,12,13,14,21,22,23,30,31,32,39,40,41));
+    private static final String[] colorString = {"WHITE","GOLD","DARK_PURPLE","AQUA","YELLOW","GREEN","LIGHT_PURPLE","DARK_GRAY","GRAY","DARK_AQUA","DARK_PURPLE","BLUE","GOLD","DARK_GREEN","DARK_RED","BLACK"};
     static public void setTeleport(Player p, Location location, String string_location, PlayerStats playerStats){
         p.teleport(location);
         playerStats.setLocation(string_location);
@@ -78,8 +79,28 @@ public class CommonMethods {
             }
         }
     }
+    public static void deleteChartHologram(double x,double z){
+        int chunkX = (int)x >> 4;
+        int chunkZ = (int)z >> 4;
+        World world = Bukkit.getWorld("chart");
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                Chunk chunk = world.getChunkAt(chunkX + dx, chunkZ + dz);
+                if(!chunk.isLoaded())chunk.load();
+                for(Entity entity :chunk.getEntities()){
+                    if (entity.getType() == EntityType.ARMOR_STAND) {
+                        Location local = entity.getLocation();
+                        if(x == local.getX() && z == local.getZ()) {
+                            entity.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }
     public static boolean isInSlotSet(int slot){
         return slotSet.contains(slot);
     }
+    public static String getColorString(int slot){return colorString[slot];}
 
 }

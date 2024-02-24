@@ -12,12 +12,13 @@ import net.oriserver.aether.aether.chat.ChatRoom;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.createinventory.CreateInventoryManager;
-import net.oriserver.aether.aether.sqlite.PhoneSetting;
-import net.oriserver.aether.aether.sqlite.PlayerDBManagerUUID;
+import net.oriserver.aether.aether.sqlite.playerDB.PhoneSetting;
+import net.oriserver.aether.aether.sqlite.playerDB.PlayerDBManagerUUID;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,26 +29,31 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class UsualListener implements Listener {
 
-    private final PlayerManager pm;
-    private final SQLiteManager sq;
+    private final PlayerManager playerManager;
+    private final SQLiteManager sqLiteManager;
     private final ChatManager chatManager;
     private final CreateInventoryManager saveInventoryManager;
     private final ParticleManager particleManager;
     private final HideShow hideShow;
     private final InventoryManager inventoryManager;
 
-
-    public UsualListener(PlayerManager pm, InventoryManager inventoryManager, SQLiteManager sq, ChatManager chatManager, CreateInventoryManager saveInventoryManager, HideShow hideShow, ParticleManager particleManager){
-        this.pm = pm;
+    @Autowired
+    public UsualListener(JavaPlugin plugin, PlayerManager playerManager, InventoryManager inventoryManager, SQLiteManager sqLiteManager, ChatManager chatManager, CreateInventoryManager saveInventoryManager, HideShow hideShow, ParticleManager particleManager){
+        Bukkit.getPluginManager().registerEvents(this,plugin);
+        this.playerManager = playerManager;
         this.inventoryManager = inventoryManager;
-        this.sq = sq;
+        this.sqLiteManager = sqLiteManager;
         this.chatManager = chatManager;
         this.saveInventoryManager = saveInventoryManager;
         this.hideShow = hideShow;
@@ -57,65 +63,65 @@ public class UsualListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void joinEvent(PlayerJoinEvent e){
         Player player = e.getPlayer();
-
-        player.setWalkSpeed(0.2f);
-        player.setFlySpeed(0.1f);
-        for(PotionEffect effect : player.getActivePotionEffects()) {player.removePotionEffect(effect.getType());}
-        player.setCollidable(false);
-
-        String uuid = String.valueOf(player.getUniqueId());
-        PlayerDBManagerUUID playerDBManagerUUID = sq.getPlayerDBManagerUUID();
-
-        player.getInventory().setItem(35,Item.getHead(player.getName()));
-
-        if(!playerDBManagerUUID.isPlayerInDatabase(uuid)){//firstJoinEvent
-            player.teleport(new Location(Bukkit.getWorld("world"),171.500,96,-4.5,90,30));
-            playerDBManagerUUID.insertPlayer_name(uuid,player.getName());
-            sq.getPlayerDBManagerR().insertPlayerData(uuid);
-            sq.getPlayerDBManagerSetting().insertPlayerData(uuid);
-            sq.getPlayerDBManagerJQ().insertPlayerData(uuid);
-            sq.getPhoneSetting().insertData(uuid);
-            sq.getPlayerDBManagerHeadBlock().insertData(uuid);
-        }
-        else if(!playerDBManagerUUID.isChangeName(uuid,player.getName())){
-            playerDBManagerUUID.updatePlayer_name(uuid, player.getName());
-        }
-        if(!pm.isPlayer(uuid)) {
-            pm.addPlayer(player);
-        }
-        //サーバー内のプレイヤーデータ
-        PlayerStats playerStats = pm.getPlayer(uuid);
-        playerStats.setPlayer(player);
-        if(playerStats.isChatroomonoff()){
-            playerStats.setChatroom("");
-        }
-        else{
-            String roomName = "General";
-            ChatRoom chatRoom = chatManager.getChatrooms().get(roomName);
-            chatRoom.getMembers().add(player);
-            chatManager.getPlayerRooms().put(player,chatRoom);
-        }
-
-        Item.player_partition.put(uuid,playerStats.getPartition());
-        //if(!playerStats.isPlayersidebaronoff())playerStats.getPlayerSidebar().setSidebar(player);
-        //else playerStats.getPlayerSidebar().cancelSidebar();
-
-        if(!player.isOp()){
-            player.getInventory().clear();
-            Item.getFirstInventory(player,playerStats.getPhone());
-        }
-        playerStats.setListName();
-        hideShow.handleNewPlayerJoin(player);
-        playerStats.setJoin_time(System.currentTimeMillis());
-
-
-
+        onJoin(player);
         if(player.isOp()){
             player.performCommand("wea");
         }
-        player.setGameMode(GameMode.ADVENTURE);
     }
+    public void onJoin(Player p) {
+        p.setWalkSpeed(0.2f);
+        p.setFlySpeed(0.1f);
+        for (PotionEffect effect : p.getActivePotionEffects()) {
+            p.removePotionEffect(effect.getType());
+        }
+        p.setCollidable(false);
 
+        String uuid = String.valueOf(p.getUniqueId());
+        PlayerDBManagerUUID playerDBManagerUUID = sqLiteManager.getPlayerDBManagerUUID();
+
+        p.getInventory().setItem(35, Item.getHead(p.getName()));
+
+        if (!playerDBManagerUUID.isPlayerInDatabase(uuid)) {//firstJoinEvent
+            p.teleport(new Location(Bukkit.getWorld("world"), 171.500, 96, -4.5, 90, 30));
+            playerDBManagerUUID.insertPlayer_name(uuid, p.getName());
+            sqLiteManager.getPlayerDBManagerR().insertPlayerData(uuid);
+            sqLiteManager.getPlayerDBManagerSetting().insertPlayerData(uuid);
+            sqLiteManager.getPlayerDBManagerJQ().insertPlayerData(uuid);
+            sqLiteManager.getPhoneSetting().insertData(uuid);
+            sqLiteManager.getPlayerDBManagerHeadBlock().insertData(uuid);
+        } else if (!playerDBManagerUUID.isChangeName(uuid, p.getName())) {
+            playerDBManagerUUID.updatePlayer_name(uuid, p.getName());
+        }
+        if (!playerManager.isPlayer(uuid)) {
+            playerManager.addPlayer(p);
+        }
+        //サーバー内のプレイヤーデータ
+        PlayerStats playerStats = playerManager.getPlayer(uuid);
+        playerStats.setPlayer(p);
+        if (playerStats.isChatroomonoff()) {
+            playerStats.setChatroom("");
+        } else {
+            String roomName = "General";
+            ChatRoom chatRoom = chatManager.getChatrooms().get(roomName);
+            chatRoom.getMembers().add(p);
+            chatManager.getPlayerRooms().put(p, chatRoom);
+        }
+
+        Item.player_partition.put(uuid, playerStats.getPartition());
+        //if(!playerStats.isPlayersidebaronoff())playerStats.getPlayerSidebar().setSidebar(player);
+        //else playerStats.getPlayerSidebar().cancelSidebar();
+
+        if (!p.isOp()) {
+            p.getInventory().clear();
+            Item.getFirstInventory(p, playerStats.getPhone());
+        }
+        playerStats.setListName();
+        hideShow.handleNewPlayerJoin(p);
+        playerStats.setJoin_time(System.currentTimeMillis());
+
+        p.setGameMode(GameMode.ADVENTURE);
+
+    }
 
     @EventHandler
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
@@ -138,16 +144,27 @@ public class UsualListener implements Listener {
         e.setCancelled(true);
         Player p = e.getPlayer();
         ChatRoom room = chatManager.getPlayerRooms().get(p);
-        PlayerStats playerStats = pm.getPlayer(p.getUniqueId().toString());
+        PlayerStats playerStats = playerManager.getPlayer(p.getUniqueId().toString());
         if (room != null) {
-            String message =
-                    "["+room.getName()+"] "+
-                    playerStats.getTag()+ " "+
-                    playerStats.getBadge()+" "+p.getName()+ " " + playerStats.getBadgeReverse() + " > "+
-                    chatManager.getJapanese(e.getMessage())+ ChatColor.GRAY+" ("+e.getMessage()+")"
-            ;
-            for (Player member : room.getMembers())member.sendMessage(message);
-            for (Player member : chatManager.getChatrooms().get("Admin").getMembers()) member.sendMessage(ChatColor.GRAY+message);
+            StringBuilder sb = new StringBuilder();
+            if(!playerStats.getBadge().equals("")){
+                if(!playerStats.getTag().equals("")){
+                    sb.append(playerStats.getBadge()).append(playerStats.getTag()).append(playerStats.getBadge()).append(" ");
+                }else{
+                    sb.append(playerStats.getBadge()).append(" ");
+                }
+            }else{
+                if(!playerStats.getTag().equals("")){
+                    sb.append(playerStats.getTag()).append(" ");
+                }
+            }
+            sb.append(p.getName()).append(" ");
+            sb.append(">").append(" ");
+            sb.append(chatManager.getJapanese(e.getMessage()));
+            sb.append(ChatColor.GRAY).append(" ").append("(").append(e.getMessage()).append(")");
+            //sb.append("[").append(room.getName().equals("General")?"G":room.getName()).append("]").append(" ");
+            for(Player member : room.getMembers())member.sendMessage(sb.toString());
+            for(Player member : chatManager.getChatrooms().get("Admin").getMembers()) member.sendMessage(ChatColor.GRAY+sb.toString());
         }else{
             p.sendMessage("チャットルームに入っていないため発言できません。");
             p.sendMessage("General チャットルームに入りますか？");
@@ -175,14 +192,14 @@ public class UsualListener implements Listener {
             }
         }
         String uuid = String.valueOf(player.getUniqueId());
-        PlayerStats playerStats = pm.getPlayer(uuid);
+        PlayerStats playerStats = playerManager.getPlayer(uuid);
         if(playerStats==null)return;
         playerStats.setChatroom("General");
 
         particleManager.setQuitPlayer(player);
 
         boolean[] setting = playerStats.getSetting();
-        SQLiteManager sqLiteManager = pm.getSqLiteManager();
+        SQLiteManager sqLiteManager = playerManager.getSqLiteManager();
         sqLiteManager.getPlayerDBManagerSetting().setPlayerData(uuid,setting);
 
         PhoneSetting phoneSetting = sqLiteManager.getPhoneSetting();
@@ -204,8 +221,8 @@ public class UsualListener implements Listener {
             // 地面にいない（ジャンプまたは上昇中）＆＆まだカウントされていない
             if (!player.isOnGround() && !playersJumping.contains(player_uuid)) {
                 // ジャンプ回数を増やす
-                if(pm.isPlayer(player_uuid)) {
-                    pm.getPlayer(player_uuid.toString()).setJumpcount1();
+                if(playerManager.isPlayer(player_uuid)) {
+                    playerManager.getPlayer(player_uuid.toString()).setJumpcount1();
                     // ジャンプを開始したとしてUUIDをセットに追加
                     playersJumping.add(player_uuid);
                 }

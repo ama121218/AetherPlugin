@@ -1,7 +1,7 @@
 package net.oriserver.aether.aether.inventory.home.admin.saveteleport;
 
 import net.oriserver.aether.aether.inventory.InventoryManager;
-import net.oriserver.aether.aether.sqlite.SaveTeleportDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveTeleportDB;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

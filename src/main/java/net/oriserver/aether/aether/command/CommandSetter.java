@@ -1,6 +1,7 @@
 package net.oriserver.aether.aether.command;
 
-import net.oriserver.aether.aether.TNTRun.TNTRunMain;
+import net.oriserver.aether.aether.chart.ChartManager;
+import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.chat.ChatManager;
 import net.oriserver.aether.aether.command.commands.*;
 import net.oriserver.aether.aether.command.hideshow.Hide;
@@ -11,12 +12,17 @@ import net.oriserver.aether.aether.particle.ParticleManager;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.createinventory.CreateInventoryManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandSetter {
 
+    @Autowired
     public CommandSetter(JavaPlugin plugin, InventoryManager inventoryManager, PlayerManager playerManager, ChatManager chatManager, CreateInventoryManager createInventoryManager,
-                         HideShow hideShow, TNTRunMain tntRunMain, ParticleManager particleManager){
+                         HideShow hideShow, ParticleManager particleManager, ChartManager chartManager){
 
+        plugin.getCommand("teleportaether").setExecutor(new TeleportAether(chartManager.getChartStageInfo()));
         plugin.getCommand("getphone").setExecutor(new GetPhone(playerManager));
         plugin.getCommand("saveteleport").setExecutor(new SaveTeleport(playerManager.getSqLiteManager().getSaveTeleportDB()));
         plugin.getCommand("saveitem").setExecutor(new SaveItem(playerManager.getSqLiteManager().getSaveItemDB()));
@@ -29,7 +35,6 @@ public class CommandSetter {
         plugin.getCommand("hide").setExecutor(new Hide(hideShow));
         plugin.getCommand("show").setExecutor(new Show(hideShow));
         plugin.getCommand("i").setExecutor(new I());
-        plugin.getCommand("TNTRun").setExecutor(new TNTRun(tntRunMain));
         plugin.getCommand("skull").setExecutor(new Skull());
         plugin.getCommand("particle").setExecutor(new PlayParticle(particleManager));
         plugin.getCommand("openphone").setExecutor(new OpenPhone(inventoryManager));

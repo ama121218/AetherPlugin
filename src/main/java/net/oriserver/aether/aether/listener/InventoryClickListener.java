@@ -16,6 +16,8 @@ import net.oriserver.aether.aether.inventory.home.appearance.AppearanceInventory
 import net.oriserver.aether.aether.inventory.home.appearance.badge.BadgeInventoryClick;
 import net.oriserver.aether.aether.inventory.home.appearance.headblock.HeadBlockInventoryClick;
 import net.oriserver.aether.aether.inventory.home.appearance.particle.ParticleInventoryClick;
+import net.oriserver.aether.aether.inventory.home.appearance.tag.TagInventory;
+import net.oriserver.aether.aether.inventory.home.appearance.tag.TagInventoryClick;
 import net.oriserver.aether.aether.inventory.home.athletic.AthleticInventoryClick;
 import net.oriserver.aether.aether.inventory.home.minigame.MiniGameInventoryClick;
 import net.oriserver.aether.aether.inventory.home.phonesetting.PhoneSettingInventoryClick;
@@ -36,12 +38,16 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+@Component
 public class InventoryClickListener implements Listener {
 
     private final FeatherInventoryClick featherInventoryClick;
@@ -52,6 +58,7 @@ public class InventoryClickListener implements Listener {
     private final ParticleInventoryClick particleInventoryClick;
     private final HeadBlockInventoryClick headBlockInventoryClick;
     private final BadgeInventoryClick badgeInventoryClick;
+    private final TagInventoryClick tagInventoryClick;
     private final SettingInventoryClick settingInventoryClick;
     private final GiveItemInventoryClick giveItemInventoryClick;
     private final SaveItemInventoryClick saveItemInventoryClick;
@@ -65,24 +72,25 @@ public class InventoryClickListener implements Listener {
     private final GlobalInventoryClick globalInventoryClick;
     private final Plugin plugin;
 
-    final public PlayerManager pm;
+    final public PlayerManager playerManager;
 
     private final Map<String, InventoryAction> actionMap = new HashMap<>();
-    private final HashSet<String> clickCoolTime = new HashSet<String>();
+    private final HashSet<String> clickCoolTime = new HashSet<>();
 
-    public InventoryClickListener(PlayerManager pm,InventoryManager inventoryManager,ParticleManager particleManager,Plugin plugin){
-
-        featherInventoryClick = new FeatherInventoryClick();
-        this.pm = pm;
+    @Autowired
+    public InventoryClickListener(JavaPlugin plugin,PlayerManager playerManager, InventoryManager inventoryManager, ParticleManager particleManager){
+        Bukkit.getPluginManager().registerEvents(this,plugin);
+        this.playerManager = playerManager;
         this.plugin = plugin;
-
-        athleticInventoryClick = new AthleticInventoryClick(inventoryManager,pm);
-        homeInventoryClick = new HomeInventoryClick(inventoryManager,pm);
+        featherInventoryClick = new FeatherInventoryClick();
+        athleticInventoryClick = new AthleticInventoryClick(inventoryManager,playerManager);
+        homeInventoryClick = new HomeInventoryClick(inventoryManager,playerManager);
         miniGameInventoryClick = new MiniGameInventoryClick(inventoryManager);
         appearanceInventoryClick = new AppearanceInventoryClick(inventoryManager);
         particleInventoryClick = new ParticleInventoryClick(plugin,inventoryManager,particleManager);
         headBlockInventoryClick = new HeadBlockInventoryClick(inventoryManager);
         badgeInventoryClick = new BadgeInventoryClick(inventoryManager);
+        tagInventoryClick = new TagInventoryClick(inventoryManager);
         settingInventoryClick = new SettingInventoryClick(inventoryManager,particleManager);
         giveItemInventoryClick = new GiveItemInventoryClick(inventoryManager);
         saveItemInventoryClick = new SaveItemInventoryClick(inventoryManager);
@@ -92,8 +100,8 @@ public class InventoryClickListener implements Listener {
         phoneAppearanceInventoryClick = new PhoneAppearanceInventoryClick(inventoryManager);
         phonePartitionInventoryClick = new PhonePartitionInventoryClick(inventoryManager);
         phoneSettingInventoryClick = new PhoneSettingInventoryClick(inventoryManager);
-        levelInventoryClick = new LevelInventoryClick(inventoryManager,pm);
-        globalInventoryClick = new GlobalInventoryClick(pm);
+        levelInventoryClick = new LevelInventoryClick(inventoryManager,playerManager);
+        globalInventoryClick = new GlobalInventoryClick(playerManager);
 
         actionMap.put("Speed Select", (player, type, slot, event) -> featherInventoryClick.event(player, type, slot));
         actionMap.put("Home", (player, type, slot, event) -> homeInventoryClick.event(player, type, slot));
@@ -103,6 +111,7 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Particle", (player, type, slot, event) -> particleInventoryClick.event(player, type, slot));
         actionMap.put("HeadBlock", headBlockInventoryClick::event);
         actionMap.put("Badge", badgeInventoryClick::event);
+        actionMap.put("Tag",tagInventoryClick::event);
         actionMap.put("Setting", (player, type, slot, event) -> settingInventoryClick.event(player, type, slot));
 
         actionMap.put("Give Item", (player, type, slot, event) -> giveItemInventoryClick.event(player, type, slot));
@@ -147,6 +156,10 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Chart Stage Create",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new ChartStageInventoryEvent(player,type,slot,event.getCurrentItem().getItemMeta().getDisplayName()))));
 
         actionMap.put("PlaySound",(player,type,slot,event)->Bukkit.getPluginManager().callEvent(new PlaySoundEvent(player,slot)));
+
+        actionMap.put("CreateChartStage", (player,type,slot,event) -> Bukkit.getPluginManager().callEvent(new CreateChartStageInventoryEvent(player,slot,type,event.getInventory().getTitle())));
+        actionMap.put(ChatColor.DARK_RED+"Delete CreateCheckPoint", (player,type,slot,event) -> Bukkit.getPluginManager().callEvent(new CreateChartStageInventoryEvent(player,slot,type,event.getInventory().getTitle())));
+        actionMap.put("SelectStageColor", (player,type,slot,event) -> Bukkit.getPluginManager().callEvent(new CreateChartStageInventoryEvent(player,slot,type,event.getInventory().getTitle())));
     }
 
     @EventHandler
@@ -169,11 +182,6 @@ public class InventoryClickListener implements Listener {
             return;
         }
         //CreateChart
-        if(title.endsWith("CreateChartStage")||title.endsWith("CreateCheckPoint")){
-            e.setCancelled(true);
-            Bukkit.getPluginManager().callEvent(new CreateChartStageInventoryEvent(p,e.getRawSlot(),clickItem.getType(),title));
-            return;
-        }
         InventoryAction action = actionMap.get(title);
         if (action != null) {
             e.setCancelled(true);

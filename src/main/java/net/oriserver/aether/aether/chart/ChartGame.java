@@ -6,7 +6,7 @@ import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
-import net.oriserver.aether.aether.sqlite.ChartDBManagerP;
+import net.oriserver.aether.aether.sqlite.chartDB.ChartDBManagerP;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.ChatColor;
@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,15 +26,14 @@ public class ChartGame implements Listener {
 
     private final ChartStageInfo chartStageInfo;
     private final ChartHologram hologram;
-    private final PlayerManager pm;
-
+    private final PlayerManager playerManager;
     private final HashMap<String, ChartInfo> saveChartStageTime = new HashMap<>();
     private final ItemStack prismarine = Item.createitem(Material.PRISMARINE_SHARD,1, ChatColor.GREEN +"time_reset","");
 
-    public ChartGame(ChartStageInfo chartStageInfo, ChartHologram hologram, PlayerManager pm){
+    public ChartGame(ChartStageInfo chartStageInfo, ChartHologram hologram, PlayerManager playerManager){
         this.chartStageInfo = chartStageInfo;
         this.hologram = hologram;
-        this.pm = pm;
+        this.playerManager = playerManager;
     }
 
     public void handleChartStart(Player p,int chart){
@@ -44,9 +45,28 @@ public class ChartGame implements Listener {
         p.sendMessage(ChatColor.BOLD+"測定を開始します");
         saveChartStageTime.put(p.getUniqueId().toString(),new ChartInfo(chart,System.currentTimeMillis(),location));
         saveChartStageTime.get(p.getUniqueId().toString()).setCheckPoint(location.clone());
-        CommonMethods.setTeleport(p,location,""+chart,pm.getPlayer(p.getUniqueId().toString()));
+        CommonMethods.setTeleport(p,location,""+chart,playerManager.getPlayer(p.getUniqueId().toString()));
         p.getInventory().addItem(prismarine);
 
+    }
+
+    @EventHandler
+    public void handleChartStageTP(ChartStageTPEvent e){
+        Player p = e.getPlayer();
+        int chart = chartStageInfo.getStage(e.getS_Location());
+        if(chart==-1){
+            chart = chartStageInfo.getBackStage(e.getS_Location());
+            if(chart==-1)return;
+            Location location = chartStageInfo.getBackStageTP(chart);
+            if(location==null){p.sendMessage("ステージがありません");return;}
+            CommonMethods.setTeleport(p,location,"Chart Lobby",playerManager.getPlayer(p.getUniqueId().toString()));
+            p.sendMessage("Chart World にテレポートしました");
+        }else{
+            Location location = chartStageInfo.getStageTP(chart);
+            if(location==null){p.sendMessage("ステージがありません");return;}
+            CommonMethods.setTeleport(p,location,"Chart_"+chart,playerManager.getPlayer(p.getUniqueId().toString()));
+            p.sendMessage("Chart_"+chart+"にテレポートしました");
+        }
     }
 
     @EventHandler
@@ -65,7 +85,7 @@ public class ChartGame implements Listener {
             return;
         }
         saveChartStageTime.put(p.getUniqueId().toString(),new ChartInfo(chart,System.currentTimeMillis(),location));
-        CommonMethods.setTeleport(p,location,""+chart,pm.getPlayer(p.getUniqueId().toString()));
+        CommonMethods.setTeleport(p,location,""+chart,playerManager.getPlayer(p.getUniqueId().toString()));
         p.getInventory().addItem(prismarine);
     }
 
@@ -123,18 +143,20 @@ public class ChartGame implements Listener {
 
     public void handleChartGoal(Player p,int chart){
         p.getInventory().remove(Material.PRISMARINE_SHARD);
-        String uuid = String.valueOf(p.getUniqueId());
-        CommonMethods.setTeleport(p,chartStageInfo.getGoalLocation(chart),"Chart_Lobby", pm.getPlayer(uuid));
+        String uuid = p.getUniqueId().toString();
+        PlayerStats playerStats = playerManager.getPlayer(uuid);
+        if(playerStats.isChartagainonoff()) CommonMethods.setTeleport(p,chartStageInfo.getStageTP(chart),"Chart_"+chart, playerManager.getPlayer(uuid));
+        else CommonMethods.setTeleport(p,chartStageInfo.getGoalLocation(chart),"Chart_Lobby", playerManager.getPlayer(uuid));
 
-        PlayerStats playerStats = pm.getPlayer(uuid);
+
         if(chart-playerStats.getChart()==1){
             playerStats.setChart(chart);
-            pm.getSqLiteManager().getPlayerDBManagerR().setPlayerChart(uuid,chart);
+            playerManager.getSqLiteManager().getPlayerDBManagerR().setPlayerChart(uuid,chart);
         }
 
         ChartInfo chartInfo = saveChartStageTime.get(p.getUniqueId().toString());
         if(chartInfo == null || chartInfo.getStartTime() == null) {
-            ChartDBManagerP chartDBManagerP = pm.getSqLiteManager().getChartDBManagerP();
+            ChartDBManagerP chartDBManagerP = playerManager.getSqLiteManager().getChartDBManagerP();
             p.sendMessage(chartStageInfo.getStageName(chart) + "をクリアしました。 タイム : 測定不能");
             chartDBManagerP.setgoalcount1(uuid,chart);
             saveChartStageTime.remove(p.getUniqueId().toString());
@@ -145,7 +167,7 @@ public class ChartGame implements Listener {
         String stage_name = chartStageInfo.getStageName(chart);
 
         Long this_time = System.currentTimeMillis() - chartInfo.getStartTime();
-        ChartDBManagerP chartDBManagerP = pm.getSqLiteManager().getChartDBManagerP();
+        ChartDBManagerP chartDBManagerP = playerManager.getSqLiteManager().getChartDBManagerP();
         ArrayList<Object> list = chartDBManagerP.getData(uuid,stage_id);
 
         Long past_time;
@@ -156,8 +178,8 @@ public class ChartGame implements Listener {
             chartDBManagerP.setgoal(uuid,stage_id,1,this_time);
             past_time = 0L;
             past_star = 0;
-            pm.getPlayer(uuid).setStar(pm.getPlayer(uuid).getStar()+this_star);
-            pm.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,pm.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+this_star);
+            playerManager.getPlayer(uuid).setStar(playerManager.getPlayer(uuid).getStar()+this_star);
+            playerManager.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,playerManager.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+this_star);
         }else{
             past_time = (Long)list.get(0);
             int clear_count = (int)list.get(1);
@@ -166,8 +188,8 @@ public class ChartGame implements Listener {
                 chartDBManagerP.setgoal(uuid,stage_id,clear_count+1,this_time);
                 int star = this_star-past_star;
                 if(star>0){
-                    pm.getPlayer(uuid).setStar(pm.getPlayer(uuid).getStar()+star);
-                    pm.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,pm.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+star);
+                    playerManager.getPlayer(uuid).setStar(playerManager.getPlayer(uuid).getStar()+star);
+                    playerManager.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,playerManager.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+star);
                 }
             }else{
                 chartDBManagerP.setgoal(uuid,stage_id,clear_count+1);
@@ -176,14 +198,17 @@ public class ChartGame implements Listener {
                 return;
             }
         }
-        int ranking = pm.getSqLiteManager().getChartRankingDB().insertOrUpdateScoreIfTop5(stage_id,p.getUniqueId().toString(),p.getName(),this_time);
+        int ranking = playerManager.getSqLiteManager().getChartRankingDB().insertOrUpdateScoreIfTop5(stage_id,p.getUniqueId().toString(),p.getName(),this_time);
         p.sendMessage("ranking"+ranking);
         printChartClear(p,stage_name,past_time,this_time,past_star,this_star,ranking);
         saveChartStageTime.remove(p.getUniqueId().toString());
         if(ranking!=-1&&ranking<=5){
             hologram.setChartTime(stage_id);
         }
-        CommonMethods.setTeleport(p,chartStageInfo.getGoalLocation(chart),"Chart_Lobby", pm.getPlayer(uuid));
+
+        if(playerStats.isChartagainonoff()) CommonMethods.setTeleport(p,chartStageInfo.getStageTP(chart),"Chart_"+chart, playerManager.getPlayer(uuid));
+        else CommonMethods.setTeleport(p,chartStageInfo.getGoalLocation(chart),"Chart_Lobby", playerManager.getPlayer(uuid));
+
     }
 
     public void printChartClear(Player p,String stage_name,Long past_time,Long this_time,int past_star,int this_star,int ranking){

@@ -36,6 +36,7 @@ public class PlayerStats {
     private boolean friendonoff;
     private boolean chatroomonoff;
     private boolean playersidebaronoff;
+    private boolean chartagainonoff;
 
     private PlayerSidebar playerSidebar;
     private Long join_time;
@@ -56,6 +57,10 @@ public class PlayerStats {
 
         ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(uuid);
         if(arrayList_R==null)return;
+        if(arrayList_R.size()==0){
+            sqLiteManager.getPlayerDBManagerR().insertPlayerData(uuid);
+            arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(uuid);
+        }
         this.level = arrayList_R.get(0);
         this.global = arrayList_R.get(1);
         this.chart = arrayList_R.get(2);
@@ -64,26 +69,43 @@ public class PlayerStats {
 
         ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getData(uuid);
         if(arrayList_JQ==null)return;
+        if(arrayList_JQ.size()==0){
+            sqLiteManager.getPlayerDBManagerJQ().insertPlayerData(uuid);
+            arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getData(uuid);
+        }
         this.jumpcount = (int) arrayList_JQ.get(0);
         this.location = (String) arrayList_JQ.get(1);
         this.past_time = (long) arrayList_JQ.get(2);
 
         ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(uuid);
         if(arrayList_Setting==null)return;
+        if(arrayList_Setting.size()==0){
+            sqLiteManager.getPlayerDBManagerSetting().insertPlayerData(uuid);
+            arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(uuid);
+        }
         this.particleonoff = (boolean) arrayList_Setting.get(0);
         this.mailonoff = (boolean) arrayList_Setting.get(1);
         this.friendonoff = (boolean) arrayList_Setting.get(2);
         this.chatroomonoff = (boolean) arrayList_Setting.get(3);
         this.playersidebaronoff = (boolean) arrayList_Setting.get(4);
+        this.chartagainonoff = (boolean)  arrayList_Setting.get(5);
 
         ArrayList<Object> arrayList_Phone = sqLiteManager.getPhoneSetting().getData(uuid);
         if(arrayList_Phone==null)return;
+        if(arrayList_Phone.size()==0){
+            sqLiteManager.getPhoneSetting().insertData(uuid);
+            arrayList_Phone = sqLiteManager.getPhoneSetting().getData(uuid);
+        }
         this.phone = (int) arrayList_Phone.get(0);
         this.partition = (int) arrayList_Phone.get(1);
         this.checkpoint = (int) arrayList_Phone.get(2);
 
         ArrayList<Object> arrayList_HeadBlock = sqLiteManager.getPlayerDBManagerHeadBlock().getData(uuid);
         if(arrayList_HeadBlock==null)return;
+        if(arrayList_HeadBlock.size()==0){
+            sqLiteManager.getPlayerDBManagerHeadBlock().insertData(uuid);
+            arrayList_HeadBlock = sqLiteManager.getPlayerDBManagerHeadBlock().getData(uuid);
+        }
         this.headblocks = new String[]{String.valueOf(arrayList_HeadBlock.get(0)),
                 String.valueOf(arrayList_HeadBlock.get(1)),
                 String.valueOf(arrayList_HeadBlock.get(2)),
@@ -101,6 +123,9 @@ public class PlayerStats {
 
         this.badges = new String[1];
         this.badges[0] = "111111111111111";
+
+        this.tags = new String[1];
+        this.tags[0] = "111111111111111";
     }
 
     public Player getPlayer() {return this.player;}
@@ -150,12 +175,13 @@ public class PlayerStats {
 
 
     public boolean[] getSetting(){
-        boolean[] booleans = new boolean[5];
+        boolean[] booleans = new boolean[6];
         booleans[0] = particleonoff;
         booleans[1] = mailonoff;
         booleans[2] = friendonoff;
         booleans[3] = chatroomonoff;
         booleans[4] = playersidebaronoff;
+        booleans[5] = chartagainonoff;
         return booleans;
     }
 
@@ -169,6 +195,8 @@ public class PlayerStats {
     public void setChatroomonoff(boolean chatroomonoff) {this.chatroomonoff = chatroomonoff;}
     public boolean isPlayersidebaronoff() {return this.playersidebaronoff;}
     public void setPlayersidebaronoff(boolean playersidebaronoff) {this.playersidebaronoff = playersidebaronoff;}
+    public boolean isChartagainonoff() {return chartagainonoff;}
+    public void setChartagainonoff(boolean chartagainonoff) {this.chartagainonoff = chartagainonoff;}
 
     public int getPhone(){return this.phone;}
     public void setPhone(int phone){this.phone = phone;}
@@ -213,4 +241,7 @@ public class PlayerStats {
 
     public String getBadges(int page){return this.badges[page];}
     public void setBadges(int page,String badge){this.badges[page] = badge;}
+
+    public String getTags(int page){return this.tags[page];}
+    public void setTags(int page,String tags){this.tags[page] = tags;}
 }

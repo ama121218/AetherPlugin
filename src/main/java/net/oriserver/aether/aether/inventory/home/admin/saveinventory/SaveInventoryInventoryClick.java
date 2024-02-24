@@ -1,13 +1,10 @@
 package net.oriserver.aether.aether.inventory.home.admin.saveinventory;
 
 import net.oriserver.aether.aether.inventory.InventoryManager;
-import net.oriserver.aether.aether.sqlite.SaveInventoryDB;
-import net.oriserver.aether.aether.sqlite.SaveItemDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveInventoryDB;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

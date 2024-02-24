@@ -4,18 +4,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
+@Component
 public class HideShow {
     final private Plugin plugin;
-    final private HashSet<String> hide_player = new HashSet<String>();
+    final private HashSet<String> hide_player = new HashSet<>();
 
-
-    public HideShow(Plugin plugin){
-        this.plugin = plugin;
-    }
+    @Autowired
+    public HideShow(Plugin plugin){this.plugin = plugin;}
 
     public void allHide(Player player){
         for(Player ph : Bukkit.getOnlinePlayers()){

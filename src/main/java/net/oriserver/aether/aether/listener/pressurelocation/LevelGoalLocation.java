@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class LevelGoalLocation {
 
-    private final HashMap<String,Integer> coordinatesMap = new HashMap<String,Integer>();
+    private final HashMap<String,Integer> coordinatesMap = new HashMap<>();
 
     public LevelGoalLocation(){
         coordinatesMap.put("657.0,10.0,733.0", 1);

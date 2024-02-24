@@ -7,22 +7,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CreateTNTRunStageClickItemEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private PlayerInteractEvent e;
+    private final PlayerInteractEvent e;
 
-
-    public CreateTNTRunStageClickItemEvent(PlayerInteractEvent e) {
-        this.e = e;
-    }
-    public PlayerInteractEvent getEvent(){
-        return e;
-    }
+    public CreateTNTRunStageClickItemEvent(PlayerInteractEvent e){this.e = e;}
+    public PlayerInteractEvent getEvent(){return e;}
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+    public HandlerList getHandlers(){return handlers;}
+    public static HandlerList getHandlerList(){return handlers;}
 }

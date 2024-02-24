@@ -1,16 +1,12 @@
 package net.oriserver.aether.aether.command.commands;
 
-import net.oriserver.aether.aether.sqlite.SaveItemDB;
-import net.oriserver.aether.aether.sqlite.SaveTeleportDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveItemDB;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Random;
 
 public class SaveItem implements CommandExecutor {
     final private SaveItemDB saveItemDB;

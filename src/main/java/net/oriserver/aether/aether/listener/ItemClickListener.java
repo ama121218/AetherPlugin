@@ -1,7 +1,5 @@
 package net.oriserver.aether.aether.listener;
 
-import net.oriserver.aether.aether.TNTRun.CreateStage;
-import net.oriserver.aether.aether.TNTRun.TNTRunMain;
 import net.oriserver.aether.aether.chart.events.*;
 import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
@@ -25,23 +23,27 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 
+@Component
 public class ItemClickListener implements Listener {
 
     private final FeatherInventory featherInventory;
     private final InventoryManager inventoryManager;
     private final HideShow hideShow;
     private final Plugin plugin;
-    private final TNTRunMain tntRunMain;
     private final HashSet<String> itemCoolTime = new HashSet<String>();
-    public ItemClickListener(InventoryManager inventoryManager,HideShow hideShow , Plugin plugin, TNTRunMain tntRunMain){
+
+    @Autowired
+    public ItemClickListener(InventoryManager inventoryManager,HideShow hideShow , Plugin plugin){
+        Bukkit.getPluginManager().registerEvents(this,plugin);
         featherInventory = new FeatherInventory();
         this.inventoryManager = inventoryManager;
         this.hideShow = hideShow;
         this.plugin = plugin;
-        this.tntRunMain = tntRunMain;
     }
 
     @EventHandler
@@ -154,11 +156,11 @@ public class ItemClickListener implements Listener {
             }
         }else if(p.isOp() && item.getType() == Material.SHULKER_SHELL){
             e.setCancelled(true);
-            if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun create stage tool")) {
+            /*if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun create stage tool")) {
                 CreateStage createStage = tntRunMain.getCreateStageManager().getCreateStage(p);
                 if(createStage == null)return;
                 p.openInventory(createStage.getInvCreateStage());
-            }else if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE+"Chart Stage Create Tool")){
+            }else */if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE+"Chart Stage Create Tool")){
                 Bukkit.getPluginManager().callEvent(new ChartCreateToolClickEvent(p));
             }
         }
@@ -180,15 +182,12 @@ public class ItemClickListener implements Listener {
 
                     // Aether Phoneを持っている場合の処理をここに書く
                     event.setCancelled(true); // 任意でイベントをキャンセル
-                    // その他の処理...
                     inventoryManager.getHomeInventory().setinv(player);
                 }
                 // 鉄インゴットを持っている場合の処理
                 else if (item != null && item.getType() == Material.IRON_INGOT) {
 
-                    // 鉄インゴットを持っている場合の処理をここに書く
-                    event.setCancelled(true); // 任意でイベントをキャンセル
-                    // 例: プレイヤーにメッセージを表示
+                    event.setCancelled(true); //イベントをキャンセル
                     if(player.getLocation().getWorld().getName().equals("shrine"))inventoryManager.getLevelInventory().setinv(player,1,inventoryManager.getPlayerManager().getPlayer(String.valueOf(player.getUniqueId())).getLevel());
                     else if(player.getLocation().getWorld().getName().equals("chart")){
                         PlayerStats playerStats = inventoryManager.getPlayerManager().getPlayer(player.getUniqueId().toString());

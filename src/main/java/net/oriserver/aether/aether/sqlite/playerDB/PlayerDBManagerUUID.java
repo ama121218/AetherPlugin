@@ -1,14 +1,15 @@
-package net.oriserver.aether.aether.sqlite;
+package net.oriserver.aether.aether.sqlite.playerDB;
 
+import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerUUID extends SQLiteAPI{
+public class PlayerDBManagerUUID extends SQLiteAPI {
 
-    PlayerDBManagerUUID(JavaPlugin plugin,String dbname){
+    public PlayerDBManagerUUID(JavaPlugin plugin, String dbname){
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Player_name (" +
                 "`player_uuid` varchar NOT NULL," +

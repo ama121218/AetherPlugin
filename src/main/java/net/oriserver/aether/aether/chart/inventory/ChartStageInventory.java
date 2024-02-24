@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +19,9 @@ public class ChartStageInventory {
     final private ChartStageInfo chartStageInfo;
     Inventory invChart = Bukkit.createInventory(null, 54, "Chart Stage Create");
     ItemStack gray_dye = new ItemStack(Material.INK_SACK,1, (short) 8);
-    public ChartStageInventory(ChartStageInfo chartStageInfo){
-        this.chartStageInfo = chartStageInfo;
-    }
+
+    public ChartStageInventory(ChartStageInfo chartStageInfo){this.chartStageInfo = chartStageInfo;}
+
     public void setinv(Player p, int page){
         HashMap<Integer,String> stageNameMap = chartStageInfo.getStageNameMap();
         Inventory openinv = Item.inventorycopy(invChart);

@@ -1,12 +1,13 @@
-package net.oriserver.aether.aether.sqlite;
+package net.oriserver.aether.aether.sqlite.adminDB;
 
+import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveTeleportDB extends SQLiteAPI{
+public class SaveTeleportDB extends SQLiteAPI {
     public SaveTeleportDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Save_Teleport (" +

@@ -5,11 +5,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+@Component
 public class ParticleManager {
 
     private final int range = 30;
@@ -18,6 +21,8 @@ public class ParticleManager {
     private final HashSet<String> blockPlayerParticleSet = new HashSet<>();
     private final Particle particle;
     private final Plugin plugin;
+
+    @Autowired
     public ParticleManager(Plugin plugin){
         this.plugin = plugin;
         particle = new Particle();

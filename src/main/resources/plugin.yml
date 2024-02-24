@@ -52,13 +52,6 @@ commands:
       - tpa
   i:
     description: 座標表示
-  TNTRun:
-    description: TNTRun setting
-    usage: /<command> [create]
-    aliases:
-      - TNTrun
-      - tntrun
-      - TNTRun
 
   chart:
     description: chartStage

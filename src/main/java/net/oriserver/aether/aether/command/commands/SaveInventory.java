@@ -1,7 +1,7 @@
 package net.oriserver.aether.aether.command.commands;
 
 
-import net.oriserver.aether.aether.sqlite.SaveInventoryDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveInventoryDB;
 import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

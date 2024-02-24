@@ -1,20 +1,15 @@
 package net.oriserver.aether.aether.inventory.home.admin.saveitem;
 
 import net.oriserver.aether.aether.inventory.InventoryManager;
-import net.oriserver.aether.aether.sqlite.SaveItemDB;
+import net.oriserver.aether.aether.sqlite.adminDB.SaveItemDB;
 import net.oriserver.aether.aether.statics.CommonMethods;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 public class SaveItemInventoryClick {
 

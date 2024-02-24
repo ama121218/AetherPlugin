@@ -39,7 +39,7 @@ public class ChartInventoryClickListener implements Listener {
         map_number.put(39, 13);
         map_number.put(40, 14);
     }
-    HashMap<Integer,Integer> map_number = new HashMap<Integer,Integer>();
+    HashMap<Integer,Integer> map_number = new HashMap<>();
 
     @EventHandler
     public void onClickChartInventory(ChartInventoryClickEvent e){

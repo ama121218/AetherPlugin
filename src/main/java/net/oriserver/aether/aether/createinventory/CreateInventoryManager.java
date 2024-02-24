@@ -1,9 +1,11 @@
 package net.oriserver.aether.aether.createinventory;
 
 import org.bukkit.entity.Player;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+@Component
 public class CreateInventoryManager {
 
     HashMap<String, CreateInventory> createInventoryMap = new HashMap<String, CreateInventory>();

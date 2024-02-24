@@ -22,6 +22,8 @@ public class BadgeInventory {
         invBadge.setItem(1, Item.createitem(Material.TOTEM, 1, ChatColor.GREEN + "Appearance", ""));
         invBadge.setItem(10, Item.createitem(Material.PRISMARINE_CRYSTALS, 1, ChatColor.GREEN + "Badge", ""));
 
+        invBadge.setItem(49, Item.createitem(Material.BARRIER, 1, ChatColor.GREEN + "バッジを外す", ""));
+
         invBadge.setItem(7, Item.createitem(Material.END_CRYSTAL, 1,ChatColor.GREEN + "Particle", ""));
         invBadge.setItem(16, Item.createitem(Material.IRON_HELMET, 1,ChatColor.GREEN + "HeadBlock", ""));
         invBadge.setItem(25, Item.createitem(Material.JUKEBOX, 1, ChatColor.GREEN + "Music", ""));

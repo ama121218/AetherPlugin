@@ -9,12 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 public class ChartInventory {
     Inventory invChart = Bukkit.createInventory(null, 54, "Chart Athletic");
-    private final PlayerManager pm;
+    private final PlayerManager playerManager;
     private final ChartStageInfo chartStageInfo;
     int[] a = {3,4,5,12,13,14,21,22,23,30,31,32,39,40};
     int[] c = {7,16,25,34};
@@ -26,9 +28,9 @@ public class ChartInventory {
     String eq = ChatColor.GOLD+"======================";
     String teleport = ChatColor.WHITE+""+ChatColor.BOLD+"➩Click to teleport";
     ItemStack gray_dye = new ItemStack(Material.INK_SACK,1, (short) 8);
-    
-    public ChartInventory(PlayerManager pm, ChartStageInfo chartStageInfo){
-        this.pm = pm;
+
+    public ChartInventory(PlayerManager playerManager, ChartStageInfo chartStageInfo){
+        this.playerManager = playerManager;
         this.chartStageInfo = chartStageInfo;
         invChart.setItem(0, Item.createitem(Material.IRON_INGOT, 1, ChatColor.WHITE+"Teleport_option", ""));
         invChart.setItem(45,Item.createitem(Material.BARRIER, 1, "閉じる", ""));
@@ -43,7 +45,7 @@ public class ChartInventory {
         invChart.setItem(18,Item.createitem(Material.CHORUS_FRUIT_POPPED,1,ChatColor.GREEN+"Teleport_Spawn",""));
     }
     public void setinv(Player p,int page,int chart){
-        ArrayList<Object[]> objects = pm.getSqLiteManager().getChartDBManagerP().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
+        ArrayList<Object[]> objects = playerManager.getSqLiteManager().getChartDBManagerP().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
         Inventory openinv = Item.inventorycopy(invChart);
         for(int i = 0; i < chart+1-((page-1)*14) && i < 14; i++){
             try{

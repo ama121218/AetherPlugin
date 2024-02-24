@@ -1,4 +1,4 @@
-package net.oriserver.aether.aether.chart;
+package net.oriserver.aether.aether.sqlite.chartDB;
 
 import net.oriserver.aether.aether.Aether;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
@@ -28,10 +28,6 @@ public class ChartRankingDB extends SQLiteAPI {
     public int insertOrUpdateScoreIfTop5(int stage_id, String uuid,String player_name, Long time) {
         List<RankingData> top5 = getTop5Scores(stage_id);
         int position = -1;// 最適な位置を探索
-
-        for(RankingData ti:top5){
-            Aether.getPlugin().getLogger().info("time:"+ti.getTime());
-        }
 
         for (int i = 0; i < top5.size(); i++) {
 
