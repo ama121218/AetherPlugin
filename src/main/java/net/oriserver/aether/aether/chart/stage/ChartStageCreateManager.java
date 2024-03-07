@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class ChartStageCreateManager{
+public class ChartStageCreateManager{//チャートステージを作成するインターフェイスの作成
     private final HashMap<String, ChartStageCreate> createMap = new HashMap<>();
 
     private final SQLiteAPI chartStageDB;

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ChartIronIngotClickEvent extends Event {
+public class ChartIronIngotClickEvent extends Event {//チャートワールドにて鉄インゴットをクリックした時のイベント
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveInventoryDB extends SQLiteAPI {
+public class SaveInventoryDB extends SQLiteAPI {//各アドミンプレイヤーごとにインベントリーを保存するクラス
     public SaveInventoryDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Save_Inventory (" +

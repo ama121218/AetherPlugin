@@ -1,7 +1,6 @@
 package net.oriserver.aether.aether.listener;
 
 import net.oriserver.aether.aether.chart.events.*;
-import net.oriserver.aether.aether.events.CreateTNTRunStageClickItemEvent;
 import net.oriserver.aether.aether.hideshow.HideShow;
 import net.oriserver.aether.aether.inventory.global.GlobalLocation;
 import net.oriserver.aether.aether.inventory.level.LevelLocation;
@@ -29,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 
 @Component
-public class ItemClickListener implements Listener {
+public class ItemClickListener implements Listener {//プレイヤーが手持ちのアイテムをクリックしたイベントを操作するクラス
 
     private final FeatherInventory featherInventory;
     private final InventoryManager inventoryManager;
@@ -152,7 +151,7 @@ public class ItemClickListener implements Listener {
         }else if(p.isOp() && item.getType() == Material.WOOD_PICKAXE){
             if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("TNTRun_Setting")) {
                 e.setCancelled(true);
-                Bukkit.getPluginManager().callEvent(new CreateTNTRunStageClickItemEvent(e));
+                //Bukkit.getPluginManager().callEvent(new CreateTNTRunStageClickItemEvent(e));
             }
         }else if(p.isOp() && item.getType() == Material.SHULKER_SHELL){
             e.setCancelled(true);

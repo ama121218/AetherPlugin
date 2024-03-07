@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-public class PlayParticle  implements CommandExecutor{
+public class PlayParticle  implements CommandExecutor{//./playparticleを行ったときの処理
     private final ParticleManager particleManager;
     Particle[] particles;
     public PlayParticle(ParticleManager particleManager){

@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class ShopInventory {
+public class ShopInventory {//ショップインベントリークラス
 
     Inventory invshop = Bukkit.createInventory(null, 54, "Shop");
     public ShopInventory(){

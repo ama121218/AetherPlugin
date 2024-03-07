@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ChartManager {
+public class ChartManager {//チャートアスレチックのゲームシステムを管理するクラス
 
     private final ChartHologram chartHologram;
     private final ChartStageInfo chartStageInfo;

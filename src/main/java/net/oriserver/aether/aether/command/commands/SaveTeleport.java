@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Random;
 
-public class SaveTeleport implements CommandExecutor {
+public class SaveTeleport implements CommandExecutor {//./stを行ったときの処理
     final private SaveTeleportDB saveTeleportDB;
     public SaveTeleport(SaveTeleportDB saveTeleportDB){
         this.saveTeleportDB = saveTeleportDB;

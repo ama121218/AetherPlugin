@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class FeatherInventoryClick {
+public class FeatherInventoryClick {//スピード変化インベントリーをクリックした時に操作するクラス
     public void event(Player p,Material material,int slot){
         if(slot == 0){p.setWalkSpeed(0.1f);p.setFlySpeed(0.05f);p.sendMessage("your speed level : -1");
             for(PotionEffect effect : p.getActivePotionEffects()) {p.removePotionEffect(effect.getType());}

@@ -5,7 +5,7 @@ import net.oriserver.aether.aether.inventory.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class ShopInventoryClick {
+public class ShopInventoryClick {//ショップのインベントリーをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
     public ShopInventoryClick(InventoryManager inventoryManager){

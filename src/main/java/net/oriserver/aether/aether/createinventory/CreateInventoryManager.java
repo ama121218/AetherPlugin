@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 @Component
-public class CreateInventoryManager {
+public class CreateInventoryManager {//プレイヤーのインベントリーを拡張するシステム
 
     HashMap<String, CreateInventory> createInventoryMap = new HashMap<String, CreateInventory>();
 

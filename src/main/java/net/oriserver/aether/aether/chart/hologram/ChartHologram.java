@@ -9,7 +9,7 @@ import org.bukkit.*;
 
 import java.util.*;
 
-public class ChartHologram {
+public class ChartHologram {//チャートのホログラムを扱うクラス
 
     private final ChartRankingDB chartRankingDB;
     private final ChartStageInfo chartStageInfo;
@@ -47,6 +47,7 @@ public class ChartHologram {
             if(chartStage.getStageName()!=null) {
                 if (chartStage.getStageName() != null) {
                     CommonMethods.deleteChartHologram(chartStage.getStage_x()+0.5, chartStage.getStage_z()+0.5);
+                    CommonMethods.deleteChartHologram(chartStage.getBack_stage_x()+0.5,chartStage.getBack_stage_z()+0.5);
                     CommonMethods.deleteChartHologram(chartStage.getStart_x()+0.5, chartStage.getStart_z()+0.5);
                     CommonMethods.deleteChartHologram(chartStage.getGoal_x()+0.5, chartStage.getGoal_z()+0.5);
                     if (chartStage.getCheckPoints() != null) {
@@ -66,6 +67,8 @@ public class ChartHologram {
             if(chartStage.getStageName()!=null) {
                 Location location_stage = new Location(Bukkit.getWorld("chart"), chartStage.getStage_x()+0.5, chartStage.getStage_y()+0.3, chartStage.getStage_z()+0.5);
                 CommonMethods.setHologram(location_stage, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + (mainStage + "_" + subStage) + ChatColor.GOLD + "|||");
+                Location location_back_stage = new Location(Bukkit.getWorld("chart"), chartStage.getBack_stage_x()+0.5, chartStage.getBack_stage_y()+0.3, chartStage.getBack_stage_z()+0.5);
+                CommonMethods.setHologram(location_back_stage, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + "back" + ChatColor.GOLD + "|||");
                 Location location_start = new Location(Bukkit.getWorld("chart"), chartStage.getStart_x()+0.5, chartStage.getStart_y()+0.3, chartStage.getStart_z()+0.5);
                 CommonMethods.setHologram(location_start, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + "start" + ChatColor.GOLD + "|||");
                 Location location_goal = new Location(Bukkit.getWorld("chart"), chartStage.getGoal_x()+0.5, chartStage.getGoal_y()+0.3, chartStage.getGoal_z()+0.5);
@@ -98,7 +101,7 @@ public class ChartHologram {
             Location location_stage = new Location(Bukkit.getWorld("chart"), chartStage.getStage_x()+0.5, chartStage.getStage_y()+0.3, chartStage.getStage_z()+0.5);
             CommonMethods.setHologram(location_stage, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + (mainStage + "_" + subStage) + ChatColor.GOLD + "|||");
             Location location_back_stage = new Location(Bukkit.getWorld("chart"), chartStage.getBack_stage_x()+0.5, chartStage.getBack_stage_y()+0.3, chartStage.getBack_stage_z()+0.5);
-            CommonMethods.setHologram(location_back_stage, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + "back world" + ChatColor.GOLD + "|||");
+            CommonMethods.setHologram(location_back_stage, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + "back" + ChatColor.GOLD + "|||");
             Location location_start = new Location(Bukkit.getWorld("chart"), chartStage.getStart_x()+0.5, chartStage.getStart_y()+0.3, chartStage.getStart_z()+0.5);
             CommonMethods.setHologram(location_start, ChatColor.GOLD + "|||" + ChatColor.WHITE + "" + ChatColor.BOLD + "start" + ChatColor.GOLD + "|||");
             Location location_goal = new Location(Bukkit.getWorld("chart"), chartStage.getGoal_x()+0.5, chartStage.getGoal_y()+0.3, chartStage.getGoal_z()+0.5);

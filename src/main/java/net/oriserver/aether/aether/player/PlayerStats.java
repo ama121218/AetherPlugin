@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class PlayerStats {
+public class PlayerStats {//サーバー内で各プレイヤーのデータを保存するクラス
     private Player player;
     private int level;
     private int global;
@@ -55,11 +55,11 @@ public class PlayerStats {
         this.player = player;
         String uuid = String.valueOf(player.getUniqueId());
 
-        ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(uuid);
+        ArrayList<Integer> arrayList_R = sqLiteManager.getPlayerRealTimeDataDB().getPlayerData(uuid);
         if(arrayList_R==null)return;
         if(arrayList_R.size()==0){
-            sqLiteManager.getPlayerDBManagerR().insertPlayerData(uuid);
-            arrayList_R = sqLiteManager.getPlayerDBManagerR().getPlayerData(uuid);
+            sqLiteManager.getPlayerRealTimeDataDB().insertPlayerData(uuid);
+            arrayList_R = sqLiteManager.getPlayerRealTimeDataDB().getPlayerData(uuid);
         }
         this.level = arrayList_R.get(0);
         this.global = arrayList_R.get(1);
@@ -67,21 +67,21 @@ public class PlayerStats {
         this.star = arrayList_R.get(3);
         this.AP = arrayList_R.get(4);
 
-        ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getData(uuid);
+        ArrayList<Object> arrayList_JQ = sqLiteManager.getPlayerJoinQuitDataDB().getData(uuid);
         if(arrayList_JQ==null)return;
         if(arrayList_JQ.size()==0){
-            sqLiteManager.getPlayerDBManagerJQ().insertPlayerData(uuid);
-            arrayList_JQ = sqLiteManager.getPlayerDBManagerJQ().getData(uuid);
+            sqLiteManager.getPlayerJoinQuitDataDB().insertPlayerData(uuid);
+            arrayList_JQ = sqLiteManager.getPlayerJoinQuitDataDB().getData(uuid);
         }
         this.jumpcount = (int) arrayList_JQ.get(0);
         this.location = (String) arrayList_JQ.get(1);
         this.past_time = (long) arrayList_JQ.get(2);
 
-        ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(uuid);
+        ArrayList<Object> arrayList_Setting = sqLiteManager.getPlayerSettingDB().getPlayerData(uuid);
         if(arrayList_Setting==null)return;
         if(arrayList_Setting.size()==0){
-            sqLiteManager.getPlayerDBManagerSetting().insertPlayerData(uuid);
-            arrayList_Setting = sqLiteManager.getPlayerDBManagerSetting().getPlayerData(uuid);
+            sqLiteManager.getPlayerSettingDB().insertPlayerData(uuid);
+            arrayList_Setting = sqLiteManager.getPlayerSettingDB().getPlayerData(uuid);
         }
         this.particleonoff = (boolean) arrayList_Setting.get(0);
         this.mailonoff = (boolean) arrayList_Setting.get(1);
@@ -90,21 +90,21 @@ public class PlayerStats {
         this.playersidebaronoff = (boolean) arrayList_Setting.get(4);
         this.chartagainonoff = (boolean)  arrayList_Setting.get(5);
 
-        ArrayList<Object> arrayList_Phone = sqLiteManager.getPhoneSetting().getData(uuid);
+        ArrayList<Object> arrayList_Phone = sqLiteManager.getPlayerPhoneSetting().getData(uuid);
         if(arrayList_Phone==null)return;
         if(arrayList_Phone.size()==0){
-            sqLiteManager.getPhoneSetting().insertData(uuid);
-            arrayList_Phone = sqLiteManager.getPhoneSetting().getData(uuid);
+            sqLiteManager.getPlayerPhoneSetting().insertData(uuid);
+            arrayList_Phone = sqLiteManager.getPlayerPhoneSetting().getData(uuid);
         }
         this.phone = (int) arrayList_Phone.get(0);
         this.partition = (int) arrayList_Phone.get(1);
         this.checkpoint = (int) arrayList_Phone.get(2);
 
-        ArrayList<Object> arrayList_HeadBlock = sqLiteManager.getPlayerDBManagerHeadBlock().getData(uuid);
+        ArrayList<Object> arrayList_HeadBlock = sqLiteManager.getPlayerHeadBlockDB().getData(uuid);
         if(arrayList_HeadBlock==null)return;
         if(arrayList_HeadBlock.size()==0){
-            sqLiteManager.getPlayerDBManagerHeadBlock().insertData(uuid);
-            arrayList_HeadBlock = sqLiteManager.getPlayerDBManagerHeadBlock().getData(uuid);
+            sqLiteManager.getPlayerHeadBlockDB().insertData(uuid);
+            arrayList_HeadBlock = sqLiteManager.getPlayerHeadBlockDB().getData(uuid);
         }
         this.headblocks = new String[]{String.valueOf(arrayList_HeadBlock.get(0)),
                 String.valueOf(arrayList_HeadBlock.get(1)),
@@ -115,6 +115,7 @@ public class PlayerStats {
         Item.player_partition.put(uuid,this.partition);
         this.chatroom = this.chatroomonoff ? "" : "General";
         this.playerSidebar = new PlayerSidebar(player.getName(),this.level,this.global,this.star,this.AP,this.chatroom,this.location);
+        //this.playerSidebar.setSidebar(player);//sidebar-
 
         this.headblocks[0] = "111111111111111";
         this.headblocks[1] = "111111111111111";

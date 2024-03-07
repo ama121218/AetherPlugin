@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class GiveItemInventoryClick {
+public class GiveItemInventoryClick {//アイテムを渡すインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
     public GiveItemInventoryClick(InventoryManager inventoryManager){this.inventoryManager = inventoryManager;}

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class Chat implements CommandExecutor {
+public class Chat implements CommandExecutor {//./chatを行ったときの処理
 
     private final ChatManager chatManager;
     private final Plugin plugin;

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class TagInventoryClick {
+public class TagInventoryClick {//プレイヤーTagインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
     public TagInventoryClick(InventoryManager inventoryManager){

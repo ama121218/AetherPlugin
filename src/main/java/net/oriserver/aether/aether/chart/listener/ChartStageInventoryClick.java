@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class ChartStageInventoryClick implements Listener{
+public class ChartStageInventoryClick implements Listener{//チャートステージ作成時のインベントリーをクリックした時に操作するクラス
     private final ChartStageInventory chartStageInventory;
     private final ChartStageInfo chartStageInfo;
     public ChartStageInventoryClick(ChartStageInventory chartStageInventory, ChartStageInfo chartStageInfo){

@@ -5,7 +5,7 @@ import net.oriserver.aether.aether.inventory.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class PhonePartitionInventoryClick {
+public class PhonePartitionInventoryClick {//インベントリー装飾のインベントリークラスをクリックした時に操作するクラス
     final private InventoryManager inventoryManager;
     public PhonePartitionInventoryClick(InventoryManager inventoryManager){
         this.inventoryManager = inventoryManager;

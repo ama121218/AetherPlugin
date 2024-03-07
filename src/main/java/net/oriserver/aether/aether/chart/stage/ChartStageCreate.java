@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class ChartStageCreate implements Listener {
+public class ChartStageCreate implements Listener {//チャートステージを作成する際のステージ情報を保存するクラス
 
     private final String creator_name;
     private final String stage_id;
@@ -50,7 +50,7 @@ public class ChartStageCreate implements Listener {
     private final Inventory invCreateStage;
 
     public ChartStageCreate(String creator_name, String stage_id, ChartStageCreateManager createChartStageManager){
-        stage_color = String.valueOf(ChatColor.WHITE);
+        stage_color = "WHITE";
         this.createChartStageManager = createChartStageManager;
         this.creator_name = creator_name;
         this.stage_id = stage_id;

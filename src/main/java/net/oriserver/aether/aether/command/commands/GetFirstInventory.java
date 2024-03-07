@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GetFirstInventory implements CommandExecutor {
+public class GetFirstInventory implements CommandExecutor {//./getfirstinvを行ったときの処理
     final private PlayerManager pm;
     public GetFirstInventory(PlayerManager pm){
         this.pm = pm;

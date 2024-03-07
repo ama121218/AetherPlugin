@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerJQ extends SQLiteAPI {
+public class PlayerJoinQuitDataDB extends SQLiteAPI {//プレイヤーが入出退出時に保存するデータを扱うクラス
 
-    public PlayerDBManagerJQ(JavaPlugin plugin, String dbname) {
+    public PlayerJoinQuitDataDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Player_data_JQ (" +
                 "`player_uuid` varchar NOT NULL," +

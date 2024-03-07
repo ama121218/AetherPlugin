@@ -5,7 +5,7 @@ import net.oriserver.aether.aether.inventory.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class PhoneAppearanceInventoryClick {
+public class PhoneAppearanceInventoryClick {//スマホ装飾インベントリークラスをクリックした時に操作するクラス
     final private InventoryManager inventoryManager;
     public PhoneAppearanceInventoryClick(InventoryManager inventoryManager){this.inventoryManager = inventoryManager;}
     public void event(Player p, Material material, int slot){

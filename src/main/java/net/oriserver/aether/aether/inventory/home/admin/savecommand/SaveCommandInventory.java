@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class SaveCommandInventory {
-
+public class SaveCommandInventory {//コマンドを保存するのインベントリークラス
 
     final private PlayerManager pm;
     int[] a = {3,4,5,12,13,14,21,22,23,30,31,32,39,40,41};

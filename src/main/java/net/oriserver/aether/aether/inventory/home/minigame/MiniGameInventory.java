@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class MiniGameInventory {
+public class MiniGameInventory {//ミニゲームのインベントリークラスをクリックした時に操作するクラス
 
     Inventory invMiniGame = Bukkit.createInventory(null, 54, "MiniGame");
     public MiniGameInventory(){

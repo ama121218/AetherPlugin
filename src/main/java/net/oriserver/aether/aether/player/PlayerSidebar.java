@@ -8,7 +8,7 @@ import org.bukkit.scoreboard.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class PlayerSidebar {
+public class PlayerSidebar {//プレイヤーのサイドバーの情報をプレイヤーごとに保存するクラス
     private final Scoreboard board;
     private final Objective objective;
     private final Team noCollisionTeam;
@@ -51,8 +51,8 @@ public class PlayerSidebar {
         setlevel(level);
     }
     public void setSidebar(Player p){
-        //p.setScoreboard(board);
-        //objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        //p.setScoreboard(board);//sidebar-
+        //objective.setDisplaySlot(DisplaySlot.SIDEBAR);//sidebar-
     }
 
     public void setlevel(int level){
@@ -101,6 +101,6 @@ public class PlayerSidebar {
 
 
     public void cancelSidebar() {
-        //board.clearSlot(DisplaySlot.SIDEBAR);
+        //board.clearSlot(DisplaySlot.SIDEBAR);//sidebar-
     }
 }

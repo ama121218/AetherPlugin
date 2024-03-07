@@ -12,13 +12,12 @@ import net.oriserver.aether.aether.chat.ChatRoom;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
 import net.oriserver.aether.aether.createinventory.CreateInventoryManager;
-import net.oriserver.aether.aether.sqlite.playerDB.PhoneSetting;
-import net.oriserver.aether.aether.sqlite.playerDB.PlayerDBManagerUUID;
+import net.oriserver.aether.aether.sqlite.playerDB.PlayerPhoneSetting;
+import net.oriserver.aether.aether.sqlite.playerDB.PlayerUUIDDB;
 import net.oriserver.aether.aether.sqlite.SQLiteManager;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -38,7 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class UsualListener implements Listener {
+public class UsualListener implements Listener {//プレイヤーが起こす普通のイベントを操作するクラス
 
     private final PlayerManager playerManager;
     private final SQLiteManager sqLiteManager;
@@ -77,18 +76,18 @@ public class UsualListener implements Listener {
         p.setCollidable(false);
 
         String uuid = String.valueOf(p.getUniqueId());
-        PlayerDBManagerUUID playerDBManagerUUID = sqLiteManager.getPlayerDBManagerUUID();
+        PlayerUUIDDB playerDBManagerUUID = sqLiteManager.getPlayerUUIDDB();
 
         p.getInventory().setItem(35, Item.getHead(p.getName()));
 
         if (!playerDBManagerUUID.isPlayerInDatabase(uuid)) {//firstJoinEvent
             p.teleport(new Location(Bukkit.getWorld("world"), 171.500, 96, -4.5, 90, 30));
             playerDBManagerUUID.insertPlayer_name(uuid, p.getName());
-            sqLiteManager.getPlayerDBManagerR().insertPlayerData(uuid);
-            sqLiteManager.getPlayerDBManagerSetting().insertPlayerData(uuid);
-            sqLiteManager.getPlayerDBManagerJQ().insertPlayerData(uuid);
-            sqLiteManager.getPhoneSetting().insertData(uuid);
-            sqLiteManager.getPlayerDBManagerHeadBlock().insertData(uuid);
+            sqLiteManager.getPlayerRealTimeDataDB().insertPlayerData(uuid);
+            sqLiteManager.getPlayerSettingDB().insertPlayerData(uuid);
+            sqLiteManager.getPlayerJoinQuitDataDB().insertPlayerData(uuid);
+            sqLiteManager.getPlayerPhoneSetting().insertData(uuid);
+            sqLiteManager.getPlayerHeadBlockDB().insertData(uuid);
         } else if (!playerDBManagerUUID.isChangeName(uuid, p.getName())) {
             playerDBManagerUUID.updatePlayer_name(uuid, p.getName());
         }
@@ -200,13 +199,13 @@ public class UsualListener implements Listener {
 
         boolean[] setting = playerStats.getSetting();
         SQLiteManager sqLiteManager = playerManager.getSqLiteManager();
-        sqLiteManager.getPlayerDBManagerSetting().setPlayerData(uuid,setting);
+        sqLiteManager.getPlayerSettingDB().setPlayerData(uuid,setting);
 
-        PhoneSetting phoneSetting = sqLiteManager.getPhoneSetting();
-        phoneSetting.setData(uuid, new int[]{playerStats.getPhone(), playerStats.getPartition(), playerStats.getCheckpoint()});
+        PlayerPhoneSetting playerPhoneSetting = sqLiteManager.getPlayerPhoneSetting();
+        playerPhoneSetting.setData(uuid, new int[]{playerStats.getPhone(), playerStats.getPartition(), playerStats.getCheckpoint()});
 
         playerStats.setPast_time(playerStats.getPast_time() + System.currentTimeMillis()-playerStats.getJoin_time());
-        sqLiteManager.getPlayerDBManagerJQ().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
+        sqLiteManager.getPlayerJoinQuitDataDB().setData(uuid,new Object[]{playerStats.getJumpcount(), playerStats.getLocation(),playerStats.getPast_time()});
     }
     private final Set<String> playersJumping = new HashSet<>();
 

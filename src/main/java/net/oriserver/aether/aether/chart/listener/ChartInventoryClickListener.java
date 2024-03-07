@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class ChartInventoryClickListener implements Listener {
+public class ChartInventoryClickListener implements Listener {//チャートアスレチックのインベントリーをクリックしたときのEventを取得
 
     private final ChartInventory chartInventory; 
     private final PlayerManager pm;

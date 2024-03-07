@@ -3,7 +3,7 @@ package net.oriserver.aether.aether.sqlite.chartDB;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ChartStageDB extends SQLiteAPI {
+public class ChartStageDB extends SQLiteAPI {//Chartステージのデータを扱うクラス
     public ChartStageDB(JavaPlugin plugin, String dbname){
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS ChartStage (" +

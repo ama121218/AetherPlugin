@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Particle {
+public class Particle {//パーティクルを作成するクラス
 
     ArrayList<double[]> wingParticleList;
     ArrayList<double[]> shieldParticleList;

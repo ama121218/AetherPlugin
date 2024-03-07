@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CreateInventory implements CommandExecutor {
+public class CreateInventory implements CommandExecutor {//./ciを行ったときの処理
     private final CreateInventoryManager saveInventoryManager;
 
     public CreateInventory(CreateInventoryManager saveInventoryManager){

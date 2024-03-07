@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PhoneSetting extends SQLiteAPI {
-    public PhoneSetting(JavaPlugin plugin, String dbname) {
+public class PlayerPhoneSetting extends SQLiteAPI {//プレイヤーごとのスマホ設定を保存するクラス
+    public PlayerPhoneSetting(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Phone_Setting (" +
                 "`player_uuid` varchar NOT NULL," +

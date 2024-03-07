@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 
 @Component
-public class PressureListener implements Listener {
+public class PressureListener implements Listener {//プレイヤーが感圧板を踏んだ時のイベントを操作するクラス
 
     final private SQLiteManager sqLiteManager;
     final private PlayerManager pm;
@@ -83,7 +83,7 @@ public class PressureListener implements Listener {
         int player_level = playerStats.getLevel();
         if (level - player_level == 1) {
             playerStats.setLevel(level);
-            sqLiteManager.getPlayerDBManagerR().setPlayerLevel(uuid,level);
+            sqLiteManager.getPlayerRealTimeDataDB().setPlayerLevel(uuid,level);
         }
         p.sendMessage(ChatColor.BOLD+"Level Athletic: "+level+" をクリアしました。");
         CommonMethods.setTeleport(p,LevelLocation.getLevelLocation(level+1),"Level_"+(level+1),pm.getPlayer(uuid));

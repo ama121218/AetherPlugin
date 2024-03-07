@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class I implements CommandExecutor {
+public class I implements CommandExecutor {//./iを行ったときの処理(現在位置の座標をコンソールに出力)
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HeadBlockDB extends SQLiteAPI {
-    public HeadBlockDB(JavaPlugin plugin, String dbname) {
+public class PlayerHeadBlockDB extends SQLiteAPI {//HeadBlockの入手状況を保存するクラス
+    public PlayerHeadBlockDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS HeadBlock (" +
                 "`player_uuid` varchar NOT NULL," +

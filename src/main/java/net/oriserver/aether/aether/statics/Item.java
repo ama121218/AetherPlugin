@@ -17,11 +17,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Item {
+public class Item {//基本的にItemを操作する共通メソッドをまとめたクラス
     
-    static final private ItemStack[] item_partition = new ItemStack[20];
-    static final private ItemStack[] item_phone = new ItemStack[7];
-    static final private ItemStack[] first_inv = new ItemStack[9];
+    static final private ItemStack[] item_partition = new ItemStack[20];//スマホ開く際の装飾アイテムを保存
+    static final private ItemStack[] item_phone = new ItemStack[7];//スマホの装飾アイテムを保存
+    static final private ItemStack[] first_inv = new ItemStack[9];//join時のfirstInvを保存
     static {
         item_partition[0] = createitem(Material.IRON_FENCE, 1, "", "");
         item_partition[1] = createitem(Material.THIN_GLASS, 1, "", "");
@@ -65,9 +65,9 @@ public class Item {
         player_partition = new HashMap<>();
     }
 
-    static public final HashMap<String,Integer> player_partition;
+    static public final HashMap<String,Integer> player_partition;//プレイヤーごとに装飾アイテムの番号を保存
 
-    static public ItemStack createitem(final Material material, int a, final String name, final String... lore){
+    static public ItemStack createitem(final Material material, int a, final String name, final String... lore){//アイテムの作成
         final ItemStack item = new ItemStack(material,a);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
@@ -75,14 +75,14 @@ public class Item {
         item.setItemMeta(meta);
         return item;
     }
-    static public ItemStack changename(final ItemStack i,final String name, final String... lore){
+    static public ItemStack changename(final ItemStack i,final String name, final String... lore){//アイテムの名前変更
         final ItemMeta meta = i.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(Arrays.asList(lore));
         i.setItemMeta(meta);
         return i;
     }
-    static public ItemStack createitem2(final Material material,int a,final String name, final String... lore){
+    static public ItemStack createitem2(final Material material,int a,final String name, final String... lore){//エンチャント付きアイテムの作成
         final ItemStack item = new ItemStack(material,a);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
@@ -92,23 +92,22 @@ public class Item {
         item.setItemMeta(meta);
         return item;
     }
-    static public ItemStack enachantitem(ItemStack item){
+    static public ItemStack enachantitem(ItemStack item){//アイテムにエンチャントをつける
         ItemMeta meta = item.getItemMeta();
         meta.addEnchant(Enchantment.LUCK,1,true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
         return item;
     }
-    static public Inventory inventorycopy(Inventory a){
-        ItemStack[] allitem;
-        String t = a.getTitle();
-        allitem = a.getContents();
-        a.setContents(allitem);
-        Inventory copyinv = Bukkit.createInventory(null,54,t);
-        copyinv.setContents(allitem);
-        return copyinv;
+    static public Inventory inventorycopy(Inventory a){//Inventoryクラスの内容を全てコピー
+        String title = a.getTitle();
+        ItemStack[] allItem = a.getContents();
+        a.setContents(allItem);
+        Inventory copyInv = Bukkit.createInventory(null,54,title);
+        copyInv.setContents(allItem);
+        return copyInv;
     }
-    static public ItemStack getHead(String player_name) {
+    static public ItemStack getHead(String player_name) {//プレイヤーの頭アイテムを入手
         ItemStack item = new ItemStack(Material.SKULL_ITEM, 1,(short) SkullType.PLAYER.ordinal());
         SkullMeta skullmeta = (SkullMeta) item.getItemMeta();
         skullmeta.setOwningPlayer(Bukkit.getPlayer(player_name));
@@ -116,7 +115,7 @@ public class Item {
         item.setItemMeta(skullmeta);
         return item;
     }
-    static public ItemStack getHead(String player_name,final String... lore) {
+    static public ItemStack getHead(String player_name,final String... lore) {//プレイヤーの頭アイテムを入手し説明を付与
         ItemStack item = new ItemStack(Material.SKULL_ITEM, 1,(short) SkullType.PLAYER.ordinal());
         SkullMeta skullmeta = (SkullMeta) item.getItemMeta();
         skullmeta.setOwningPlayer(Bukkit.getPlayer(player_name));
@@ -125,7 +124,7 @@ public class Item {
         item.setItemMeta(skullmeta);
         return item;
     }
-    static public ItemStack getHead2(String value) {
+    static public ItemStack getHead2(String value) {//プロパティから頭アイテムを入手
         ItemStack skull = new ItemStack(Material.SKULL_ITEM,1,(short) SkullType.PLAYER.ordinal());
         UUID hashAsId = new UUID(value.hashCode(), value.hashCode());
         return Bukkit.getUnsafe().modifyItemStack(skull,
@@ -133,7 +132,7 @@ public class Item {
         );
     }
 
-    static public void setInventory(Player p, Inventory inv){
+    static public void setInventory(Player p, Inventory inv){//装飾を含めたInventoryの作成
         int itemnumber = 0;
         if(player_partition.containsKey(String.valueOf(p.getUniqueId())))itemnumber = player_partition.get( String.valueOf(p.getUniqueId()));
         for (int i = 2; i <= 47; i += 9) {
@@ -145,7 +144,7 @@ public class Item {
         p.openInventory(inv);
     }
 
-    static public void getItemPhone(Player p,int number){
+    static public void getItemPhone(Player p,int number){//スマホを入手、持っていた場合は更新
         boolean b = false;
         for(int i=0;i<35;i++) {
             if (p.getInventory().getItem(i) == null) continue;
@@ -160,7 +159,7 @@ public class Item {
         }
     }
 
-    static public void getFirstInventory(Player p,int phone_number){
+    static public void getFirstInventory(Player p,int phone_number){//プレイヤーjoin時にアイテムを設定
         Inventory player_inventory = p.getInventory();
         for(int i=0;i<=8;i++){
             player_inventory.setItem(i,first_inv[i]);
@@ -182,7 +181,7 @@ public class Item {
         }
     }
 
-    static public void removeCustomNamedItemFromInventory(Inventory inventory, Material material, String customName) {
+    static public void removeCustomNamedItemFromInventory(Inventory inventory, Material material, String customName) {//指定した名前のアイテムをプレイヤーから削除
         for (ItemStack item : inventory.getContents()) {
             if (item != null && item.getType() == material && item.hasItemMeta() && customName.equals(item.getItemMeta().getDisplayName())) {
                 inventory.remove(item);
@@ -190,7 +189,7 @@ public class Item {
         }
     }
 
-    public static void setItemNameNMS(net.minecraft.server.v1_12_R1.ItemStack itemStack, String name) {
+    public static void setItemNameNMS(net.minecraft.server.v1_12_R1.ItemStack itemStack, String name) {//NMSをつかったアイテムの作成
         NBTTagCompound tagCompound = itemStack.getTag();
 
         if (tagCompound == null) {

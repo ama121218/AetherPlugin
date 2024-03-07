@@ -4,7 +4,7 @@ import net.oriserver.aether.aether.sqlite.chartDB.ChartStageDB;
 
 import java.util.ArrayList;
 
-public class TemporaryData {
+public class TemporaryData {//一時データの保存(今までのデータを扱うため)
 
     public TemporaryData(ChartStageDB chartStageDB){
 

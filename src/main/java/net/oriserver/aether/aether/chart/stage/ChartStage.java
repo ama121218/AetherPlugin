@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-public class ChartStage{
+public class ChartStage{//チャートのステージ情報を保存するクラス
     private int stageId;
     private String stageColor;
     private String stageName;

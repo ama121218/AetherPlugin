@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 import static net.oriserver.aether.aether.inventory.level.LevelLocation.getLevelLocation;
 
-public class LevelInventoryClick {
+public class LevelInventoryClick {//レベルアスレチックのインベントリーをクリックした時に操作するクラス
     private final InventoryManager inventoryManager;
     private final PlayerManager pm;
     public LevelInventoryClick(InventoryManager inventoryManager,PlayerManager pm){

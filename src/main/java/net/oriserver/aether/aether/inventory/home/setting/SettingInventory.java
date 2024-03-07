@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class SettingInventory {
+public class SettingInventory {//設定のインベントリークラス
     int[] a = {12,13,14,30,31,32};
     ItemStack[] onitems = new ItemStack[6];
     ItemStack[] offitems = new ItemStack[6];

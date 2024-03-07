@@ -1,13 +1,10 @@
 package net.oriserver.aether.aether.events;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 
-public class PlaySoundEvent extends Event {
+public class PlaySoundEvent extends Event {//サウンドインベントリーをクリックした時のEventを入手するクラス
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class TagInventory {
+public class TagInventory {//プレイヤーTagインベントリークラス
     int[] a = {3,4,5,12,13,14,21,22,23,30,31,32,39,40,41};
     ItemStack gray_dye = new ItemStack(Material.INK_SACK, 1, (short) 8);
     ArrayList<ItemStack[]> tags_list = new ArrayList<ItemStack[]>();

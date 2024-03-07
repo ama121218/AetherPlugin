@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-public class SQLiteAPI {
+public class SQLiteAPI {//JDBCを使ったSQLiteとの接続API
     protected final JavaPlugin plugin;
     private final String dbname;
     public SQLiteAPI(JavaPlugin plugin, String dbname){
@@ -17,7 +17,7 @@ public class SQLiteAPI {
         this.dbname = plugin.getConfig().getString("SQLite.Filename", dbname);
     }
 
-    public void initialize(String sql){
+    public void initialize(String sql){//dbファイルがあるかの確認なければ作成
         Connection conn = null;
         PreparedStatement ps = null;
         File ndir = new File(plugin.getDataFolder().getAbsolutePath());
@@ -45,7 +45,7 @@ public class SQLiteAPI {
             }
         }
     }
-    public Connection getSQLConnection() {
+    public Connection getSQLConnection() {//指定されたデータベースに接続するメソッド
         File dataFolder = new File(plugin.getDataFolder(), dbname+".db");
         try {
             Class.forName("org.sqlite.JDBC");
@@ -57,7 +57,7 @@ public class SQLiteAPI {
         }
         return null;
     }
-    public void setDB(String sql, List<Object> parameters) {
+    public void setDB(String sql, List<Object> parameters) {//クエリを実行するメソッド
         try (Connection conn = getSQLConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             for (int i = 0; i < parameters.size(); i++) {
@@ -70,10 +70,10 @@ public class SQLiteAPI {
     }
 
     @FunctionalInterface
-    public interface ResultSetHandler<T> {
+    public interface ResultSetHandler<T> {//クエリの内容でSQLiteからデータを取得する関数型インターフェイスの宣言
         List<T> handle(ResultSet rs) throws SQLException;
     }
-    public <T> List<T> getDB(String sql, List<Object> parameters, ResultSetHandler<T> handler) {
+    public <T> List<T> getDB(String sql, List<Object> parameters, ResultSetHandler<T> handler) {//クエリの内容でSQLiteからデータを取得する
         try (Connection conn = getSQLConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             for (int i = 0; i < parameters.size(); i++) {
                 ps.setObject(i + 1, parameters.get(i));

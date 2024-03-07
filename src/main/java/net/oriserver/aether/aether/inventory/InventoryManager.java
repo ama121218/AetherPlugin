@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.text.html.HTML;
 
 @Component
-public class InventoryManager {
+public class InventoryManager {//各インベントリーのインスタンスを扱うクラス
     private final PlayerManager playerManager;
     private final HomeInventory homeInventory;
     private final AthleticInventory athleticInventory;

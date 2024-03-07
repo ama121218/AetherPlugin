@@ -3,7 +3,7 @@ package net.oriserver.aether.aether.inventory.level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-public enum LevelLocation {
+public enum LevelLocation {//レベルアスレチックのステージ座標をenumで保存
     LEVEL_1(657.500, 4.001, 702.500),
     LEVEL_2(657.500, 4.001, 768.500),
     LEVEL_3(657.500, 4.001, 834.500),

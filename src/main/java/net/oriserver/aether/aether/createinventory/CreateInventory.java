@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class CreateInventory {
+public class CreateInventory {//指定ページに合わせてプレイヤーに拡張したインベントリーを作るクラス
 
     ArrayList<ItemStack[]> item_list = new ArrayList<ItemStack[]>();
     ArrayList<String> item_string = new ArrayList<String>();

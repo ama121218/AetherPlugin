@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class ParticleInventory {
+public class ParticleInventory {//パーティクルインベントリークラス
     Inventory invParticle = Bukkit.createInventory(null, 54, "Particle");
     public ParticleInventory(){
         invParticle.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

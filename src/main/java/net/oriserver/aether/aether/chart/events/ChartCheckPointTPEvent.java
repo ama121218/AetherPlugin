@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ChartCheckPointTPEvent extends Event {
+public class ChartCheckPointTPEvent extends Event {//チェックポイントへ飛ぶイベントを入手
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;

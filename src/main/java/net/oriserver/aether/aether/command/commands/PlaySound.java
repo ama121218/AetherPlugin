@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaySound implements CommandExecutor, Listener {
+public class PlaySound implements CommandExecutor, Listener {//./playsoundを行ったときの処理
 
     Sound[] sounds = Sound.values();
     Material[] materials = {

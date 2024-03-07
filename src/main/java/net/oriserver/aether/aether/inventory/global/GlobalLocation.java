@@ -3,7 +3,7 @@ package net.oriserver.aether.aether.inventory.global;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-public enum GlobalLocation {
+public enum GlobalLocation {//グローバルアスレチックの座標をenumで保存
 
     Global_1("アクロポリス",-282.500,92.001, -234.500,0,-15),
     Global_2("ピラミッド",-969.500, 53.001, -30.500,45,-9),

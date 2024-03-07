@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class LevelInventory {
+public class LevelInventory {//レベルアスレチックのインベントリークラス
     Inventory invLevel = Bukkit.createInventory(null, 54, "Level Athletic");
     int[] a = {3,4,5,12,13,14,21,22,23,30,31,32,39,40,41};
     int[] b = {3,4,5,12,13};

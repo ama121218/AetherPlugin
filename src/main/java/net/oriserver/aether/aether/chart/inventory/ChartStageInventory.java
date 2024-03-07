@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChartStageInventory {
+public class ChartStageInventory {//チャートアスレチック作成時のインベントリークラス
     int[] a = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32};
     final private ChartStageInfo chartStageInfo;
     Inventory invChart = Bukkit.createInventory(null, 54, "Chart Stage Create");

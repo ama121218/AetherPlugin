@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import static net.oriserver.aether.aether.AthleticLocation.getLocation;
 
 
-public class TeleportAether implements CommandExecutor {
+public class TeleportAether implements CommandExecutor {//./tpaを行ったときの処理
 
     private final ChartStageInfo chartStageInfo;
 

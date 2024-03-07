@@ -6,7 +6,7 @@ import net.oriserver.aether.aether.statics.CommonMethods;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class GlobalInventoryClick {
+public class GlobalInventoryClick {//グローバルアスレチックインベントリーをクリックした時に操作するクラス
 
     final private PlayerManager playerManager;
 

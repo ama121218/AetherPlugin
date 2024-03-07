@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
-public class LevelGoalLocation {
+public class LevelGoalLocation {//レベルアスレチックのクリア感圧板の座標を扱うクラス
 
     private final HashMap<String,Integer> coordinatesMap = new HashMap<>();
 

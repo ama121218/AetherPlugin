@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Skull implements CommandExecutor {
+public class Skull implements CommandExecutor {//./Skullを行ったときの処理
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){

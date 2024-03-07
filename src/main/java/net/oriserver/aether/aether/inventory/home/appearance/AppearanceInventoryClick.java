@@ -5,7 +5,7 @@ import net.oriserver.aether.aether.player.PlayerStats;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class AppearanceInventoryClick {
+public class AppearanceInventoryClick {//プレイヤー装飾のインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
     public AppearanceInventoryClick(InventoryManager inventoryManager){

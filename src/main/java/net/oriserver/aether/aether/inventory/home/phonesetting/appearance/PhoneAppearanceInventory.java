@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class PhoneAppearanceInventory {
+public class PhoneAppearanceInventory {//スマホ装飾インベントリークラス
     Inventory invPhoneAppearance = Bukkit.createInventory(null, 54, "Phone Appearance");
     public PhoneAppearanceInventory(){
         invPhoneAppearance.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

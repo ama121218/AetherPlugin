@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class GiveItemInventory {
+public class GiveItemInventory {//アイテムを渡すインベントリークラス
     Inventory invGiveItem = Bukkit.createInventory(null, 54, "Give Item");
     public GiveItemInventory(){
         invGiveItem.setItem(0, Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

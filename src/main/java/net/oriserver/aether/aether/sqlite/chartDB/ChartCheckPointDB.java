@@ -3,7 +3,7 @@ package net.oriserver.aether.aether.sqlite.chartDB;
 import net.oriserver.aether.aether.sqlite.SQLiteAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ChartCheckPointDB extends SQLiteAPI {
+public class ChartCheckPointDB extends SQLiteAPI {//ステージごとのチェックポイントを扱うクラス
 
     public ChartCheckPointDB(JavaPlugin plugin, String dbname){
         super(plugin, dbname);

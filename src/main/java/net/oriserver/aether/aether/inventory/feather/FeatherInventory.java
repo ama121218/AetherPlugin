@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class FeatherInventory {
+public class FeatherInventory {//スピード変化インベントリークラス
     private final Inventory speed_select = Bukkit.createInventory(null,9,"Speed Select");
     public FeatherInventory(){
         speed_select.setItem(0, Item.createitem(Material.SOUL_SAND,1,"level -1"));

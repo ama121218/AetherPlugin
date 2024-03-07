@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class SaveCommandInventoryClick {
+public class SaveCommandInventoryClick {//コマンドを保存するのインベントリークラスをクリックした時に操作するクラス
 
 
     final private InventoryManager inventoryManager;

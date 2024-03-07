@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class GlobalInventory {
+public class GlobalInventory {//グローバルアスレチックインベントリー
     Inventory invGlobal = Bukkit.createInventory(null, 54, "Global Athletic");
     int[] a = {3,4,5/*,12,13,14,21,22,23,30,31,32,39,40*/};
     ItemStack gray_dye = new ItemStack(Material.INK_SACK,1, (short) 8);

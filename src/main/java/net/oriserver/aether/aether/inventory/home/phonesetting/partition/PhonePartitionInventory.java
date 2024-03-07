@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class PhonePartitionInventory {
+public class PhonePartitionInventory {//インベントリー装飾のインベントリークラス
     Inventory invPhonePartition1 = Bukkit.createInventory(null, 54, "Phone Partition 1");
     Inventory invPhonePartition2 = Bukkit.createInventory(null, 54, "Phone Partition 2");
     public PhonePartitionInventory(){

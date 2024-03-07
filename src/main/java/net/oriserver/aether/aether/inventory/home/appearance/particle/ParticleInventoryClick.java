@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ParticleInventoryClick {
+public class ParticleInventoryClick {//パーティクルインベントリークラスをクリックした時に操作するクラス
     final private InventoryManager inventoryManager;
     final private ParticleManager particleManager;
     public ParticleInventoryClick(Plugin plugin, InventoryManager inventoryManager,ParticleManager particleManager){

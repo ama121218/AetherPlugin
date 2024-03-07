@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 
-public class ChatRoom {
+public class ChatRoom {//ローマ字を日本語へ変換するクラス
     private final String name;
     private final boolean isPrivate;
     private final HashSet<Player> members = new HashSet<>();

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class CreateChartStageInventoryEvent extends Event {
+public class CreateChartStageInventoryEvent extends Event {//Chartのステージを作成するときに使うEvent
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final Material material;

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ChartTimeResetEvent extends Event {
+public class ChartTimeResetEvent extends Event {//タイムをリセットする時に取得するイベント
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     public ChartTimeResetEvent(Player player){this.player = player;}

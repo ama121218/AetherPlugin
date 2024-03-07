@@ -13,7 +13,7 @@ import org.bukkit.material.MaterialData;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class BadgeInventoryClick {
+public class BadgeInventoryClick {//Badgeインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
     public BadgeInventoryClick(InventoryManager inventoryManager){

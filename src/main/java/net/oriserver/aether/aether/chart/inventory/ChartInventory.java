@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-public class ChartInventory {
+public class ChartInventory {//チャートアスレチックのインベントリークラス
     Inventory invChart = Bukkit.createInventory(null, 54, "Chart Athletic");
     private final PlayerManager playerManager;
     private final ChartStageInfo chartStageInfo;
@@ -45,7 +45,7 @@ public class ChartInventory {
         invChart.setItem(18,Item.createitem(Material.CHORUS_FRUIT_POPPED,1,ChatColor.GREEN+"Teleport_Spawn",""));
     }
     public void setinv(Player p,int page,int chart){
-        ArrayList<Object[]> objects = playerManager.getSqLiteManager().getChartDBManagerP().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
+        ArrayList<Object[]> objects = playerManager.getSqLiteManager().getChartPlayerDataDB().getDatas(String.valueOf(p.getUniqueId()),1 + (page - 1) *14,chart);
         Inventory openinv = Item.inventorycopy(invChart);
         for(int i = 0; i < chart+1-((page-1)*14) && i < 14; i++){
             try{

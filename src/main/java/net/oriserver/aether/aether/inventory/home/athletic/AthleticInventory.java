@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class AthleticInventory {
+public class AthleticInventory {//アスレチックのインベントリークラス
     Inventory invAthletic = Bukkit.createInventory(null, 54, "Athletic Teleport");
     public AthleticInventory(){
         invAthletic.setItem(0,Item.createitem(Material.IRON_DOOR, 1, "ホーム", ""));

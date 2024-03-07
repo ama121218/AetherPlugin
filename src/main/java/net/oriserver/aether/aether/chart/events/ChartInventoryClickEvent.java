@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-public class ChartInventoryClickEvent extends Event {
+public class ChartInventoryClickEvent extends Event {//チャートインベントリーをクリックした時のイベント
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;

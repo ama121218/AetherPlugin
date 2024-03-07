@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerSetting extends SQLiteAPI {
+public class PlayerSettingDB extends SQLiteAPI {//プレイヤーの設定を保存するDBクラス
 
-    public PlayerDBManagerSetting(JavaPlugin plugin, String dbname){
+    public PlayerSettingDB(JavaPlugin plugin, String dbname){
         super(plugin,dbname);
 
         String sql = "CREATE TABLE IF NOT EXISTS Player_Setting (" +

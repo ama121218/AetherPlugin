@@ -3,7 +3,7 @@ package net.oriserver.aether.aether.chat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RomanjiToJapanese {
+public class RomanjiToJapanese {//ローマ字を日本語へ変換するクラス
     private final Map<String, String> romanjiToHiraganaMap;
 
     RomanjiToJapanese(){

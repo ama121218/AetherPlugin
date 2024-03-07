@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 @Component
-public class ChatManager {
+public class ChatManager {//chatRoomを管理するクラス
     private final HashMap<String, ChatRoom> chatRooms = new HashMap<>();
     private final HashMap<Player, ChatRoom> playerRooms = new HashMap<>();
     private final RomanjiToJapanese romanjiToJapanese;

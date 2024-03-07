@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class SaveItemInventoryClick {
-
+public class SaveItemInventoryClick {//アイテムを保存するのインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
 

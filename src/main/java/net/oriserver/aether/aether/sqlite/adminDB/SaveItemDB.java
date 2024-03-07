@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveItemDB extends SQLiteAPI {
+public class SaveItemDB extends SQLiteAPI {//各アドミンプレイヤーごとにアイテムを保存するクラス
     public SaveItemDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Save_Item (" +

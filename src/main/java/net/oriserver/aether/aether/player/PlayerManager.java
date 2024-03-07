@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class PlayerManager {
+public class PlayerManager {//サーバー内のプレイヤーのデータPlayerStatsを管理するクラス
     private final Map<String, PlayerStats> players = new HashMap<String,PlayerStats>();
     private final SQLiteManager sqLiteManager;
 

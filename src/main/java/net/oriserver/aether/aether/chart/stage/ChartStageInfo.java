@@ -10,7 +10,7 @@ import org.bukkit.Location;
 
 import java.util.*;
 
-public class ChartStageInfo {
+public class ChartStageInfo {//ステージの感圧板の位置やテレポート位置をメモリに格納して管理するクラス
 
     private final SQLiteAPI chartStageDB;
     private final SQLiteAPI chartCheckPointDB;
@@ -71,7 +71,7 @@ public class ChartStageInfo {
                     for (ChartStage.Local_xyz local_xyz : chartStage.getCheckPoints()) {
                         j++;
                         checkPointMap.put(local_xyz.getX() + "," + local_xyz.getY() + "," + local_xyz.getZ(), i + "_" + (j));
-                        checkPointTPMap.put(i + "_" + (j), new Location(Bukkit.getWorld("chart"), local_xyz.getX(), local_xyz.getY(), local_xyz.getZ()));
+                        checkPointTPMap.put(i + "_" + (j), new Location(Bukkit.getWorld("chart"), local_xyz.getX()+0.5, local_xyz.getY(), local_xyz.getZ()+0.5));
                     }
                 }
                 checkPointAmount.put(i,j);
@@ -117,7 +117,7 @@ public class ChartStageInfo {
                 for (ChartStage.Local_xyz local_xyz : thisChartStage.getCheckPoints()) {
                     j++;
                     checkPointMap.put(local_xyz.getX() + "," + local_xyz.getY() + "," + local_xyz.getZ(), i + "_" + (j));
-                    checkPointTPMap.put(i + "_" + (j), new Location(Bukkit.getWorld("chart"), local_xyz.getX(), local_xyz.getY(), local_xyz.getZ()));
+                    checkPointTPMap.put(i + "_" + (j), new Location(Bukkit.getWorld("chart"), local_xyz.getX()+0.5, local_xyz.getY(), local_xyz.getZ()+0.5));
                 }
             }
             checkPointAmount.put(i, j);

@@ -6,7 +6,7 @@ import net.oriserver.aether.aether.player.PlayerStats;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class SettingInventoryClick {
+public class SettingInventoryClick {//設定のインベントリーをクリックした時に操作するクラス
 
     private final InventoryManager inventoryManager;
     private final ParticleManager particleManager;

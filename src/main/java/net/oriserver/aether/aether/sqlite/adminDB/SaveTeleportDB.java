@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveTeleportDB extends SQLiteAPI {
+public class SaveTeleportDB extends SQLiteAPI {//各アドミンプレイヤーごとにテレポート位置を保存するクラス
     public SaveTeleportDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Save_Teleport (" +

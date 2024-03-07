@@ -3,7 +3,7 @@ package net.oriserver.aether.aether;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-public enum AthleticLocation {
+public enum AthleticLocation {//各アスレチックの場所をEnumで保存
     LOBBY("world", 123.500, 118.1, -3.500, 90, 0),
     SHRINE("shrine", -43.5, 33.001, 156.5, -90, 0),
     GLOBAL("global", 0.5, 54.001, 5.5, -180, 0),
@@ -37,7 +37,7 @@ public enum AthleticLocation {
         this.pitch = pitch;
     }
 
-    public static Location getLocation(AthleticLocation athleticLocation) {
+    public static Location getLocation(AthleticLocation athleticLocation) {//Enumからアスレチック座標をもとにLocationを返す
         Location location = new Location(
                 Bukkit.getWorld(athleticLocation.worldName),
                 athleticLocation.x,
@@ -48,8 +48,7 @@ public enum AthleticLocation {
         location.setPitch(athleticLocation.pitch);
         return location;
     }
-    public static Location getChartLocation(int chart){
-
+    public static Location getChartLocation(int chart){//番号指定でChartアスレチックにテレポート
         if(chart>=1&&chart<=14){
             return new Location(Bukkit.getWorld("chart"),-1572.500,4,2036.500+300*(chart-1),0,0);
         }else if(chart>=15&&chart<=28){

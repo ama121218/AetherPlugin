@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ChartStartGoalEvent extends Event {
+public class ChartStartGoalEvent extends Event {//ゴールを取得するイベント
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final String location;

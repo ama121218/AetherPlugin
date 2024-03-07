@@ -77,6 +77,8 @@ public class InventoryClickListener implements Listener {
     private final Map<String, InventoryAction> actionMap = new HashMap<>();
     private final HashSet<String> clickCoolTime = new HashSet<>();
 
+    //プレイヤーがインベントリーをクリックしたイベントを操作するクラス
+
     @Autowired
     public InventoryClickListener(JavaPlugin plugin,PlayerManager playerManager, InventoryManager inventoryManager, ParticleManager particleManager){
         Bukkit.getPluginManager().registerEvents(this,plugin);
@@ -152,7 +154,7 @@ public class InventoryClickListener implements Listener {
         actionMap.put("Phone Partition 2", (player, type, slot, event) -> phonePartitionInventoryClick.event2(player, type, slot));
         actionMap.put("Global Athletic",(player,type,slot, event)-> globalInventoryClick.event(player,type,slot));
         
-        actionMap.put("TNTRun_CreateStage",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new CreateTNTRunStageInventoryEvent(player,slot))));
+        //actionMap.put("TNTRun_CreateStage",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new CreateTNTRunStageInventoryEvent(player,slot))));
         actionMap.put("Chart Stage Create",((player, type, slot, event) -> Bukkit.getPluginManager().callEvent(new ChartStageInventoryEvent(player,type,slot,event.getCurrentItem().getItemMeta().getDisplayName()))));
 
         actionMap.put("PlaySound",(player,type,slot,event)->Bukkit.getPluginManager().callEvent(new PlaySoundEvent(player,slot)));

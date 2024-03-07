@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class AnvilClickEvent extends Event {
+public class AnvilClickEvent extends Event {//ステージを作成するときに名前を変更するためにかな床インベントリーのEventを入手
     private static final HandlerList handlers = new HandlerList();
     private InventoryClickEvent e;
 

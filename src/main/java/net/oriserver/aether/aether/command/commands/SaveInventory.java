@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class SaveInventory implements CommandExecutor {
+public class SaveInventory implements CommandExecutor {//./sinvを行ったときの処理
 
     private final SaveInventoryDB saveInventoryDB;
 

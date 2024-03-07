@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ChartStage implements CommandExecutor {
+public class ChartStage implements CommandExecutor {//./chart createを行ったときの処理
     final private ChartStageCreateManager createChartStageManager;
     final ChartStageInventory chartStageInventory;
 

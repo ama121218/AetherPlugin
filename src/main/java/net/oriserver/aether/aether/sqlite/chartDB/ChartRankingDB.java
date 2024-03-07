@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ChartRankingDB extends SQLiteAPI {
+public class ChartRankingDB extends SQLiteAPI {//Chartアスレチックのランキングを管理
     public ChartRankingDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Chart_Ranking (" +

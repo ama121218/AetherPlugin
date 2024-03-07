@@ -6,7 +6,7 @@ import net.oriserver.aether.aether.chart.stage.ChartStageInfo;
 import net.oriserver.aether.aether.chart.hologram.ChartHologram;
 import net.oriserver.aether.aether.player.PlayerManager;
 import net.oriserver.aether.aether.player.PlayerStats;
-import net.oriserver.aether.aether.sqlite.chartDB.ChartDBManagerP;
+import net.oriserver.aether.aether.sqlite.chartDB.ChartPlayerDataDB;
 import net.oriserver.aether.aether.statics.CommonMethods;
 import net.oriserver.aether.aether.statics.Item;
 import org.bukkit.ChatColor;
@@ -16,13 +16,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChartGame implements Listener {
+public class ChartGame implements Listener {//プレイヤーイベントからチャートアスレチックのスタート、タイム測定、ゴールを管理するクラス
 
     private final ChartStageInfo chartStageInfo;
     private final ChartHologram hologram;
@@ -151,14 +149,14 @@ public class ChartGame implements Listener {
 
         if(chart-playerStats.getChart()==1){
             playerStats.setChart(chart);
-            playerManager.getSqLiteManager().getPlayerDBManagerR().setPlayerChart(uuid,chart);
+            playerManager.getSqLiteManager().getPlayerRealTimeDataDB().setPlayerChart(uuid,chart);
         }
 
         ChartInfo chartInfo = saveChartStageTime.get(p.getUniqueId().toString());
         if(chartInfo == null || chartInfo.getStartTime() == null) {
-            ChartDBManagerP chartDBManagerP = playerManager.getSqLiteManager().getChartDBManagerP();
+            ChartPlayerDataDB chartPlayerDataDB = playerManager.getSqLiteManager().getChartPlayerDataDB();
             p.sendMessage(chartStageInfo.getStageName(chart) + "をクリアしました。 タイム : 測定不能");
-            chartDBManagerP.setgoalcount1(uuid,chart);
+            chartPlayerDataDB.setgoalcount1(uuid,chart);
             saveChartStageTime.remove(p.getUniqueId().toString());
             return;
         }
@@ -167,32 +165,32 @@ public class ChartGame implements Listener {
         String stage_name = chartStageInfo.getStageName(chart);
 
         Long this_time = System.currentTimeMillis() - chartInfo.getStartTime();
-        ChartDBManagerP chartDBManagerP = playerManager.getSqLiteManager().getChartDBManagerP();
-        ArrayList<Object> list = chartDBManagerP.getData(uuid,stage_id);
+        ChartPlayerDataDB chartPlayerDataDB = playerManager.getSqLiteManager().getChartPlayerDataDB();
+        ArrayList<Object> list = chartPlayerDataDB.getData(uuid,stage_id);
 
         Long past_time;
         int past_star;
         int this_star = getStar(stage_id,this_time);
 
         if(list.size()==0){
-            chartDBManagerP.setgoal(uuid,stage_id,1,this_time);
+            chartPlayerDataDB.setgoal(uuid,stage_id,1,this_time);
             past_time = 0L;
             past_star = 0;
             playerManager.getPlayer(uuid).setStar(playerManager.getPlayer(uuid).getStar()+this_star);
-            playerManager.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,playerManager.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+this_star);
+            playerManager.getSqLiteManager().getPlayerRealTimeDataDB().setStar(uuid,playerManager.getSqLiteManager().getPlayerRealTimeDataDB().getStar(uuid)+this_star);
         }else{
             past_time = (Long)list.get(0);
             int clear_count = (int)list.get(1);
             past_star = getStar(stage_id,past_time);
             if(this_time<past_time){
-                chartDBManagerP.setgoal(uuid,stage_id,clear_count+1,this_time);
+                chartPlayerDataDB.setgoal(uuid,stage_id,clear_count+1,this_time);
                 int star = this_star-past_star;
                 if(star>0){
                     playerManager.getPlayer(uuid).setStar(playerManager.getPlayer(uuid).getStar()+star);
-                    playerManager.getSqLiteManager().getPlayerDBManagerR().setStar(uuid,playerManager.getSqLiteManager().getPlayerDBManagerR().getStar(uuid)+star);
+                    playerManager.getSqLiteManager().getPlayerRealTimeDataDB().setStar(uuid,playerManager.getSqLiteManager().getPlayerRealTimeDataDB().getStar(uuid)+star);
                 }
             }else{
-                chartDBManagerP.setgoal(uuid,stage_id,clear_count+1);
+                chartPlayerDataDB.setgoal(uuid,stage_id,clear_count+1);
                 printChartClear(p,stage_name,past_time,this_time,past_star,this_star,-1);
                 saveChartStageTime.remove(p.getUniqueId().toString());
                 return;

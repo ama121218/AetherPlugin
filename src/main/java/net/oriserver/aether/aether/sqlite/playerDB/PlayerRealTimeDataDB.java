@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerDBManagerR extends SQLiteAPI {
+public class PlayerRealTimeDataDB extends SQLiteAPI {
 
-    public PlayerDBManagerR(JavaPlugin plugin, String dbname) {
+    public PlayerRealTimeDataDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Player_data_R (" +
                 "`player_uuid` varchar NOT NULL," +

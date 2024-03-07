@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChartDBManagerP extends SQLiteAPI {
-    public ChartDBManagerP(JavaPlugin plugin, String dbname) {
+public class ChartPlayerDataDB extends SQLiteAPI {//プレイヤーの各ステージごとのタイムとクリア回数を保存
+    public ChartPlayerDataDB(JavaPlugin plugin, String dbname) {
         super(plugin,dbname);
         String sql = "CREATE TABLE IF NOT EXISTS Chart_Data_Player (" +
                 "`player_uuid` varchar NOT NULL," +

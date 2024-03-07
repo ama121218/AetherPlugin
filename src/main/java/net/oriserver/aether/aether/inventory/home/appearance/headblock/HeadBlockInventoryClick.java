@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class HeadBlockInventoryClick {
+public class HeadBlockInventoryClick {//HeadBlockインベントリークラスをクリックした時に操作するクラス
     final private InventoryManager inventoryManager;
 
     public HeadBlockInventoryClick(InventoryManager inventoryManager) {

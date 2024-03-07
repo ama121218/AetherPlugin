@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandSetter {
+public class CommandSetter {//Minecraft内のコマンドを処理のクラスに設定するクラス
 
     @Autowired
     public CommandSetter(JavaPlugin plugin, InventoryManager inventoryManager, PlayerManager playerManager, ChatManager chatManager, CreateInventoryManager createInventoryManager,

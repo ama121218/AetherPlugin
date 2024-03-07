@@ -12,8 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class SaveInventoryInventoryClick {
-
+public class SaveInventoryInventoryClick {//インベントリーを保存するのインベントリークラスをクリックした時に操作するクラス
 
     final private InventoryManager inventoryManager;
 

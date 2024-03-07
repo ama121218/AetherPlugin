@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
-public class ChartStageTPEvent extends Event {
+public class ChartStageTPEvent extends Event {//ステージのテレポートを取得するイベント
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;

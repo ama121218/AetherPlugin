@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 @Component
-public class HideShow {
+public class HideShow {//プレイヤーを表示非表示するクラス
     final private Plugin plugin;
     final private HashSet<String> hide_player = new HashSet<>();
 

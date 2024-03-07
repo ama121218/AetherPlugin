@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SaveCommand implements CommandExecutor {
+public class SaveCommand implements CommandExecutor {//./scを行ったときの処理
     final private SaveCommandDB saveCommandDB;
     public SaveCommand(SaveCommandDB saveCommandDB){
         this.saveCommandDB = saveCommandDB;

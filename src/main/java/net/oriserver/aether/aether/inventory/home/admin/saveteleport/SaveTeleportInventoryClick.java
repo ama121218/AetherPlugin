@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class SaveTeleportInventoryClick {
+public class SaveTeleportInventoryClick {//テレポート位置を保存するのインベントリークラスをクリックした時に操作するクラス
     final private InventoryManager inventoryManager;
 
     HashMap<String,ItemStack> select = new HashMap<String,ItemStack>();

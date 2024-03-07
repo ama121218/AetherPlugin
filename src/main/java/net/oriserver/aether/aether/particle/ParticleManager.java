@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 @Component
-public class ParticleManager {
+public class ParticleManager {//パーティクルの操作をするクラス
 
     private final int range = 30;
 

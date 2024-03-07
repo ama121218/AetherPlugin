@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class PhoneSettingInventory {
+public class PhoneSettingInventory {//スマホ装飾設定のインベントリークラス
     Inventory invPhoneSetting = Bukkit.createInventory(null, 54, "Phone Setting");
     public PhoneSettingInventory() {
 
